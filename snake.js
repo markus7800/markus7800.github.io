@@ -78,9 +78,9 @@ function game() {
 		ay=Math.floor(Math.random()*tc);
 		n = 0
 	}
-	ctx.clearRect(0, 0, canv.width, canv.height);
-	<!-- ctx.fillStyle="black"; -->
-	<!-- ctx.fillRect(0,0,canv.width,canv.height); -->
+	// ctx.clearRect(0, 0, canv.width, canv.height);
+	ctx.fillStyle="#004953";
+	ctx.fillRect(0,0,canv.width,canv.height);
 
 	ctx.fillStyle="lime";
 
