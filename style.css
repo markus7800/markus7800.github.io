@@ -13,6 +13,7 @@ h2 {
 }
 
 h3 {
+	margin-top: 2rem;
 	font-size: 1.5rem;
 }
 
@@ -32,7 +33,7 @@ main {
 }
 
 a {
-	color: lightskyblue;
+	color: deepskyblue;
 }
 
 @media only screen and (max-device-width: 600px) {
