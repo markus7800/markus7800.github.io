@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Fourier Series</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Fourier Series</h1>
+		<div id="images">
+			<img class=.centered src="../res/hello_crop.gif" alt="fourier gif">
+		</div>
+		<main>
+
+				<h2>Orthonormal Basis</h2>
+				<p>
+					Let \(\mathcal{H}\) be a Hilbert space with inner product \( \left<.,.\right>. \)
+				</p>
+				<p>
+					A family of vectors \(E = (e_i)_{i \in I} \subseteq \mathcal{H}\) is called an orthonormal system (ONS) if \(\left< e_i, e_j \right> = \delta_{ij}\) for all \(i,j \in I\). If the system spans the Hilbert space, \(\overline{\operatorname{span}(E)} = \mathcal{H}\), it is called an orthonormal basis (ONB).
+				</p>
+				<h3>Proposition.</h3>
+				<p>
+					An ONS \((e_k)_{k \in \mathbb{N}}\) is an ONB if and only if
+					\[\sum_{k \in \mathbb{N}} \left< x, e_k \right> e_k = x\]
+					 for all \(x \in \mathcal{H}\) in \(\sqrt{\left<.,.\right>}\).
+				</p>
+
+				<h2> ONB on \(L^2([0, 2\pi], \mathbb{C})\)</h2>
+				<p>
+					The vector space \(L^2([0, 2\pi], \mathbb{C})\)  contains all measurable functions from \([0, 2\pi]\) to  \(\mathbb{C}\) with respect to the Lebesgue measure \(\lambda\) and the Borel sigma field. With the inner product
+					\[\left< f, g \right> =  \frac{1}{2\pi}  \int_0^{2\pi} f(x) \bar{g(x)} d\lambda(x)\]
+					it is a Hilbert space.
+				</p>
+
+				<h3>Proposition.</h3>
+				<p>
+					The set \(\{x \mapsto \exp(n i x) : n \in \mathbb{Z} \}\) is an ONB on \(L^2([0, 2\pi], \mathbb{C})\).
+				</p>
+				<p>
+					So for a continuous 2d-curve \(f: [0, 2\pi] \to \mathbb{C}\) we can find coefficients \(c_n = \left< f, \exp(n i .)\right>\) such that
+					\[f = \sum_{ n \in \mathbb{Z} } c_n \exp(n i .).\]
+					But \(x \mapsto \exp(n i x) \) (\(n \neq 0\)) is a function that does \(n\) revolutions around the unit circle. Clockwise for negative and counterclockwise for positive \(n\).
+					A complex coefficient only scales and rotates (changes the beginning) the circle.
+					This means we can find a center point \(c_0\) for the first circle, \(\{c_0 + c_1 \exp(i x): x \in [0, 2\pi] \} \).
+					For a given timestep \(t \in [0, 2\pi\) we choose the center point for the next circle as \(c_0 + c_1 \exp(i t)\), so we have \(\{c_0 + c_1 \exp(i t) + c_{-1} \exp(-i x)\}: x \in [0, 2\pi]\}\). We can continue in this fashion, using as many circles as we want and arrange them in arbitrary order.
+					For the hello curve the order \(0, 1, -1, 2, -2, 3, -3, \dots\) was chosen.
+				</p>
+
+				<h2>Implementation</h2>
+				<p>
+					The integral can be readily approximated by the trapezoid rule for equally spaced atoms
+					\[\int_D f(x) dx \approx \sum_{i \in I} \frac{(t_{i+1} - t_i)f(t_i) + f(t_{i+1})}{2} \approx \Delta t \sum_{i \in I} f(t_i).\]
+					To generate more points for a curce we can linearly interpolate.
+				</p>
+				<p>
+					The julia code is as simple as
+				</p>
+				<div>
+					<p class=juliacode>
+						T = length(points)<br>
+	   					f = interpolate(points, Δt)<br>
+	    				E = [exp(-2*π*im*n*t/T) for n in -depth:1:depth, t in 0:Δt:T]<br>
+	    				return 1/length(f) * E * f
+					</p>
+				</div>
+				<p>
+					where we only have to be careful about the scaling and the interval sizes.
+				</p>
+				<p>
+					Full code at my <a href="https://github.com/markus7800/fourier_series">GitHub</a>.
+				</p>
+			
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+
+	</body>
+</html>
