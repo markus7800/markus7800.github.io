@@ -48,16 +48,28 @@ a {
    text-align:center;
 }
 
-code {
-  font-family: Consolas,"courier new";
-  color: crimson;
-  padding: 2px;
-  font-size: 105%;
-}
-
 .juliacode {
 	font-size: 24px;
 	color: crimson;
+}
+
+.collapsible {
+  cursor: pointer;
+  background-color: white;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 24px;
+  padding: 0;
+  font-family: Courier New, monospace;
+  font-style:italic;
+}
+
+.collapsiblecontent {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
 }
 
 @media only screen and (max-device-width: 600px) {
