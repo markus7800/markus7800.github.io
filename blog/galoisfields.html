@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Galois Fields</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Galois Fields</h1>
+		<div id="images">
+			<img src="../res/field.svg" alt="fancy field">
+		</div>
+		<main>
+			<h2>Classification of Finite Fields</h2>
+			<h3>Theorem.</h3>
+			<p>For every finite field \(K\) there exists a prime number \(p\) and natural number \(n \ge 1\) such that \(K\) has \(p^n\) elements. All fields with this number of elements are isomorphic.</p>
+			<h2>Construction of Finite Fields</h2>
+			<h3>Proposition.</h3>
+			<p>For a field \(K\) and irreducible polynom \(f \in K[x]\) the factor ring \(L := K[x]/(f)\) is a field. \(K\) can be embedded in \(L\) isomorphically and \(L\) is a \(\operatorname{degree}(f)\) dimensional vector space over this embedding.</p>
+
+			<h3>Proposition.</h3>
+			<p>For every prime number \(p\) the ring of integers modulo \(p\) is the finite field with \(p\) elements. It is denoted by \(\mathbb{Z}_p\).</p>
+			<p>For every \(k \ge 1\) there exists a irreducible polynom \(f \in \mathbb{Z}_p[x]\) of degree \(k\).</p>
+			<p>All normed and irreducible factors of \(x^{p^n} - x\) are precisely the irreducible and normed polynoms in \(\mathbb{Z}_p[x]\) which have degree that divides \(n\).</p>
+			<p>The addition group is isomporphic to \(C_p^n\), where \(C_p\) is the integer addition group modulo \(p\).</p>
+			<p>The multiplication gprup is isomporphic to \(C_{p^n}\) which means there is one generating element.</p>
+
+			<h2>Implementation</h2>
+			<p>So the main task is to find a irreducible polynom over \(\mathbb{Z}_p[x]\) of degree \(n\).
+			The approach was to iterate over all normed polynoms \(f\) of degree \(n\) and check if they divide \(x^{p^n} - x\). As all irreducible factors of \(f\) are also irreducible factors of \(x^{p^n} - x\), to check irreducibility of \(f\) it is sufficient to check polynoms with degree that divides \(n\). </p>
+			<p>To implement the polynomial modular arithmetic following Euclids algorithm was used:
+			\[
+			\begin{align*}
+			& \text{Polynoms } p, q \text{ with degrees } n \ge  m \text{ respectively}\\
+			& \text{Calculate} \quad p \mod q:\\
+			& \text{while} \quad\operatorname{degree}(p) \ge \operatorname{degree}(q) \\
+			&\quad \quad p = p - \frac{p_n}{q_m} q \\
+			& \text{return } p
+			\end{align*}
+			\]
+			where \(p_n\) and \(q_m\) are the highest non zero coefficients of \(p\) and \(q\) respectively.
+ 			</p>
+ 			<p><br></p>
+ 			<p>Code at my <a href="https://github.com/markus7800/FiniteFieldGenerator">GitHub</a>.</p>
+ 			<p><br></p>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
