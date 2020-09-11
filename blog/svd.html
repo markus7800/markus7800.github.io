@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Singular Value Decomposition</title>
+		\(
+		\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+		\)
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Singular Value Decomposition</h1>
+		<main>
+		<div id="images">
+			<img src="../res/kitten.gif">
+		</div>
+		<h3>Definition.</h3>
+		<p>
+			The singular value decomposition (SVD) of Matrix \(A \in \mathbb{K}^{m \times n}\), \(\mathbb{K} \in \{\mathbb{R}, \mathbb{C}\}\), a factorization such that
+			\[A = U \Sigma V^*,\]
+			where \(U\) is a \(m \times m\) unitary matrix, \(V\) is a \(n \times n\) uniatry matrix and \(\Sigma\) is a \(m \times n\) diagonal matrix with nonnegative entries called singular values.
+		</p>
+		<h3>Theorem.</h3>
+		<p>
+			For any matrix \(A \in \mathbb{K}^{m \times n}\) there exists a SVD.
+		</p>
+		<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<h3>Finite Dimensional Spectral Theorem.</h3>
+				<p>If \(M \in \mathbb{K}^{n \times n}\) is symmetric (hermitian) there exists a orthonormal basis of consisting of eigenvectors of \(M\). Each eigenvalue is real.
+				</p>
+				<p style="font-style: italic">Proof.</p>
+				<p>
+					By the fundamental theorem of Algebra factor the characteristic polynom \[p(\lambda) = \det(M - \lambda I) = (\lambda - \lambda_1)(\lambda - \lambda_2)\cdots(\lambda - \lambda_n)\]
+					with eigenvalues \(\lambda_i \in \mathbb{C}\) with normed eigenvectors \(v_i\).
+					As we have
+					\[
+					\begin{align*}
+					\lambda_i = \lambda_i \norm{v_i}_2^2 = v_i^\top \lambda v_i = v_i^\top M v_i = v_i^\top M^* v_i  = \overline{\lambda_i},
+					\end{align*}
+					\]
+					all eigenvalues are real.
+				</p>
+				<p>
+					For \(\lambda_i \neq \lambda_j\) it holds that
+					\[
+					\begin{align*}
+					v_i^\top M v_j &= \lambda_j v_i^\top v_j \\
+					v_i^\top M^* v_j &= \lambda_i v_i^\top v_j \\
+					\end{align*}
+					\]
+					and so \( v_i^\top v_j = 0.\)
+					This shows that eigenvectors of different eigenvalues are orthogonal.
+				</p>
+				<p>
+					By Gram-Schmidt we can find an orthonormal basis for each eigenspace \(\ker (M - \lambda_i I)\).
+					Combining all vectors gives us the desired orthonromal basis.
+				</p>
+				<p align="right">\(\Box\)</p>
+				<p>
+					Let \(M = A^*A\) which is symmetric (hermitian). By the spectral theorem let \(V \in \mathbb{K}^{n \times n}\) be the matrix with the orthonormal basis as columns.
+				</p>
+				<p>
+					We have
+					\[
+					\begin{align*}
+					V^* MB V =
+						\begin{pmatrix}
+						D & 0 \\
+						0 & 0
+						\end{pmatrix}
+					\end{align*}
+					\]
+					where \(D \in \mathbb{K}^{l \times l}\) contains the non-zero eigenvalues of \(M\) sorted. It holds that \(l \le \min(m,n)\) since the eigenvalues of \(M\) are precisely the roots of the eigenvalues of \(A\).
+				</p>
+				<p>
+					Split \(V = (V_1 \enspace V_2)\) in eigenvectors corresponding to non-zero eigenvalues and eigenvectors corresponding to eigenvalue \(0\).
+				</p>
+				<p>
+					We have
+					\begin{align*}
+						\begin{pmatrix}
+						D & 0 \\
+						0 & 0
+						\end{pmatrix}
+						=
+						\begin{pmatrix}
+						V_1^* M V_1 & V_1^* M V_2 \\
+						V_2^* M V_1 & V_2^* M V_2
+						\end{pmatrix}
+					\end{align*}
+					which implies \(V_1^* A^* A V_1 = D\) and \(V_2^* A^* A V_2 = 0\) and thus \(A V_2 = 0\)
+					As \(V\) is orthonormal we have
+					\begin{align*}
+						V^*_1 V_1 &= I_l \\
+						V_2^* V_2 &= I_{n-l} \\
+						V_1 V_1^* + V_2 V_2^* & = I_n.
+					\end{align*}
+				</p>
+				<p>
+					Define \(U_1 = AV_1 D^{-1/2} \in \mathbb{K}^{m \times l} \). Then
+					\begin{align*}
+					U_1 D^{1/2} V_1^* &= A V_1 D^{1/2}D^{-1/2} V_1^* \\
+					&= A(I - V_2 V_2^*) \\
+					& = A - (A V_2) V_2^* = A.
+					\end{align*}
+					Extend \(U_1\) to an orthonormal basis (Gram-Schmidt) \(U = (U_1 \enspace U_2)\) and let
+					\begin{align*}
+						\Sigma = \begin{pmatrix}
+						\begin{pmatrix}
+						D^{1/2} & 0 \\
+						0 & 0
+						\end{pmatrix} \\
+						0
+						\end{pmatrix} \in \mathbb{K}^{m \times n}.
+					\end{align*}
+					Now we have
+					\begin{align*}
+					U \Sigma V^* &=
+					\begin{pmatrix}
+					U_1 & U_2
+					\end{pmatrix}
+					\begin{pmatrix}
+					\begin{pmatrix}
+						D^{1/2} & 0 \\
+						0 & 0
+						\end{pmatrix} \\
+						0
+					\end{pmatrix}
+					\begin{pmatrix}
+					V_1 & V_2
+					\end{pmatrix}^* \\
+					&= \begin{pmatrix}
+					U_1 & U_2
+					\end{pmatrix}
+					\begin{pmatrix}
+					D^{1/2} V_1^* \\
+					0
+					\end{pmatrix} \\
+					&= U_1 D^{1/2} V_1^* \\&
+					= A.
+					\end{align*}
+				</p>
+
+				<p align="right">\(\Box\)</p>
+			</div>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
