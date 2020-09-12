@@ -10,6 +10,10 @@
 		<title>Singular Value Decomposition</title>
 		\(
 		\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+		\newcommand{\dim}{\operatorname{dim}}
+		\newcommand{\rank}{\operatorname{rank}}
+		\newcommand{\def}{\operatorname{def}}
+		\newcommand{\ran}{\operatorname{ran}}
 		\)
 	</head>
 	<body>
@@ -17,6 +21,7 @@
 		<p>
 			<a href="./blog.html">Back</a>
 		</p>
+		<a name="top"></a>
 		<h1>Singular Value Decomposition</h1>
 		<main>
 		<div id="images">
@@ -26,7 +31,7 @@
 		<p>
 			The singular value decomposition (SVD) of Matrix \(A \in \mathbb{K}^{m \times n}\), \(\mathbb{K} \in \{\mathbb{R}, \mathbb{C}\}\), a factorization such that
 			\[A = U \Sigma V^*,\]
-			where \(U\) is a \(m \times m\) unitary matrix, \(V\) is a \(n \times n\) uniatry matrix and \(\Sigma\) is a \(m \times n\) diagonal matrix with nonnegative entries called singular values.
+			where \(U\) is a \(m \times m\) unitary matrix, \(V\) is a \(n \times n\) uniatry matrix and \(\Sigma\) is a \(m \times n\) diagonal matrix with nonnegative entries called singular values \(\sigma_i\).
 		</p>
 		<h3>Theorem.</h3>
 		<p>
@@ -44,7 +49,7 @@
 					As we have
 					\[
 					\begin{align*}
-					\lambda_i = \lambda_i \norm{v_i}_2^2 = v_i^\top \lambda v_i = v_i^\top M v_i = v_i^\top M^* v_i  = \overline{\lambda_i},
+					\lambda_i = \lambda_i \norm{v_i}_2^2 = v_i^* \lambda v_i = v_i^* M v_i = v_i^* M^* v_i  = \overline{\lambda_i},
 					\end{align*}
 					\]
 					all eigenvalues are real.
@@ -53,11 +58,11 @@
 					For \(\lambda_i \neq \lambda_j\) it holds that
 					\[
 					\begin{align*}
-					v_i^\top M v_j &= \lambda_j v_i^\top v_j \\
-					v_i^\top M^* v_j &= \lambda_i v_i^\top v_j \\
+					v_i^* M v_j &= \lambda_j v_i^* v_j \\
+					v_i^* M^* v_j &= \lambda_i v_i^* v_j \\
 					\end{align*}
 					\]
-					and so \( v_i^\top v_j = 0.\)
+					and so \( v_i^* v_j = 0.\)
 					This shows that eigenvectors of different eigenvalues are orthogonal.
 				</p>
 				<p>
@@ -152,6 +157,82 @@
 
 				<p align="right">\(\Box\)</p>
 			</div>
+
+			<p>
+				As the proof of the existence theorem is constuctive it gives us an algorithm to perform SVD:
+				<p>1. Find eigenvectors \(V\) and eigenvalues \(\Lambda\) of \(A^*A\) (sorted by decreasing in eigenvalues.</p>
+				<p>2. Initialise \(\Sigma \in \mathbb{R}^{m \times n}\) with square roots of the \(\min(m,n)\) largest eigenvalues on the diagonal.</p>
+				<p>3. Solve \(U \Sigma = AV \) for \(U\) (e.g. \(\Sigma^* U^* = (AV)^*\) for \(U^*\)).</p>
+			</p>
+
+			<h3>Eckart-Young-Mirsky theorem.</h3>
+			<p>
+				Let
+				\[A_k = \sum_{i=1}^k \sigma_i u_i v_i^* \]
+				be the rank \(k\) approximation of \(A \in \mathbb{K}^{m \times n}.\)<br>
+				We have that 
+				\[\norm{A - A_k}_2 = \sigma_{k+1}\]
+				and for every \(B \in \mathbb{K}^{m \times n}\) with rank \(k\)
+				\[\norm{A - B}_2 \ge \norm{A - A_k}_2.\]
+			</p>
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<h3>Claim.</h3>
+				<p>
+					\[\norm{A}_2 = \sigma_\max (A).\]
+				</p>
+				<p style="font-style: italic">Proof.</p>
+				<p>
+					\begin{align*}
+					\norm{A}_2 &= \max_{x \neq 0} \frac{\norm{Ax}_2}{\norm{x}_2} \\ 
+					&= \sqrt{ \max_{x \neq 0} \frac{x^*A^*Ax}{x^*x} } \\
+					&= \sqrt{ \max_{x \neq 0} R_{A^*A}(x) } = \sqrt{ \lambda_\max(A^*A)} =  \sigma_\max (A),
+					\end{align*}
+					where \(R_{A^*A}\) is the Rayleigh quotient of \(A^*A\).
+				</p>
+				<p align="right">\(\Box\)</p>
+
+				<p>
+					Therefore
+					\begin{align*}
+					\norm{A - A_k}_2 = \sigma_\max \left( \sum_{i = k+1}^n \sigma_i u_i v_i^* \right) = \sigma_{k+1}.
+					\end{align*}
+				</p>
+				
+
+				<p>
+					Further, note that \(\def(B) = n - \rank(B) = n - k\). Let \(V_{k+1}\) be the matrix with the first {k+1} eigenvectors as columns.
+				
+					\begin{align*}
+					&\dim(\ker(B) \cap \ran(V_{k+1})) = \\
+					&\dim(\ker(B)) + \dim(\ran(V_{k+1})) - \dim(\ker(B) + \ran(V_{k+1})) = \\
+					&\def(B) + \rank(V_{k+1}) - \dim(\ker(B) + \ran(V_{k+1})) = \\
+					&n - k + k + 1 -  \dim(\ker(B) + \ran(V_{k+1})) \ge 1
+					\end{align*}
+
+					Therefore there exists a \(x \in \ker(B) \cap \ran(V_{k+1})\) with \(\norm{x}_2 = 1\).
+					\begin{align*}
+					\norm{A - B}_2^2 &\ge \norm{(A - B)x}_2^2 = \norm{Ax}_2^2 \\
+					& = \sum_{i=1}^{k+1} \sigma_i ^2 |v_i^*x|^2  \\
+					&\ge \sigma_{k+1}^2 \sum_{i=1}^{k+1} |v_i^*x|^2 = \sigma_{k+1}^2 = \norm{A - A_k}_2^2.
+					\end{align*}
+				</p>
+
+
+			</div>
+
+			<h2>Image Compression with SVD</h2>
+			<p>
+				As a normal image consists of three real matrix (for each RGB channel) we can calculate the best low rank approximation with SVD for each color.
+				For a given rank \(k\) and dimensions \(m \times n\) the amount of entries for the SVD that we need to store is given by
+				\[3(m \cdot k + k + k \cdot n).\]
+				We do not have to store \(U\) and \(V\) fully as the entries have no effect in the multiplaction with \(\Sigma\).<br>
+				Thus, we have a compression rate of
+				\[\frac{(m  + n + 1) }{m \cdot n}k,\]
+				which is linear in \(k\).
+				How the compression looks for different \(k\) can be seen on the <a href="#top">top of the page.</a>
+			</p>
+
 		</main>
 		<p>
 			<a href="./blog.html">Back</a>
