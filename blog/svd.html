@@ -29,9 +29,9 @@
 		</div>
 		<h3>Definition.</h3>
 		<p>
-			The singular value decomposition (SVD) of Matrix \(A \in \mathbb{K}^{m \times n}\), \(\mathbb{K} \in \{\mathbb{R}, \mathbb{C}\}\), a factorization such that
+			The singular value decomposition (SVD) of Matrix \(A \in \mathbb{K}^{m \times n}\), \(\mathbb{K} \in \{\mathbb{R}, \mathbb{C}\}\), is a factorization such that
 			\[A = U \Sigma V^*,\]
-			where \(U\) is a \(m \times m\) unitary matrix, \(V\) is a \(n \times n\) uniatry matrix and \(\Sigma\) is a \(m \times n\) diagonal matrix with nonnegative entries called singular values \(\sigma_i\).
+			where \(U\) is a \(m \times m\) unitary matrix, \(V\) is a \(n \times n\) unitary matrix and \(\Sigma\) is a \(m \times n\) diagonal matrix with nonnegative entries called singular values \(\sigma_i\).
 		</p>
 		<h3>Theorem.</h3>
 		<p>
@@ -40,12 +40,12 @@
 		<button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent">
 				<h3>Finite Dimensional Spectral Theorem.</h3>
-				<p>If \(M \in \mathbb{K}^{n \times n}\) is symmetric (hermitian) there exists a orthonormal basis of consisting of eigenvectors of \(M\). Each eigenvalue is real.
+				<p>If \(M \in \mathbb{K}^{n \times n}\) is symmetric (hermitian) there exists a orthonormal basis consisting of eigenvectors of \(M\). Each eigenvalue is real.
 				</p>
 				<p style="font-style: italic">Proof.</p>
 				<p>
 					By the fundamental theorem of Algebra factor the characteristic polynom \[p(\lambda) = \det(M - \lambda I) = (\lambda - \lambda_1)(\lambda - \lambda_2)\cdots(\lambda - \lambda_n)\]
-					with eigenvalues \(\lambda_i \in \mathbb{C}\) with eigenvectors \(v_i\).
+					with eigenvalues \(\lambda_i \in \mathbb{C}\) and eigenvectors \(v_i\).
 					As we have
 					\[
 					\begin{align*}
@@ -67,7 +67,7 @@
 				</p>
 				<p>
 					By Gram-Schmidt we can find an orthonormal basis for each eigenspace \(\ker (M - \lambda_i I)\).
-					Combining all vectors gives us the desired orthonromal basis.
+					Combining all vectors gives us the desired orthonormal basis.
 				</p>
 				<p align="right">\(\Box\)</p>
 				<p>
@@ -84,7 +84,7 @@
 						\end{pmatrix}
 					\end{align*}
 					\]
-					where \(D \in \mathbb{K}^{l \times l}\) contains the non-zero eigenvalues of \(M\) sorted. It holds that \(l \le \min(m,n)\) since the eigenvalues of \(M\) are precisely the roots of the eigenvalues of \(A\).
+					where \(D \in \mathbb{K}^{l \times l}\) contains the non-zero eigenvalues of \(M\) sorted. It holds that \(l \le \min(m,n)\) since the eigenvalues of \(M\) are precisely the roots of the eigenvalues of \(A.\)
 				</p>
 				<p>
 					Split \(V = (V_1 \enspace V_2)\) in eigenvectors corresponding to non-zero eigenvalues and eigenvectors corresponding to eigenvalue \(0\).
@@ -102,7 +102,7 @@
 						V_2^* M V_1 & V_2^* M V_2
 						\end{pmatrix}
 					\end{align*}
-					which implies \(V_1^* A^* A V_1 = D\) and \(V_2^* A^* A V_2 = 0\) and thus \(A V_2 = 0\)
+					which implies \(V_1^* A^* A V_1 = D\) and \(V_2^* A^* A V_2 = 0\) and thus \(A V_2 = 0\).
 					As \(V\) is orthonormal we have
 					\begin{align*}
 						V^*_1 V_1 &= I_l \\
@@ -212,7 +212,8 @@
 
 					Therefore there exists a \(x \in \ker(B) \cap \ran(V_{k+1})\) with \(\norm{x}_2 = 1\).
 					\begin{align*}
-					\norm{A - B}_2^2 &\ge \norm{(A - B)x}_2^2 = \norm{Ax}_2^2 \\
+					\norm{A - B}_2^2 &\ge \norm{(A - B)x}_2^2 \\ 
+					&= \norm{Ax}_2^2 \\
 					& = \sum_{i=1}^{k+1} \sigma_i ^2 |v_i^*x|^2  \\
 					&\ge \sigma_{k+1}^2 \sum_{i=1}^{k+1} |v_i^*x|^2 = \sigma_{k+1}^2 = \norm{A - A_k}_2^2.
 					\end{align*}
@@ -223,7 +224,7 @@
 
 			<h2>Image Compression with SVD</h2>
 			<p>
-				As a normal image consists of three real matrix (for each RGB channel) we can calculate the best low rank approximation with SVD for each color.
+				As a normal image consists of three real matrices (for each RGB channel) we can calculate the best low rank approximation with SVD for each color.
 				For a given rank \(k\) and dimensions \(m \times n\) the amount of entries for the SVD that we need to store is given by
 				\[3(m \cdot k + k + k \cdot n).\]
 				We do not have to store \(U\) and \(V\) fully as the entries have no effect in the multiplaction with \(\Sigma\).<br>

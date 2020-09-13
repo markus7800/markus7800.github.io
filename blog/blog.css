@@ -20,6 +20,7 @@ h3 {
 }
 
 p {
+	overflow: scroll;
 	font-size: 24px;
 }
 
@@ -30,7 +31,6 @@ div {
 }
 
 main {
-	overflow-x: scroll;
 	margin-left: 16px;
 	margin-right: 16px;
 }
