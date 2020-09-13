@@ -30,6 +30,7 @@ div {
 }
 
 main {
+	overflow-x: scroll;
 	margin-left: 16px;
 	margin-right: 16px;
 }

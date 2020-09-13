@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Seam Carving</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Seam Carving</h1>
+		<main>
+			<p>
+				The following is based on <a href="https://www.youtube.com/watch?v=rpB6zQNsbQU">this lecture</a> from Grant Sanderson.
+			</p>
+			<p>
+				Seam Carving is a technique used to reduce image size.
+				Unlike simply scaling the image, this method tries to preserve the aspect ratios of the main objects of the image.
+			</p>
+			<p>
+				This task can be achieved by detecting the edges of the objects and then take a path from top to bottom (or left to right)
+				which crosses the least edges - the S E A M.
+			</p>
+			<h2>How to detect edges?</h2>
+			<p>
+				Edge detection can be done by convolving the image with an appropriate kernel.
+				The Sobel filter is a good choice:
+				\[
+				\begin{align*}
+				\begin{bmatrix}
+				0.125 & 0 & 0.125 \\
+				0.25 & 0 & 0.25 \\
+				0.125 & 0 & 0.125
+				\end{bmatrix},
+				\quad
+				\begin{bmatrix}
+				0.125 & 0.25 & 0.125 \\
+				0 & 0 & 0\\
+				0.125 & 0.25 & 0.125
+				\end{bmatrix},
+				\end{align*}
+				\]
+				for vertical and horizontal edges respectively.<br>
+				These kernels are applied separately to the brightness values of the image,
+				\[\texttt{Brightness}(r,g,b) = 0.3 * r + 0.59 * g + 0.11 * b,\]
+				and then the Euclidean norm is computed from both components. 
+			</p>
+			<p>
+				This achieves images similiar to this:
+				<div id="images">	
+					<img src="./res_seam_carving/edgy_salvador.jpg" width="600px">
+				</div>
+			</p>
+
+			<h2>How to find the seam?</h2>
+			<p>
+				Imagine a path from top to bottom.
+				We restrict the paths to only go down or down left or down right per row.
+				The edgeness of this path is just the sum of all edgeness values of its pixels.
+				We want to find the path with minimum edgeness.
+				We have to work from bottom to top.
+				The edgeness of the last row remains the same.
+				Then we move one row up and assign each pixel its edgeness value from the convolution
+				plus the minimum value of the possible next pixels of the row below.
+				We also keep track which of the three pixels it was to retrive the path once we are finished.
+				If we completed the last (first) row we choose the pixel with the least edgeness value.
+				We then follow the directions we kept track of and store all traversed pixels in a list.
+				This is then the desired path - the seam - which will be removed from the image.
+			</p>
+			<h2>Final result</h2>
+			<div id="images">
+				<img src="./res_seam_carving/seam_carving.gif" width="800px">
+			</div>
+
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
