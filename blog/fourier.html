@@ -56,8 +56,10 @@
 				\[f = \sum_{ n \in \mathbb{Z} } c_n \exp(n i .).\]
 				But \(x \mapsto \exp(n i x) \) (\(n \neq 0\)) is a function that does \(n\) revolutions around the unit circle. Clockwise for negative and counterclockwise for positive \(n\).
 				A complex coefficient only scales and rotates (changes the beginning) the circle.
+			</p>
+			<p>
 				This means we can find a center point \(c_0\) for the first circle, \(\{c_0 + c_1 \exp(i x): x \in [0, 2\pi] \} \).
-				For a given timestep \(t \in [0, 2\pi\) we choose the center point for the next circle as \(c_0 + c_1 \exp(i t)\), so we have \(\{c_0 + c_1 \exp(i t) + c_{-1} \exp(-i x)\}: x \in [0, 2\pi]\}\). We can continue in this fashion, using as many circles as we want and arrange them in arbitrary order.
+				For a given timestep \(t \in [0, 2\pi]\) we choose the center point for the next circle as \(c_0 + c_1 \exp(i t)\), so we have \(\{c_0 + c_1 \exp(i t) + c_{-1} \exp(-i x)\}: x \in [0, 2\pi]\}\). We can continue in this fashion, using as many circles as we want and arrange them in arbitrary order.
 				For the hello curve the order \(0, 1, -1, 2, -2, 3, -3, \dots\) was chosen.
 			</p>
 
