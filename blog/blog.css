@@ -20,7 +20,7 @@ h3 {
 }
 
 p {
-	overflow: scroll;
+	overflow: visible;
 	font-size: 24px;
 }
 
