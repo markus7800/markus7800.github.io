@@ -7,15 +7,72 @@
 		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-		<title></title>
+		<title>N Body Simulation</title>
+		\(
+		\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+		\newcommand{\bfx}{\mathbf{x}}
+		\)
 	</head>
 	<body>
 		<div>
 		<p>
 			<a href="./blog.html">Back</a>
 		</p>
-		<h1></h1>
+		<h1>N Body Simulation</h1>
 		<main>
+			<p>
+				Celestial objects are mainly governed by the gravitational force.
+				For two objects with masses \(m_1, m_2\) and distance \(r\) the force is given by
+				\[F_G = G \frac{m_1 m_2}{r^2}.\]
+				By Newtons second law the acceleration is proportional to applied force divided by mass
+				\[a = \frac{F}{m}.\]
+				For system with \(n\) bodies with positions \(x_1, \dots, x_n\) the dynamics can be described (simplified) by
+				\[m_j \ddot{x}_j = \sum_{i=1}^n \frac{m_i m_j}{\norm{x_i - x_j}_2^2} \frac{x_i - x_j}{\norm{x_i - x_j}_2},\]
+				where \( \frac{x_i - x_j}{\norm{x_i - x_j}_2} \) is a unit vector specifying the direction of acceleration.<br>
+				This equations simplify to
+				\[\ddot{x}_j = \sum_{i=1}^n m_i\frac{x_i - x_j}{\norm{x_i - x_j}_2^{3/2}} = f_j(x_1, \dots, x_n).\]
+			</p>
+			<p>
+				It is convenient to write these equations in vector form
+				\[\ddot{\bfx} = f(\bfx).\]
+				Note that \(\bfx \in \mathbb{R}^{dn}\) with \(d \in \{1,2,3\}\) depending how many dimension we want to model.
+			</p>
+			<p>
+				The system dynamics can easily be brought in integral form
+				\begin{align*}
+				\dot{\bfx}(t) &= \dot{\bfx}(0) + \int_0^t f(\bfx(t)) dt \\
+				\bfx(t) &= \bfx(0) + \int_0^t \dot{\bfx}(t) dt.
+				\end{align*}
+			</p>
+			<p>
+				For small \(\Delta t\) the integrals can be approximated by
+				\begin{align*}
+				\dot{\bfx}(t + \Delta t) &\approx \dot{\bfx}(t) + \Delta t \cdot f(\bfx(t)) \\
+				\bfx(t + \Delta t) &\approx \bfx(t) + \Delta t \cdot \dot{\bfx}(t).
+				\end{align*}
+			</p>
+			<p>
+				Now one could use following discrete update scheme
+				\begin{align*}
+				\dot{\bfx}_{n+1} &\gets  \dot{\bfx}_{n} + \Delta t \cdot f(\dot{\bfx}_{n}) \\
+				\bfx_{n+1}  &\gets \bfx_n + \Delta t \cdot \dot{\bfx}_n.
+				\end{align*}
+				However it turns out using the new velocity for the calculation of the position instead of the old one,
+				\begin{align*}
+				\dot{\bfx}_{n+1} &\gets  \dot{\bfx}_{n} + \Delta t \cdot f(\dot{\bfx}_{n}) \\
+				\bfx_{n+1}  &\gets \bfx_n + \Delta t \cdot \dot{\bfx}_{n+1}.
+				\end{align*}
+				yields better approximations.
+				This scheme is called semi-implicid Euler scheme.
+			</p>
+			<p>
+				Below are two simulations. On the left side the bodies start on the quarter points of a sphere with tangential velocities.
+				All have the same mass. On the right there is one very heavy body (the sun) in the center, two lighter objects (green and orange) and a 50 times heavier object (purple).
+			</p>
+			<div id="images">
+				<img src="./res/nbody/spiral_orbits.gif" width="48%">
+				<img src="./res/nbody/sun_orbits.gif" width="48%">
+			</div>
 		</main>
 		<p>
 			<a href="./blog.html">Back</a>
