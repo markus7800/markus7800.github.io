@@ -57,13 +57,13 @@
 				\dot{\bfx}_{n+1} &\gets  \dot{\bfx}_{n} + \Delta t \cdot f(\dot{\bfx}_{n}) \\
 				\bfx_{n+1}  &\gets \bfx_n + \Delta t \cdot \dot{\bfx}_n.
 				\end{align*}
-				However it turns out using the new velocity for the calculation of the position instead of the old one,
+				However, it turns out using the new velocity for the calculation of the position instead of the old one,
 				\begin{align*}
 				\dot{\bfx}_{n+1} &\gets  \dot{\bfx}_{n} + \Delta t \cdot f(\dot{\bfx}_{n}) \\
 				\bfx_{n+1}  &\gets \bfx_n + \Delta t \cdot \dot{\bfx}_{n+1}.
 				\end{align*}
 				yields better approximations.
-				This scheme is called semi-implicid Euler scheme.
+				This scheme is called semi-implicit Euler scheme.
 			</p>
 			<p>
 				Below are two simulations. On the left side the bodies start on the quarter points of a sphere with tangential velocities.

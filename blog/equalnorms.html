@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>All Norms Are Equal!</title>
+
+		\(
+		\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+		\newcommand{\R}{\mathbb{R}}
+		\)
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>All Norms Are Equal!</h1>
+		<main>
+			<p>
+				At least they are equivalent on every real (or complex) finite dimensional normed vector space.
+			</p>
+			<h2>Proposition.</h2>
+			<p>
+				Let \(\norm{.}\) be an arbitrary norm on \(\R ^n\). Then \(\norm{.}\) is equivalent to \(\norm{.}_\infty\).
+			</p>
+
+			<p style="font-style: italic">Proof.</p>
+			<p>
+				Let \(\{e_i: i = 1,\dots, n \}\) be the standard basis on \(\R ^n\).
+				Then for any \(v\in \R ^n\)
+				\[\norm{v} = \norm{\sum_{i=1}^n \alpha_i e_i} \le \sum_{i=1}^n |\alpha_i| \norm{ e_i} \le n \sum_{i=1}^n\norm{ e_i}\norm{v}_\infty \le C_1 \norm{v}_\infty.\]
+			</p>
+			<p>
+				As we have \(|\norm{v} - \norm{w}| \le \norm{v-w}\) the function
+				\begin{align*}
+				f : \left< \R ^n, \norm{.}_\infty\right> &\to \left< \R , |.|\right> \\
+				 v &\mapsto \norm{v}
+				\end{align*}
+				is continuous.
+			</p>
+			<p>
+				As \(S^{n-1} = \{v \in \R^n : \norm{v}_\infty = 1 \}\) is compact \(f\) attains a minimum on that set<br><br>
+
+				\[C_2 := \min_{v \in S^{n-1}} f(v) = \min_{v \in S^{n-1}} \norm{v}.\]
+
+				As \(0 \notin S^{n-1}\) it holds that \(C_2 > 0\).<br>
+				For arbitrary \(v \in \R^d\) define
+				\(w =\frac{1}{\norm{v}_\infty}v\). Since \(w \in S^{n-1}\) we have \(\norm{w} \ge C_2\).<br>
+				But this implies
+				\[ C_2 \norm{v}_\infty \le \norm{v}.\]
+
+			</p>
+			<p align="right">\(\Box\)</p>
+
+			<h2>Proposition.</h2>
+			<p>Let \(V\) be an arbitrary finite dimensional vector space. Then every norm is equivalent.</p>
+			<p style="font-style: italic">Proof.</p>
+			<p>
+				For basis \(\{b_i : i = 1,\dots,n\}\) define
+				\[\norm{v}_\infty = \norm{\sum_{i=1}^n \alpha_i b_i}_\infty = \max_{i=1,\dots, n} |\alpha_i|.\]
+
+				Show that every norm is equivalent to \(\norm{.}_\infty\) as above.
+
+				As the equivalence relation is transitive every norm is equivalent.
+			</p>
+				
+			<p align="right">\(\Box\)</p>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
