@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Dual Spaces and Discontinuous Linear Functionionals</title>
+		\(
+			\newcommand{\T}{\mathcal{T}}
+			\newcommand{\R}{\mathbb{R}}
+			\newcommand{\C}{\mathbb{C}}		\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+		\)
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h2>Dual Spaces and Discontinuous Linear Functionals</h2>
+		<main>
+			<h3>Are there even discontinuous linear functionals?</h3>
+			<p>
+				For me it was hard to think of an example of a discontinuous linear function.
+				Certainly in the finite dimensional case all linear functions are continuous, because they are - in a sense - simply matrix multiplications.
+			</p>
+			<p>
+				Therefore, we have to think big - infinite dimensional big.
+				Consider all bounded infinitely differentiable functions on \(\R\) equipped with the supremums norm \(\norm{.}_\infty\).
+				Define the sequence
+				\[f_n = x \mapsto \frac{1}{n}\sin(n x).\]
+				It is easy to see that \(\lim_{n \to \infty} f_n = 0\).
+			</p>
+			<p>
+				But for the derivatives \(f_n' = x \mapsto \cos(n x)\) the limit does not exist. Therefore, the linear operator \(\frac{d}{dx}\) is not continuous.
+			</p>
+
+			<h3>How can we characterise continuous linear functions?</h3>
+			<p>
+				To be able to speak of continuity we at least need a topology.
+			</p>
+			<p>
+				A real (complex) vector space \(X\) with Hausdorff topology \(\T\) is said to be a topological vector space if addition and scalar multiplication is continuous with respect to \(\T\).
+			</p>
+			<p>
+				The dual space \(X'\) is the set of all continuous linear functions \(f:X \to \C\). It is a subspace of all functionals \(X^*\).
+			</p>
+
+			<p>
+				Just like all functionals on \(\R^n\) are continuous in the case of finite dimensional topological vector spaces this also holds.
+			</p>
+			<h3>Theorem.</h3>
+			<p>
+				Let \(\left< X, \T \right>\) be a \(n\) dimensional topological vector space then \(X' = X^*\).
+			</p>
+
+			<p style="font-style: italic">Proof.</p>
+			<p>
+				Consider the normed space \(\left<\C^n, \norm{.}_2 \right>\).
+				Let \(\{e_i : i=1,\dots,n\}\) be the standard basis of \(\C^n\) and let \(f \in \C^{n*}\). We have
+				\[|f(z)| = |f(\sum_{i=1}^n \alpha_i e_i)| = \sum_{i=1}^n |\alpha_i ||f(e_i)|\le C \norm{z}_2.\]
+				Therefore, \({\C^{n}}' = \C^{n*}.\)
+			</p>
+			<p>
+				Now it is sufficient to show that \(X\) is homeomorphic to \(\C^{n}\).
+			</p>
+			<p>
+				Let \(\psi: \C^n \to X\) be an isomorphism.
+				Again
+				\[\psi(z) = \sum_{i=1}^n \alpha_i \psi(e_i).\]
+				As \(|\alpha_i| \le \norm{z}_2\) the coefficients depend continuously on \(z\). As addition and scalar multplication on \(X\) are continuous \(\psi\) is continuous.
+			</p>
+			<p>
+				Now we have to show that \(\psi^{-1}\) is continuous. As it is linear it is enough to show continuity at \(0\).
+			</p>
+			<p>
+				Let \(S^{n-1} = \{z \in \C^n : \norm{z}_2 = 1 \}\) which is compact. Thus \(K:= \psi(S^{n-1}) \subseteq X\) is also compact and since T2 closed. As \(\operatorname{ker}(\psi) = \) we have \(0 \in X \setminus K\). Choose a circled open neigbourhood of \(0\), \(V \subseteq X \setminus K\).
+			</p>
+			<p> 
+				Let
+				\(E := \psi^{-1}(V)\).
+				This set is circled and
+				\[E \cap S^{n-1} = \psi^{-1}(V \cap K) = \emptyset.\]
+				Thus \(E \subseteq U_1^{\C^n}(0)\).
+			</p>
+			<p>
+				Let \(\epsilon > 0\).
+				\[\psi^{-1}(\epsilon V) = \epsilon \psi^{-1}(V) = \epsilon E \subseteq U_\epsilon^{\C^n}(0)\]
+				which proves continuity at \(0\).
+			</p>
+			<p align="right">\(\Box\)</p>
+
+			<p>
+				In the introduction we found an example for a discontinuous function in an infinite dimensional vector space. Interestingly enough, this is always possible.
+			</p>
+			<h3>Proposition.</h3>
+			<p>
+				Let \(\left< X, \norm{.} \right>\) be a infinite dimensional normed vector space then \(X^* \setminus X' \neq \emptyset\).
+			</p>
+			<p style="font-style: italic">Proof.</p>
+			
+			<p>
+				Let \(\{b_n : n \in \mathbb{N}\}\) be a linearly independent set. 
+			</p>
+
+			<p>
+				By the theorem of linear continuation let \(f\) be the linear function with
+				\[f(b_n) = n \cdot \norm{b_n}.\]
+				This map is unbounded and thus discontinuous.
+			</p>
+
+			<p align="right">\(\Box\)</p>
+
+			<p>
+				Note that for any vector space \(X\) we can find a topology such that all functionals are continuous. In particular let \(\T = \sigma(X,X^*)\) be the weak topology with respect to \(X^*\).
+				Then \(\left< X, \T \right>\) is a locally convex topological vector space where every functional is continuous.
+			</p>
+
+			<p>
+				There even exist a topological vector space where there is no continuous functional.
+			</p>
+			<h3>Proposition.</h3>
+			<p>
+				Let \(p \in (0,1) \) and let
+				\[\Delta f = \int_{(0,1)} |f(t)|^p d\lambda(t).\]
+				Then \(L^p(0,1) = \{f:(0,1)\to \C : \Delta f < \infty\}\) is a vector space with metric
+				\[d(f,g) = \Delta(g-f).\]
+				It holds that \({L^p(0,1)}' = \{0\}\).
+			</p>
+			<p style="font-style: italic">Proof.</p>
+			<h3>Claim.</h3>
+			<p>
+				If a \(V\), a neighbourhood of \(0\), is convex, then \(V = L^p(0,1)\).
+			</p>
+			<p style="font-style: italic">Proof.</p>
+			<p>
+				Let \(f\in L^p(0,1)\) and \(U_r^\Delta(0) \subseteq V\).
+				Choose \(n \in \mathbb{N}\) such that \(n^{p-1} \Delta f < r\).
+			</p>
+			<p>
+				The measure
+				\[\mu(A) = \int_A |f(t)|^p d\lambda(t)\]
+				is finite and thus
+				\[x \mapsto \mu((0,x))\]
+				is continuous. Therefore, we can choose \(x_j\) such that \(\mu(0,x_j) = \frac{j}{n}\Delta f\).
+			</p>
+			<p>
+				Define
+				\(g_i = n f I_{(x_{i-1}, x_j]}\).
+				It holds that \(f = \frac{1}{n}\sum_{i=1}^n g_i\) and
+				\[\Delta g_i = \int_{(x_{i-1}, x_j]} |nf(t)|^p d\lambda(t) = n^{p-1} \Delta f < r.\]
+				Thus \(g_i \in V\) and as a convex combination \(f \in V\).
+			</p>
+
+			<p align="right">\(\Box\)</p>
+
+			<p>
+				Suppose there is a \(\psi \in L^p(0,1)'\) such that there is a \(f \in L^p(0,1)\) with
+				\(\psi(f) = c \neq 0\).
+			</p>
+			<p>
+				Choose \(\epsilon = \frac{|c|}{2}\). Now for any \(\delta > 0 \) it holds that 
+				\[\psi(U_\delta^\Delta(0)) = \psi(L^p(0,1)) \ni c.\]
+				So we have
+				\[\psi(U_\delta^\Delta(0)) \not\subseteq U_\epsilon^\Delta(0)\]
+				which makes \(\psi\) discontinuous.
+			</p>
+			<p align="right">\(\Box\)</p>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
