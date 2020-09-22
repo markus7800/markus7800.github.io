@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<link rel="icon" type="image/png" href="./res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		\(
+		\newcommand{\P}{\mathbf{P}}
+		\)
+
+		<title>Bayesian Inversion</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Bayesian Inversion</h1>
+		<main>
+			<h2>Bayesian Inference</h2>
+			<p>
+				We assume that we have some kind of model and want to estimate the paramters of the model by observing some data.
+			</p>
+			<p>
+				Let's denote the observed data with \(D\) and the parameters with \(Q\) which are both considered to be random variables.
+			</p>
+			<p>
+				Define
+				\[\pi(q|d) = \P(Q=q|D=d)\]
+				the probability of parameter \(q\) given the observed data \(d.\)<br>
+				Similiarly let
+				\[\pi(d|q) = \P(D=d|Q=q)\]
+				be the likelihood of the parameter \(q\). It is the probability that we observe the data \(d\) given the underlying model parameter \(q.\)
+			</p>
+			<p>
+				By Bayes' theorem
+				\begin{align}
+					\pi(q|d) = \frac{\pi(d|q)\pi_0(q)}{\pi_D(d)} = \frac{\pi(d|q)\pi_0(q)}{\int \pi(d|q)\pi_0(q)dq},
+				\end{align}
+				where \(\pi_0(q) = \P(Q=q)\) is the <i>prior</i> information about the parameter and \(\pi_D(d) = \P(D=d)\) is the probability of the data. \(\pi(q|d)\) is called the <i>posterior</i> information about the parameter (after we observed the data).
+			</p>
+			<p>
+				In general, \(\pi_0\) is chosen through domain knowledge (e.g. the physical bounds of the parameter) and \(\pi(d|q)\) is derived from the model assumptions. Calculating \(\pi_D(d)\) is hard but there are tricks how this can be avoided.
+			</p>
+
+			<h2>Model Assumptions</h2>
+			<p>
+				Our assumption is that we have a correct model parametrised by \(Q\) and observed the data with standard normal noise.
+				\[d_i = f(t_i;Q) + \epsilon_i,\]
+				where \(\epsilon_i \sim \mathcal{N}(0,\sigma^2)\) independently. Note that \(\sigma\) is assumed to be known (for example measurement precision).
+			</p>
+			<p>
+				For this model assumption we can easily compute the likelihood
+				\begin{align}
+				\pi(d|q) &= \prod_{i=1}^N \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{(d_i-f(t_i;q))^2}{2\sigma^2}\right) \\
+				&= \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n (d_i - f(t_i;q))^2\right).
+				\end{align}
+			</p>
+
+			<h2>Example</h2>
+			<p>
+				Assume that we want to investigate the population dynamics of rabbits \(x\) and foxes \(y\).
+				We know following relation of the population for discrete time steps
+				\begin{align*}
+				x_{t+1} &= \alpha x_t - \beta x_t y_t \\
+   				y_{t+1} &= \gamma y_t + \delta x_t y_t. 
+   				\end{align*}
+   				Assume that we know that foxes die off exponentially without prey
+  				\[y_{t+1} = 0.9  y_t \quad (\gamma = 0.9). \]
+ 				Further, assume we understand the population dynamics of rabbits
+ 				with predator interaction completely
+   				\[x_{t+1} = 1.1  x_t - 0.15  x_t  y_t \quad (\alpha = 1.1, \beta = 0.15).\]
+   				It remains to determine \(\delta\). Luckily we know that \(0.05 \le \delta \le 0.20\) and observed following data with 5 percent precison \(\sigma = 0.05.\)
+			</p>
+			<div id="images">
+				<img src="res/bayesianinversion/foxrabbitdata.svg">
+			</div>
+			<p>
+				But how do we find the posterior?
+			</p>
+
+			<h2>Metropolis Hastings Algorithm</h2>
+
+			<h3>Markow Chain Monte Carlo.</h3>
+
+			<p>
+				A Markov chain is a sequence of random variables \(X_n\) called states such that
+				\begin{align}
+				\P(X_{n+1}=x_{n+1}|X_1=x_1, \dots, X_n=x_n) \\= \P(X_{n+1}=x_{n+1}|X_n=x_n),
+				\end{align}
+				so state transitions only depend on the predecessor state.<br>
+				A homogeneous (time independent) Markov chain can be described by a set of states, initial state distribution \(X_0 \sim p_0\) and a transition kernel 
+				\[p_{ij} = \P(X_{n+1}=x_j|X_n=x_i).\]<br>
+				If the state space is finite \(p_{ij}\) can be captured as a transition matrix \(P.\)
+				The distribution of states as time progresses are given by
+				\[p^n := p^0 P^n.\]
+				If a limiting return distribution \(\pi\) exists it must satisfy
+				\[\pi = \pi P\] which is called stationary.
+				If the distribution \(\pi\) is reversible \(\pi p_{ij} = \pi_j p_{ji}\) it is also stationary (detailed balance).
+			</p>
+			<h3>Theorem.</h3>
+			<p>
+				A finite, homogeneous, irreducible and aperiodic Markoc chain has a unique stationary distribution which is also the limiting state distribution of any initial state distribution.
+			</p>
+			<p>
+				Now the goal is to construct a Markov chain with the posterior as stationary distribution.
+			</p>
+
+			<h3>Deriving the algorithm.</h3>
+			<p>
+				For arbitrary distribution \(\omega\) which we already know up to a factor we can construct a Markow chain as follows.
+			</p>
+			<p>
+				As we have to satisfy the detailed balance condition we have
+				\[P(q'|q) \omega(q) = P(q|q') \omega(q').\]
+				We separate the transition probability \(P\) into proposal \(J\) and acceptance \(A\) proability
+				\[P(q'|q) = J(q'|q) A(q'|q).\]
+				So far we have
+				\[\frac{A(q'|q)}{A(q|q')} = \frac{\omega(q')J(q|q')}{\omega(q)J(q'|q)}.\]
+				We can solve for \(A\)
+				\[A(q'|q) = \min\left(1,\frac{\omega(q')J(q|q')}{\omega(q)J(q'|q)}\right).\]
+				It is clear that we only need to know \(\omega\) up to a factor.
+				If we choose
+				\[J(q'|q) \sim \mathcal{N}(q,V)\]
+				the condtions of above theorem hold and \(\omega\) is the unique stationary and limiting distribution of the Markov chain.
+			</p>
+			<p>
+				It does not seem that impressive to be able to generate a distribution when we already know it up to factor. But wait a second! We know 
+				\[\pi(q|d) \propto \pi(d|q)\pi_0(q)\]
+				and the normalising factor
+				\[\pi_D(d) = \int \pi(d|q)\pi_0(q)dq\]
+				is hard to compute whereas \(\pi(d|q)\pi_0(q)\) is not. An ideal application of MCMC.
+			</p>
+			<h3>The algorithm.</h3>
+			<p>
+				1. Start at a random guess \(q=q_0.\)
+			</p>
+			<p>
+				2. Propose \(q' \sim J(.|q)\).
+			</p>
+			<p>
+				3. Accept \(q'\) with probability 
+				\[A(q'|q) = \min\left(1,\frac{\pi(d|q')\pi_0(q')J(q|q')}{\pi(d|q)\pi_0(q)J(q'|q)}\right)\] or else discard it.
+			</p>
+			<p>
+				4. Repeat 2. and 3.
+			</p>
+			<p>
+				If then all accepted \(q\)s are collected and a <i>burn in</i> period is discarded the \(q\)s are distributed according to \(\pi(.|d)\).
+			</p>
+
+			<h3>Tipps.</h3>
+			<p>
+				If \(J(.|q) \sim \mathcal{N}(q,V)\) one can generate \(q'\) by generating \(z \sim \mathcal{N}(0,I)\) first and then computing
+				\[q' = q + V^{1/2}z.\]
+				This process is called <i>unwhitening</i> and for positive definite \(V\) the square root can be calculated by a Choletsky decomposition \(V = L L^T\), \(V^{1/2}=U=L^T.\)
+			</p>
+			<p>
+				If \(J\) is symmetric (like with the gaussian proposal) the acceptance probability simplifies to
+				\[A(q'|q) = \min\left(1,\frac{\pi(d|q')\pi_0(q')}{\pi(d|q)\pi_0(q)}\right).\]
+			</p>
+			<p>
+				The constant \(\frac{1}{\sqrt{2\pi}\sigma}\) for the likelihood also cancels in the fraction which results in numerical stabilty.
+			</p>
+
+			<h3>Back to the example.</h3>
+
+			<p>
+				Letting the Metropolis algorithm run with uniform prior for \(10^5\) steps and discarding the first tausend \(q\)s as burn in we get following histogram.
+			</p>
+			<div id="images">
+				<img src="res/bayesianinversion/deltahist.svg">
+			</div>
+			<p>
+				We can see that we have 95% confidence bounds of \([0.1195, 0.1218]\) and maximum a posteriori (MAP) estimate \(\delta \approx 0.1207.\)
+			</p>
+			<p>
+				Comparing this to the data and true dynamics with which the data was generated we see the impressive accuracy.
+			</p>
+			<div id="images">
+				<img src="res/bayesianinversion/comptotrue.svg">
+			</div>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
