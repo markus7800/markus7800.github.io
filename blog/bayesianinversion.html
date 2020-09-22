@@ -55,8 +55,8 @@
 			<p>
 				For this model assumption we can easily compute the likelihood
 				\begin{align}
-				\pi(d|q) &= \prod_{i=1}^N \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{(d_i-f(t_i;q))^2}{2\sigma^2}\right) \\
-				&= \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n (d_i - f(t_i;q))^2\right).
+				\pi(d|q) &= \prod_{i=1}^N  \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{(d_i-f(t_i;q))^2}{2\sigma^2}\right) \\
+				&= \frac{1}{(2\pi\sigma^2)^{N/2}}\exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n (d_i - f(t_i;q))^2\right).
 				\end{align}
 			</p>
 
@@ -128,7 +128,9 @@
 				the condtions of above theorem hold and \(\omega\) is the unique stationary and limiting distribution of the Markov chain.
 			</p>
 			<p>
-				It does not seem that impressive to be able to generate a distribution when we already know it up to factor. But wait a second! We know 
+				It does not seem that impressive to be able to generate a distribution when we already know it up to factor.<br>
+				But wait a second!<br>
+				We know 
 				\[\pi(q|d) \propto \pi(d|q)\pi_0(q)\]
 				and the normalising factor
 				\[\pi_D(d) = \int \pi(d|q)\pi_0(q)dq\]
@@ -163,7 +165,7 @@
 				\[A(q'|q) = \min\left(1,\frac{\pi(d|q')\pi_0(q')}{\pi(d|q)\pi_0(q)}\right).\]
 			</p>
 			<p>
-				The constant \(\frac{1}{\sqrt{2\pi}\sigma}\) for the likelihood also cancels in the fraction which results in numerical stabilty.
+				The constant \(\frac{1}{(2\pi\sigma^2)^{N/2}}\) for the likelihood also cancels in the fraction which results in numerical stabilty.
 			</p>
 
 			<h3>Back to the example.</h3>
