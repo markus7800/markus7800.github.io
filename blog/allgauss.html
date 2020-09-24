@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<link rel="icon" type="image/png" href="./res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		\(
+		\newcommand{\N}{\mathcal{N}}
+		\newcommand{\R}{\mathbb{R}}
+		\)
+
+		<title>All Gauss Everthing</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>All Gauss Everthing</h1>
+		<main>
+			<h2>Multivariate Normal Distribution</h2>
+			<p>
+				A random vector is Gaussian distributed \(X \sim \N(\mu, \Sigma)\) with mean \(\mu \in \R^k\) and positive definite covariance matrix \(\Sigma \in \R^{k \times k}\) if its pdf is
+				\[f_X(x) = \frac{1}{(2\pi)^{k/2} |\Sigma|^{1/2}} \exp \left(-\frac{1}{2}(x-\mu)^T \Sigma^{-1} (x -\mu)\right).\]
+			</p>
+			<h3>Proposition.</h3>
+			<p>
+				If \((X, Y)^T\) is jointly Gaussian,
+				\begin{align}
+					\begin{pmatrix}
+						X \\ Y
+					\end{pmatrix}
+					\sim
+					\N \left(
+					\begin{pmatrix}
+						\mu_1 \\ \mu_2
+					\end{pmatrix}
+					,
+					\begin{pmatrix}
+						\Sigma_{11} & \Sigma_{12} \\
+						\Sigma_{21} & \Sigma_{22}
+					\end{pmatrix}
+					\right),
+				\end{align}
+				then the marginal distribution is also Gaussian,
+				\begin{align}
+					X \sim \N(\mu_1, \Sigma_{11}), \quad Y \sim \N(\mu_2, \Sigma_{22}),
+				\end{align}
+				and the conditional distribution is also Gaussian,
+
+				\begin{align}
+					X|Y &\sim \N(\mu_1 + \Sigma_{12}^T \Sigma_{11}^{-1}(Y - \mu_2), \Sigma_{11} - \Sigma_{12}^T \Sigma_{11}^{-1}\Sigma_{12}),
+				\end{align}
+				\begin{align}
+					Y|X &\sim \N(\mu_2 + \Sigma_{21}^T \Sigma_{22}^{-1}(X - \mu_1), \Sigma_{22} - \Sigma_{21}^T \Sigma_{22}^{-1}\Sigma_{21}).
+				\end{align}
+			</p>
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<h3>Claim 1.</h3>
+				<p>
+					For regular symmetric
+					\begin{align}
+					A = \begin{pmatrix}
+					A_{11} & A_{12} \\
+					A_{12}^T & A_{22}
+					\end{pmatrix}
+					\end{align}
+					and inverse
+					\[B = A^{-1} = 
+					 \begin{pmatrix}
+					B_{11} & B_{12} \\
+					B_{21} & B_{22}
+					\end{pmatrix}\]
+					where the matrices are partionend in equally large blocks, we have
+					\begin{align}
+					B_{11} &= (A_{11} - A_{12}A_{22}^{-1}A_{12}^T)^{-1} \\
+					B_{22} &= (A_{22} - A_{12}^T A_{11}^{-1}A_{12})^{-1} \\
+					B_{12} &= B_{21}^T = -A_{11}^{-1}A_{12}(A_{22}-A_{12}^T A_{11}^{-1} A_{12})^{-1}
+					\end{align}
+				</p>
+
+				
+				<button class="collapsible">Proof.</button>
+				<div class="collapsiblecontent">
+					<p>
+						We have
+						\begin{align}
+						I = AB &= \begin{pmatrix}
+						A_{11}B_{11} + A_{12} B_{21} & A_{11}B_{12} + A_{12} B_{22} \\
+
+						A_{21}B_{11} + A_{22} B_{21} & A_{21}B_{12} + A_{22} B_{22}
+
+						\end{pmatrix} \\ &=
+						\begin{pmatrix}
+						I_1 & 0 \\ 0 & I_2
+						\end{pmatrix}
+						\end{align}	
+						Now we can treat this as system of linear equations and solve for the blocks.
+					</p>
+					<p align="right">\(\Box\)</p>
+				</div>
+
+				<h3>Claim 2.</h3>
+				<p> For symmetric \(A\)
+					\begin{align}
+						|A| &= |A_{22}|| A_{11} - A_{12} A_{22}^{-1} A_{12}^T | \\
+						&= |A_{11}|| A_{22} - A_{12}^T A_{11}^{-1} A_{12} | .
+					\end{align}
+				</p>
+				<button class="collapsible">Proof.</button>
+				<div class="collapsiblecontent">
+					<p>
+						\begin{align}
+						A &=
+						\begin{pmatrix}
+						A_{11} & 0 \\
+						A_{12}^T & I_2
+						\end{pmatrix}
+						\begin{pmatrix}
+						I_1 & A_{11}^{-1}A_{12} \\
+						0 & A_{22} - A_{12}^T A_{11}^{-1} A_{12}
+						\end{pmatrix} \\
+						& =
+						\begin{pmatrix}
+						I_1 & A_{12} \\
+						0 & A_{22}
+						\end{pmatrix}
+						\begin{pmatrix}
+						A_{11} - A_{12} A_{22}^{-1} A_{12}^T & 0 \\
+						A_{22}^{-1}A_{12}^T & I_2
+						\end{pmatrix} 
+
+						\end{align}
+					</p>
+					<p align="right">\(\Box\)</p>
+				</div>
+
+				<p align="right">\(\Box\)</p>
+			</div>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
