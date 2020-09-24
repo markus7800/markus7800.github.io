@@ -79,6 +79,10 @@ a {
   display: none;
   overflow: hidden;
 }
+.collapsiblecontentwopad {
+  display: none;
+  overflow: hidden;
+}
 
 @media only screen and (max-device-width: 600px) {
     h1 {

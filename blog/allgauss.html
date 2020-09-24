@@ -10,7 +10,13 @@
 
 		\(
 		\newcommand{\N}{\mathcal{N}}
+		\newcommand{\X}{\mathcal{X}}
 		\newcommand{\R}{\mathbb{R}}
+		\newcommand{\Pd}{\mathscr{P}}
+		\newcommand{\Exp}[1]{\mathbb{E}\left[#1\right]}
+		\newcommand{\Prob}[1]{\mathbf{P}\left(#1\right)}
+		\newcommand{\bfX}{\mathbf{X}}
+		\newcommand{\bfy}{\mathbf{y}}
 		\)
 
 		<title>All Gauss Everthing</title>
@@ -21,6 +27,9 @@
 			<a href="./blog.html">Back</a>
 		</p>
 		<h1>All Gauss Everthing</h1>
+		<div id="images">
+			<img src="res/allgauss/Carl_Friedrich_Gauss.jpg" width="300px">
+		</div>
 		<main>
 			<h2>Multivariate Normal Distribution</h2>
 			<p>
@@ -60,7 +69,7 @@
 				\end{align}
 			</p>
 			<button class="collapsible">Proof.</button>
-			<div class="collapsiblecontent">
+			<div class="collapsiblecontentwopad">
 				<h3>Claim 1.</h3>
 				<p>
 					For regular symmetric
@@ -186,7 +195,9 @@
 					&\quad+ (y - \mu_2)^T \Sigma^{22}(y - \mu_2) \\
 
 					&= (x - \mu_1)^T \Sigma_{11}^{-1}(x - \mu_1) \\
-					&\quad+ (\Sigma_{12}^T \Sigma_{11}^{-1}(x - \mu_1))^T(\Sigma_{22} - \Sigma_{12}^T\Sigma_{11}^{-1}\Sigma_{12})^{-1} (\Sigma_{12}^T \Sigma_{11}^{-1}(x - \mu_1) )\\
+					&\quad+ (\Sigma_{12}^T \Sigma_{11}^{-1}(x - \mu_1))^T \\
+					&\quad\quad\,(\Sigma_{22} - \Sigma_{12}^T\Sigma_{11}^{-1}\Sigma_{12})^{-1} \\
+					&\quad\quad\, (\Sigma_{12}^T \Sigma_{11}^{-1}(x - \mu_1) )\\
 					&\quad- 2(\Sigma_{12}^T \Sigma_{11}^{-1}(x - \mu_1))^T(\Sigma_{22}-\Sigma_{12}^T \Sigma_{11}^{-1} \Sigma_{12})^{-1}(y - \mu_2) \\
 					&\quad+ (y - \mu_2)^T (\Sigma_{22} - \Sigma_{12}^T\Sigma_{11}^{-1}\Sigma_{12})^{-1}(y - \mu_2) \\
 
@@ -237,11 +248,138 @@
 					\begin{align}
 						f_{Y|X}(y) &= \frac{f_Z(x,y)}{f_X(x)} \\ 
 						&= \frac{(2\pi)^{p/2} |\Sigma_X|^{1/2}}{(2\pi)^{k/2} |\Sigma|^{1/2}} \exp\left( \frac{1}{2}(Q_X(x) +  Q_{Y|X}(y) - Q_X(x)) \right) \\
-						&= \frac{1}{(2\pi)^{q/2} |\Sigma_{Y|X}|^{1/2}} \exp\left( \frac{1}{2} Q_{Y|X}(y) \right) 
+						&= \frac{1}{(2\pi)^{q/2} |\Sigma_{Y|X}|^{1/2}} \exp\left( \frac{1}{2} Q_{Y|X}(y) \right) .
 					\end{align}
 				</p>
 
 				<p align="right">\(\Box\)</p>
+			</div>
+
+			<h2>Gaussian Processes</h2>
+			<p>
+				A Gaussian Process is a mapping from an input space \(\X\) to random variables, \(f:\X \to \Pd(\R).\) Every finite collection of these random variables is jointly Gaussian distributed.
+			</p>
+			<p>
+				As a Gaussian distributed random vector \(X = (X_1,\dots,X_n)^T \sim \N(\mu,\Sigma)\) can also be considered a mapping to random variables \(X:\{1,\dots,n\}\to \Pd(\R)\), a Gaussian process can be considered a generalisation of the Gaussian distribution from  vectors to fuctions.
+			</p>
+			<p>
+				A Gaussian Process is completely defined by a mean <i>function</i> and covariance <i>function</i>
+				\begin{align}
+				m(x) &= \Exp{f(x)}, \\
+				k(x,x') &= \Exp{(f(x)-m(x))(f(x') -m(x'))}.
+				\end{align}
+			</p>
+			<p>
+				So we can specify the mean function \(m\) and the <i>kernel</i> function \(k\) and get a Gaussian process \(f \sim GP(m,k).\)
+			</p>
+			<p>
+				For multiple inputs \(\bfX = (x_1, \dots, x_n)^T \in \X^n\) we have
+				\begin{align}
+					f(\bfX) \sim \N(m(\bfX), k(\bfX,\bfX)),
+				\end{align}
+				where
+				\begin{align}
+				m(\bfX)= \begin{pmatrix}
+				m(x_1) \\
+				\vdots \\
+				m(x_n)
+				\end{pmatrix}, \quad
+
+				k(\bfX,\bfX) = \begin{pmatrix}
+				k(x_1,x_1) & \cdots & k(x_1,x_n) \\
+				\vdots & & \vdots \\
+				k(x_n, x_1) & \cdots & k(x_n,x_n)
+				\end{pmatrix}.
+				\end{align}
+			</p>
+			<p>
+				A common choice for the kernel is the <i>Squared Exponential (SE)</i>
+				\[k(x,x') = \sigma \exp\left(\frac{(x-x')^2}{\ell}\right)\]
+				which is positive definite (<a href="https://www.jld-stats.com/2020/03/06/positive-definiteness-of-squared-exponential-kernel-matrix/">Proof</a>).
+			</p>
+
+			<h3>Predictions.</h3>
+			<p>
+				If we know function values \(\bfy = (y_1, \dots, y_n)\) at training inputs \(\bfX = (x_1, \dots, x_n)^T \in \X^n\) for a deterministic model
+				\[F(x_i) = y_i \in \R,\]
+				we can specify priors in terms of mean and kernel function and then make predictions by conditioning on the training inputs.
+			</p>
+			<p>
+				For test inputs \(\bfX_* = (x_1^*, \dots, x_k^*)\) we can calculate the probability of test outputs \(\bfy_* = (y_1^*, \dots, y_k^*)\) given our data \((\bfX, \bfy)\) by observing
+				\begin{align}
+				\begin{pmatrix}
+				\bfy \\ \bfy_*
+				\end{pmatrix}
+				&\sim
+				\N \left(
+				\begin{pmatrix}
+				m(\bfX) \\ m(\bfX_*)
+				\end{pmatrix},
+				\begin{pmatrix}
+				k(\bfX,\bfX) & k(\bfX,\bfX_*) \\
+				k(\bfX_*,\bfX) & k(\bfX_*,\bfX_*)
+				\end{pmatrix}
+				\right) \\
+				&:= \N\left(
+					\begin{pmatrix}
+					\mu \\ \mu_*
+					\end{pmatrix},
+					\begin{pmatrix}
+					K & K_* \\
+					K_*^T & K_{**}
+					\end{pmatrix}
+					\right).
+				\end{align}
+				We know that
+				\begin{align}
+				\bfy_* | \bfX, \bfy, \bfX_* &= F(\bfX_*) = \bfy_* | F(\bfX)=\bfy \\
+				&\sim \N(\mu_* + K_*^T K^{-1}(\bfy - \mu),K_{**} - K_*^T K^{-1}K_*).
+				\end{align}
+			</p>
+
+			<h3>Posterior GP.</h3>
+			<p>
+				From this formula the definition of the <i>posterior</i> Gaussian Process \(GP(\hat m,\hat k)\) given data \((\bfX, \bfy)\) is clear
+				\begin{align}
+				\hat m (x) &:= k(x, \bfX) k(\bfX, \bfX)^{-1} (\bfy - m(\bfX)) \\
+				\hat k (x, x') &:= k(x,x') - k(x,\bfX)(\bfX, \bfX)^{-1}k(\bfX, x').
+				\end{align}
+				Evaluating the posterior GP at \((\bfX_*, \bfy_*)\) is the same as evaluating the prior GP at \((\bfX_*, \bfy_*)\) <i>given</i> \((\bfX, \bfy)\) (prediction).
+			</p>
+			<p>
+				This process can look like the plots below, where the mean function is the solid blue line and the shaded region is the 95% confidence interval at each point.
+				On the right we have observed data and thus we are more certain how the function looks arround this points.
+			</p>
+			<div id="images">
+				<img src="res/allgauss/prior.svg" width="48%">
+
+				<img src="res/allgauss/posterior.svg" width="48%">
+			</div>
+			
+
+			<h3>Noisy Training Data.</h3>
+			<p>
+				If we only know
+				\[F(x_i) + \epsilon_i = y_i,\]
+				with \(\epsilon_i \sim \N(0,\sigma_\epsilon)\) independently, then we have to adjust the predicitions and posterior GP by replacing \(K\) with \(K + \sigma_\epsilon^2 \mathbf{I}\).
+			</p>
+			<h3>Sampling</h3>
+			<p>
+				A sample from a Gaussian Process \(GP(m,k)\) is a realisation
+				\(f_i :\X \to \R\), so a function.
+				As we only are able to evaluate the function at a finite amount of points \(\bfX_* = (x_1^*, \dots, x_k^*)\) we simply can sample
+				\[\N(m(\bfX_*), k(\bfX_*, \bfX_*)) = \N(\mu_*, K_{**}\] or
+				\[\N(\mu_* + K_*^T K^{-1}(\bfy - \mu),K_{**} - K_*^T K^{-1}K_*)\]
+				if we have observed data.
+			</p>
+			<p>
+				Drawing 10 samples can look something like this:
+			</p>
+
+			<div id="images">
+				<img src="res/allgauss/prior_sample.svg" width="48%">
+
+				<img src="res/allgauss/posterior_sample.svg" width="48%">
 			</div>
 		</main>
 		<p>
