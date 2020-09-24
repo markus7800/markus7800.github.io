@@ -38,6 +38,21 @@
 			</p>
 			<h3>Proposition.</h3>
 			<p>
+				A finite transform of a Gaussian distributed vector \(X \sim \N(\mu, \Sigma)\) is again Gaussain
+				\[\nu + U X \sim \N(\nu + U\mu, U\Sigma U^T).\]
+			</p>
+
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p>
+					Follows from the pdf definition and some linear algebra or the moment generating funtion.
+				</p>
+				<p align="right">\(\Box\)</p>
+			</div>
+
+
+			<h3>Proposition.</h3>
+			<p>
 				If \(Z = (X, Y)^T\) is jointly Gaussian,
 				\begin{align}
 					\begin{pmatrix}
@@ -368,7 +383,7 @@
 				A sample from a Gaussian Process \(GP(m,k)\) is a realisation
 				\(f_i :\X \to \R\), so a function.
 				As we only are able to evaluate the function at a finite amount of points \(\bfX_* = (x_1^*, \dots, x_k^*)\) we simply can sample
-				\[\N(m(\bfX_*), k(\bfX_*, \bfX_*)) = \N(\mu_*, K_{**}\] or
+				\[\N(m(\bfX_*), k(\bfX_*, \bfX_*)) = \N(\mu_*, K_{**})\] or
 				\[\N(\mu_* + K_*^T K^{-1}(\bfy - \mu),K_{**} - K_*^T K^{-1}K_*)\]
 				if we have observed data.
 			</p>
@@ -381,6 +396,52 @@
 
 				<img src="res/allgauss/posterior_sample.svg" width="48%">
 			</div>
+
+			<h3>Bayesian Selection of Kernel Paramters.</h3>
+			<p>
+				Since we want to make the predictions as accurate as possible, we can try to first adapt the hyperparameters of mean and kernel to fit our training data.
+			</p>
+			<p>
+				First note that
+				\[
+					\Prob{f | \bfX, \bfy, \theta} = \frac{\Prob{\bfy| \bfX, f, \theta}\Prob{f|\theta}}{\Prob{\bfy | \bfX, \theta}},
+				\]
+				where \(\theta\) are the hyperparamters and 
+				\[
+					\Prob{\bfy | \bfX, f, \theta} = \prod_{i=1}^n \Prob{y_i| f(x_i), \theta}
+				\]
+				is the likelihood of \(f\) (where the noise of the model plays the major role).
+			</p>
+			<p>
+				The marginal likelihood, also called evidence is defined by
+				\[\Prob{\bfy | \bfX, \theta} = \int \Prob{\bfy | \bfX, f, \theta} \Prob{f |\theta} df.\]
+			</p>
+			<p>
+				The posterior of the hyperparamters is
+				\[
+				\Prob{\theta | \bfX, \bfy} = \frac{\Prob{\bfy | \bfX, \theta}\Prob{\theta}}{\Prob{\bfy | \bfX}}.
+				\]
+				If we assume a flat prior, so \(\theta\) is chosen uniformly, we have
+				\begin{align}
+				&\log \Prob{\theta | \bfX, \bfy} \propto \log \Prob{\bfy | \bfX, \theta} \\
+				&\quad= -\frac{1}{2}(\bfy - m(\bfy))^T K^{-1}(\bfy - m(\bfy)) -\frac{1}{2}\log|K^{-1}| -\frac{n}{2}\log(2\pi),
+				\end{align}
+				which can be maximised. <br>
+				This is called <i>type II maximum likelihood estimation.</i>
+
+			</p>
+
+			<h3>Implementation Tipps.</h3>
+			<p>
+				Computing the inversion of a matrix is numerically bad but since the kernels are usually positive definite we can use the Cholesky factorization.<br>
+				Write \(K = U^T U\) for an upper triangular matrix \(U.\) Solve the system
+				\(U^T L = K_*\) for \(L\) (fast). Since then \(L = (U^{-1})^T K_*\) we have
+				\[L^T L = K_*^T U^{-1} (U^{-1})^T K_* = K_*^T K^{-1} K_*.\]
+			</p>
+			<p>
+				For sampling we can use a standard normal vector \(Z \sim \N(0, \mathbf{I})\) and <i>unwhiten</i> it with \(K_{**}\). That is, let \(U^T U = K_{**}\) and then
+				\[U^T Z \sim \N(0, U^T \mathbf{I}U) = \N(0, K_{**}).\]
+			</p>
 		</main>
 		<p>
 			<a href="./blog.html">Back</a>
