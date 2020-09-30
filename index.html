@@ -16,12 +16,12 @@
 	<body>
 		<a name="top"></a>
 		<main>
-			<p>
-				<a href="./blog/blog.html">Blog</a>
-			</p>
-			
-			<h1>Markus Böck, BSc</h1>
 			<div>
+				<p>
+					<a href="./blog/blog.html">Blog</a>
+				</p>
+				
+				<h1>Markus Böck, BSc</h1>
 				<div id="images">
 					<img class="centered" src="res/hello_crop.gif" alt="hello gif">
 				</div>
@@ -52,7 +52,7 @@
 				<h2>Blog</h2>
 				<p>
 					I started a <a href="./blog/blog.html">blog</a> about stuff I find interesting.
-					This can be fancy algorithms, beautiful mathematical results, etc. There you may find explanations and background theory about some of my projects. 
+					This can be fancy algorithms, beautiful mathematical results, etc. There you may find explanations and background information about some of my projects. 
 				</p>
 				<p><br></p>
 				
@@ -60,17 +60,27 @@
 				<h2>Some Projects</h2>
 				<!-- <h2>Projects - aka some stupid stuff I made</h2> -->
 				<div>
+					<h3>CartPole with RL</h3>
+					<p>
+						Reinforcement Learning in continuous state space.
+						The task was to swingup and balance a pendulum by only applying a horizontal force at the cart.
+						The states were approximated by a neural net.
+					</p>
+					<div id="images">
+						<img src="./res/swingup10s.gif">
+					</div>
+
 					<h3>Covid-19 Predictive Modelling</h3>
 					<p>
 						Least Square Regression based on Susceptible-Infected-Removed (SIR) model.
-						Has no predictive value as it overfits like crazy but I tried.
+						Has no predictive value as it overfits a lot.
 					</p>
 					<img src="res/covid.svg" alt="covid prediction" width="95%">
 
 					<p><br></p>
 					<h3>Simplified Snake AI with RL</h3>
 					<p>
-						First implementation of reinforcement learning algos by me.
+						First implementation of reinforcement learning algorithm for me.
 						Here Monte Carlo methods were used to achieve the objective of collecting the red apples.
 						In order to decrease the number of states and difficulty, the snake has no tail.
 					</p>
