@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<link rel="icon" type="image/png" href="./res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		\(
+		\newcommand{\xbf}{\mathbf{x}}
+		\newcommand{\Xbf}{\mathbf{X}}
+		\newcommand{\ybf}{\mathbf{y}}
+		\newcommand{\R}{\mathbb{R}}
+		\newcommand{\sgn}{\operatorname{sgn}}
+		\newcommand{\norm}[1]{\lVert #1 \rVert}
+		\)
+
+		<title>Kernel Trick</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Kernel Trick</h1>
+		<main>
+			<h2>SVMs</h2>
+			<p>
+				For training data \(\Xbf \in \R^{n \times d} = (\xbf_1, \dots, \xbf_n)^T \) with labels \(\ybf \in \{-1,1\}^n = (y_1,\dots,y_n)^T\) <i>Support Vector Machines</i> aim to find a hyperplane
+				\[\mathcal{L} = \{\xbf \in \R^d: f(\xbf) = \beta_0 + \beta^T \xbf = 0\}\]
+				which separates the data according to its labels
+				\[\sgn f(\xbf_i) = y_i.\]
+			</p>
+			<p>
+				The distance of a point \(\xbf\) to the hyperplane can be stated in terms of a point \(\xbf_0 \in \mathcal{L}\)
+				\[\frac{1}{\norm{b}}b^T(\xbf -\xbf_0) = \frac{1}{\norm{b}}(b^T\xbf + \beta_0) = \frac{1}{\norm{b}}f(\xbf) \]
+			</p>
+			<p>
+				If the data is can be linearly separated with \(\beta_0, \beta\) we have
+				\[y_i f(\xbf_i) > 0\]
+				and thus
+				\[\frac{1}{\norm{\beta}} y_i (\beta^T \xbf_i + \beta_0) \ge  M\]
+				with
+				\[M = \min_{1 \le i \le n} \frac{1}{\norm{\beta}} y_i f(\xbf_i).\]
+				We can find \(\tilde \beta = \frac{1}{\norm{\beta}M}\beta, \tilde \beta_0 = \frac{1}{\norm{\beta}M}\beta_0\) such that
+				\[y_i(\tilde\beta^T \xbf_i + \tilde \beta_0 )\ge 1\]
+				and
+				\[\min_{1 \le i \le n} \frac{1}{\norm{\tilde \beta}} y_i (\tilde\beta^T \xbf_i + \tilde \beta_0 ) = \frac{1}{\norm{\tilde \beta}}.\]
+				Therefore, if we want to maximise the margin \(M\) it is sufficient to find
+				\begin{gather}
+				\min_{\beta, \beta_0} \norm{\beta} \\
+				\text{s.t.} \enspace y_i(\beta^T \xbf_i + \beta_0) \ge 1.
+				\end{gather}
+			</p>
+			<p>
+				The solution \(\beta^*, \beta^*_0\) minimises
+				\[L_p(\beta, \beta_0) = \frac{1}{2}\norm{\beta}^2 + \sum_{i=1}^n \alpha_i y_i (\beta^T \xbf + \beta_0 - 1), \quad \alpha_i \ge 0.\]
+				Differentiating yields
+				\[
+				\ybf^T(\alpha^T \Xbf) = \beta, \quad \ybf^T \alpha = 0  
+				\]
+				at a local minimum. <br>
+				We see by substituting for \(\beta\) it is equivalent to maximise
+				\begin{gather}
+				L_d(\alpha) = (1,\dots,1)^T \alpha - \frac{1}{2} \alpha^T (\ybf \ybf^T .\Xbf^T \Xbf ) \alpha \\ \text{s.t. } \alpha \ge 0 \text{ and } \ybf^T \alpha = 0
+				\end{gather}
+				which is a quadratic program.
+			</p>
+			<p>
+				Predictions are done by
+				\[G(\xbf) = \sgn (\beta^T \xbf + \beta_0) = \sgn \left( \sum_{i=1}^n \alpha_i y_i \xbf_i^T \xbf + \beta_0 \right)\]
+				where \(\beta_0 = -\frac{1}{2}(\max_{y_i =-1} \beta^T \xbf_i + \min_{y_i=1} \beta^T \xbf_i).\)
+			</p>
+
+			<h2>Kernel Trick</h2>
+			<p>
+				Consider following data:
+				<div id="images">
+					<img src="./res/kerneltrick/svm_2d.svg">
+				</div>
+			</p>
+			<p>
+				The inner class is ellipse shaped. How do we find a hyperplane which separates both classes? <br>
+				In two dimensions we don't. <br>
+				Instead, we introduce a new feature, the distance of the points to the origin.
+				\[
+					\phi(x_1,x_2) := (x_1, x_2, \sqrt{x_1^2 + x_2^2})
+				\]
+			</p>
+			<p>
+				With three dimensions we are able to find a plane:
+				<div id="images">
+					<img src="./res/kerneltrick/svm_3d_1.svg">
+				</div>
+			</p>
+			<p>
+				The kernel trick is that we can implicitly go to higher dimensions by introducing a kernel
+				\[k(\xbf_1, \xbf_2) = \phi(\xbf_1)^T \phi(\xbf_2).\]
+				We wouldn't even need to define specifiy features and could directly specify a positive definte kernel.
+			</p>
+			<p>
+				Now simply replace all occurences of \(\xbf_i^T \xbf_j\) with \(k(\xbf_i, \xbf_j)\).
+			</p>
+			<p>
+				That is, we maximise
+				\begin{gather}
+				L_d(\alpha) = (1,\dots,1)^T \alpha - \frac{1}{2} \alpha^T (\ybf \ybf^T . k(\Xbf, \Xbf) ) \alpha \\ \text{s.t. } \alpha \ge 0 \text{ and } \ybf^T \alpha = 0
+				\end{gather}
+				and predict with
+				\[G(\xbf) = \sgn (\beta^T \xbf + \beta_0) = \sgn \left( \sum_{i=1}^n \alpha_i y_i k(\xbf_i, \xbf) + \beta_0 \right)\]
+				where \(\beta_0 = -\frac{1}{2}(\max_{y_j =-1} \sum_{i=1}^n \alpha_i y_i k(\xbf_i, \xbf_j) + \min_{y_i=1} \sum_{i=1}^n \alpha_i y_i k(\xbf_i, \xbf_j).\)
+			</p>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:w^hite;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
