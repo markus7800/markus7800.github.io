@@ -34,9 +34,28 @@
 				\[\sgn f(\xbf_i) = y_i.\]
 			</p>
 			<p>
-				The distance of a point \(\xbf\) to the hyperplane can be stated in terms of a point \(\xbf_0 \in \mathcal{L}\)
-				\[\frac{1}{\norm{b}}b^T(\xbf -\xbf_0) = \frac{1}{\norm{b}}(b^T\xbf + \beta_0) = \frac{1}{\norm{b}}f(\xbf) \]
+				The distance of a point \(\xbf\) to the hyperplane \(\mathcal{L}\) is
+				\[\frac{1}{\norm{\beta}}|\beta^T\xbf + \beta_0|  = \frac{1}{\norm{\beta}}f(\xbf).\]
 			</p>
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p>
+					For arbitrary \(\xbf_0 \in \mathcal{L}\) we have
+					\begin{align}
+					|\beta^T \xbf + \beta_0| &=|\beta^T \xbf - \beta^T \xbf_0| \\
+					&= |\beta^T (\xbf - \xbf_0)| \\
+					&\le \norm{\beta} \norm{\xbf - \xbf_0}
+					\end{align}
+					So
+					\[
+					\frac{1}{\norm{\beta}}|\beta^T \xbf + \beta_0| \le \norm{\xbf - \xbf_0}
+					\]
+					and for \(\xbf_0 = \xbf - \frac{\beta^T \xbf + \beta_0}{\norm{\beta}^2} \beta \)
+					\[\xbf_0 \in \mathcal{L}, \quad \norm{\xbf - \xbf_0} = \frac{1}{\norm{\beta}}|\beta^T \xbf + \beta_0|.\]
+				</p>
+				<p align="right">\(\Box\)</p>
+			</div>
+
 			<p>
 				If the data is can be linearly separated with \(\beta_0, \beta\) we have
 				\[y_i f(\xbf_i) > 0\]
@@ -86,7 +105,7 @@
 				In two dimensions we don't. <br>
 				Instead, we introduce a new feature, the distance of the points to the origin.
 				\[
-					\phi(x_1,x_2) := (x_1, x_2, \sqrt{x_1^2 + x_2^2})
+					\phi(x_1,x_2) := (x_1, x_2, \sqrt{x_1^2 + x_2^2})^T
 				\]
 			</p>
 			<p>
@@ -98,7 +117,7 @@
 			<p>
 				The kernel trick is that we can implicitly go to higher dimensions by introducing a kernel
 				\[k(\xbf_1, \xbf_2) = \phi(\xbf_1)^T \phi(\xbf_2).\]
-				We wouldn't even need to define specifiy features and could directly specify a positive definte kernel.
+				We wouldn't even need to specifiy features and could directly specify a positive definte kernel.
 			</p>
 			<p>
 				Now simply replace all occurences of \(\xbf_i^T \xbf_j\) with \(k(\xbf_i, \xbf_j)\).
