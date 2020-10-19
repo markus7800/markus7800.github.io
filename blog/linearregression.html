@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<link rel="icon" type="image/png" href="./res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		\(
+			\newcommand{\bfx}{\mathbf{x}}
+			\newcommand{\bfX}{\mathbf{X}}
+			\newcommand{\bfy}{\mathbf{y}}
+			\newcommand{\bfw}{\mathbf{w}}
+			\newcommand{\bft}{\mathbf{t}}
+			\newcommand{\N}{\mathcal{N}}
+			\newcommand{\D}{\mathcal{D}}
+			\newcommand{\bfPhi}{\mathbf{\Phi}}
+			\newcommand{\bfI}{\mathbf{I}}
+			\newcommand{\bfm}{\mathbf{m}}
+			\newcommand{\bfS}{\mathbf{S}}
+		\)
+
+		<title>Linear Regression</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Linear Regression</h1>
+		<main>
+			<h2>Model</h2>
+			<p>
+				Define the linear regression function as
+				\[y(\bfx;\bfw) = \bfw^T \phi(\bfx)\]
+				with basis functions \(\phi = (\phi_1, \dots, \phi_d)T\) and \(\phi_0(\bfx) := 1\).
+			</p>
+			<p>
+				We assume that our variables follow a linear model with Gaussian noise \(\epsilon \sim \N(0, \beta^{-1})\) such that
+				\[y = y(\bfx; \bfw) + \epsilon\] for some unknown \(\bfw.\)
+			</p>
+
+			<h2>Maximum Likelihood Estimation</h2>
+			<p>
+				If we have observed data \(\bfX = (\bfx_1, \dots \bfx_N)^T\), \(\bfy = (y_1, \dots, y_N)^T\) independently, we can find \(\bfw\) such that we maximise the probability of having observed our data.
+			</p>
+			<p>
+				THe probability of observing given our data and parameters (<i>likelihood</i>) is
+				\[P(\bfy|\bfX,\bfw,\beta) = \prod_{n=1}^N \N(y_n|y(\bfx_n;\bfw), \beta^{-1}).\]
+				Maximising this quantity is equivalent to maximising its logarithm (<i>log-likelihood</i>)
+				\[\ln P(\bfy|\bfX,\bfw,\beta) = \frac{N}{2}\ln\beta - \frac{N}{2}\ln(2\pi)-\beta E_D(\bfw),\]
+				\[E_D(\bfw) = \frac{1}{2}\sum_{n=1}^N(y_n-\bfw^T\phi(\bfx_n))^2.\]
+				We see that the maximum likelihood estimation of \(\bfw\) can be found by minising the sum of squared residuals.
+			</p>
+			<p>
+				We can solve for \(\bfw\) analytically and obtain
+				\[\bfw_{\text{ML}} = (\bfPhi \bfPhi^T)^{-1}\bfPhi \bfy\]
+				where
+				\begin{align}
+					\bfPhi = (\phi(\bfx_1),\dots, \phi(\bfx_N))^T =
+					\begin{pmatrix}
+					1 & \phi_1(\bfx_1) & \dots & \phi_N(\bfx_1) \\
+					1 & \phi_1(\bfx_2) & \dots & \phi_N(\bfx_2) \\
+					\vdots &  & & \vdots \\
+					1 & \phi_1(\bfx_N) & \dots & \phi_N(\bfx_N)
+					\end{pmatrix}
+				\end{align}
+			</p>
+			<p>
+				To avoid overfitting we can minimise the sum of squared residuals plus a regularisation term
+				\[E_D(\bfw) + \lambda E_W(\bfw), \quad E_W(\bfw) = \frac{1}{2}\bfw^T\bfw.\]
+				Then we have
+				\[\bfw_{\text{ML}}^\lambda = (\lambda \bfI + \bfPhi \bfPhi^T)^{-1}\bfPhi \bfy.\]
+			</p>
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p align="right">\(\Box\)</p>
+			</div>
+
+			<h2>Bayesian Estimation</h2>
+			<p>
+				When using the Bayesian framework we need a prior over the parameters \(P(\bfw)\) and use the observed data \(\D\) to update our knowledge of the paramters with the help of Bayes rule
+				\[P(\bfw | \D) = \frac{P(\D | \bfw)P(\bfw)}{P(\D)}\]
+			</p>
+			<p>
+				We know that
+				\[P(\D | \bfw) = \prod_{n=1}^N \N(y_n|y(\bfx_n;\bfw), \beta^{-1})\]
+				is the exponential of a quadratic function \(\bfw\) and therefore the conjugate prior is a given by a Gaussian distribution
+				\[P(\bfw) = \N(\bfw | \bfm_0, \bfS_0)\]
+				with
+				\[P(\bfw|\D) = \N(\bfw|\bfm_N, \bfS_N)\]
+				where
+				\begin{align}
+				\bfm_N &= \bfS_N(\bfS_0^{-1}\bfm_0 + \beta \bfPhi \bfy) \\
+				\bfS_N^{-1} &= \bfS_0^{-1} + \beta \bfPhi \bfPhi^T.
+				\end{align}
+			</p>
+
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p align="right">\(\Box\)</p>
+			</div>
+
+			<p>
+				If we restrict the prior to a zero-mean isotropic Gaussian, \(P(\bfw|\alpha) = \N(\bfw| \mathbf{0}, \alpha^{-1}\bfI)\), we have
+
+				\begin{align}
+				\bfm_N &= \beta\bfS_N \bfPhi \bfy\\
+				\bfS_N^{-1} &= \alpha \bfI + \beta \bfPhi \bfPhi^T.
+				\end{align}
+
+				In this case we have
+				\[\ln P(\bfw|\D) = -\frac{\beta}{2}\sum_{n=1}^N(y_n-\bfw^T\phi(\bfx_n))^2 - \frac{\alpha}{2}\bfw^T\bfw + \text{const}. \]
+				Therefore, maximising the posterior is equivalent to the maximum likelihood estimation with regularisation \(\lambda = \frac{\alpha}{\beta}\)
+				\[\bfw_{\text{MAP}}^\alpha = \bfw_\text{ML}^\lambda.\]
+
+				Letting \(\alpha \to 0\) (making the prior broader) is equivalent to the maximum likelihood estimation without regularisation,
+				\[\lim_{\alpha \to 0}\bfw_{\text{MAP}}^\alpha = \bfw_\text{ML}.\]
+			</p>
+
+			<h3>Predictive distribution</h3>
+			<p>
+				In the Bayesian framework we are usually not interested in a point estimate of \(\bfw\) but want to directly make predictions by averageing over all parameters. The <i>predictive distribution at \(\bfx\)</i> is given by
+				\[P(y|\bfx, \D, \alpha, \beta) = \int P(y|\bfx, \bfw, \beta)P(\bfw|\D,\alpha,\beta) \text{d}\bfw.\]
+				Recall that
+				\[P(y|\bfx, \bfw, \beta) = \N(y|y(\bfx;\bfw), \beta^{-1}), \quad P(\bfw|\D,\alpha,\beta) = \N(\bfw|\bfm_N, \bfS_N).\]
+				Thus,
+				\[P(y|\bfx, \D, \alpha, \beta) = \N(y|y(\bfx; \bfm_N), \sigma^2_N(\bfx))\]
+				where
+				\begin{align}
+				y(\bfx; \bfm_N) = \bfm_N^T \phi(\bfx), \quad \sigma_N^2(\bfx) = \frac{1}{\beta} + \phi(\bfx)^T \bfS_N \phi(\bfx).
+				\end{align}
+			</p>
+
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p align="right">\(\Box\)</p>
+			</div>
+
+			<p>
+				If \(\beta\) is treated as unkown the conjugate prior is Guassian-gamma distributed and the predictive distribution is a Student's t - distribution.
+			</p>
+
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p align="right">\(\Box\)</p>
+			</div>
+
+			<h2>Curve Fitting</h2>
+
+			<h2>Bias - Variance</h2>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
