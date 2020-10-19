@@ -56,15 +56,15 @@
 			</p>
 			<p>
 				We can solve for \(\bfw\) analytically and obtain
-				\[\bfw_{\text{ML}} = (\bfPhi \bfPhi^T)^{-1}\bfPhi \bfy\]
+				\[\bfw_{\text{ML}} = (\bfPhi ^T\bfPhi)^{-1}\bfPhi^T \bfy\]
 				where
 				\begin{align}
 					\bfPhi = (\phi(\bfx_1),\dots, \phi(\bfx_N))^T =
 					\begin{pmatrix}
-					1 & \phi_1(\bfx_1) & \dots & \phi_N(\bfx_1) \\
-					1 & \phi_1(\bfx_2) & \dots & \phi_N(\bfx_2) \\
+					1 & \phi_1(\bfx_1) & \dots & \phi_d(\bfx_1) \\
+					1 & \phi_1(\bfx_2) & \dots & \phi_d(\bfx_2) \\
 					\vdots &  & & \vdots \\
-					1 & \phi_1(\bfx_N) & \dots & \phi_N(\bfx_N)
+					1 & \phi_1(\bfx_N) & \dots & \phi_d(\bfx_N)
 					\end{pmatrix}
 				\end{align}
 			</p>
@@ -72,7 +72,7 @@
 				To avoid overfitting we can minimise the sum of squared residuals plus a regularisation term
 				\[E_D(\bfw) + \lambda E_W(\bfw), \quad E_W(\bfw) = \frac{1}{2}\bfw^T\bfw.\]
 				Then we have
-				\[\bfw_{\text{ML}}^\lambda = (\lambda \bfI + \bfPhi \bfPhi^T)^{-1}\bfPhi \bfy.\]
+				\[\bfw_{\text{ML}}^\lambda = (\lambda \bfI + \bfPhi^T \bfPhi)^{-1}\bfPhi^T \bfy.\]
 			</p>
 			<button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent">
@@ -94,7 +94,7 @@
 				where
 				\begin{align}
 				\bfm_N &= \bfS_N(\bfS_0^{-1}\bfm_0 + \beta \bfPhi \bfy) \\
-				\bfS_N^{-1} &= \bfS_0^{-1} + \beta \bfPhi \bfPhi^T.
+				\bfS_N^{-1} &= \bfS_0^{-1} + \beta \bfPhi^T \bfPhi.
 				\end{align}
 			</p>
 
@@ -107,8 +107,8 @@
 				If we restrict the prior to a zero-mean isotropic Gaussian, \(P(\bfw|\alpha) = \N(\bfw| \mathbf{0}, \alpha^{-1}\bfI)\), we have
 
 				\begin{align}
-				\bfm_N &= \beta\bfS_N \bfPhi \bfy\\
-				\bfS_N^{-1} &= \alpha \bfI + \beta \bfPhi \bfPhi^T.
+				\bfm_N &= \beta\bfS_N \bfPhi^T \bfy\\
+				\bfS_N^{-1} &= \alpha \bfI + \beta \bfPhi^T \bfPhi.
 				\end{align}
 
 				In this case we have
@@ -149,7 +149,37 @@
 			</div>
 
 			<h2>Curve Fitting</h2>
+			<p>
+				Consider the model
+				\[y = \sin(2 \pi x) + \epsilon\]
+				where \(\epsilon \sim \N(0, 1/5)\).
+			</p>
+			<p>
+				We choose
+				\[\phi_j(x) = \exp\left(\frac{(x-a_j)^2}{a_j^2}\right), \quad a_j \in \{0, \pm 1, \pm 2, \pm3\}.\]
+			</p>
+			<p>
+				We have observed follwing data
+				<div id="images">
+					<img src="./res/linearregression/obsdata.svg" width="75%">
+				</div>
+			</p>
+			<p>
+				The maximum likelihood estimation looks like
+				<div id="images">
+					<img src="./res/linearregression/ml.svg" width="75%">
+				</div>
+			</p>
+			<p>
+				The Baysian estimation with \(\alpha = 10^{-6}\) like
+				<div id="images">
+					<img src="./res/linearregression/bayes5.svg" width="48%">
+					<img src="./res/linearregression/bayes10.svg" width="48%">
 
+					<img src="./res/linearregression/bayes.svg" width="75%">
+				</div>
+			</p>
+				
 			<h2>Bias - Variance</h2>
 		</main>
 		<p>
