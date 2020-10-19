@@ -20,6 +20,8 @@
 			\newcommand{\bfI}{\mathbf{I}}
 			\newcommand{\bfm}{\mathbf{m}}
 			\newcommand{\bfS}{\mathbf{S}}
+			\newcommand{\d}{\text{d}}
+			\newcommand{\Exp}[2][]{\mathbb{E}_{#1}\left[#2\right]}
 		\)
 
 		<title>Linear Regression</title>
@@ -180,7 +182,52 @@
 				</div>
 			</p>
 				
-			<h2>Bias - Variance</h2>
+			<h2>Bias - Variance Trade-Off</h2>
+			<p>
+				Define the squared loss as \(L(\bfx, y) =(y(\bfx) - y)^2\) where \(y\) is the observed value at \(\bfx.\)
+			</p>
+			<p>
+				The expected loss is then
+				\[\Exp{L} = \int \int L(\bfx, y) p(\bfx, y) \d \bfx \d y.\]
+			</p>
+			<p>
+				We can write
+				\begin{align}
+				L(\bfx, y) &= (y(\bfx) - \Exp{y|\bfx} + \Exp{y|\bfx} - y)^2 \\
+				&= (y(\bfx) - \Exp{y|\bfx})^2  + (\Exp{y|\bfx} - y)^2 \\ &\quad+ 2(y(\bfx)-\Exp{y|\bfx})(\Exp{y|\bfx} - y)
+				\end{align}
+				and thus
+				\[\Exp{L} = \int (y(\bfx) - \Exp{y|\bfx} )^2 p(\bfx) \d \bfx + \int \int (\Exp{y|\bfx}  - y)^2 p(\bfx, y) \d\bfx \d y\]
+				Therefore, the loss is smallest if \(y(\bfx) = \Exp{y|\bfx}.\)
+			</p>
+			<p>
+				Let's make our linear regression dependence  on the data \(\D\) explicit
+				\[y(\bfx; \D) = y(\bfx; \bfw) = y(\bfx).\]
+				
+				We can write
+				\begin{align}
+				(y(\bfx) - \Exp{y|\bfx})^2 &= (y(\bfx) - \Exp[\D]{y(\bfx; \D)} + \Exp[\D]{y(\bfx; \D)} - \Exp{y|\bfx})^2 \\
+				&= (y(\bfx; \D) - \Exp[\D]{y(\bfx; \D)})^2 + (\Exp[\D]{y(\bfx; \D)} - \Exp{y|\bfx})^2 \\
+				&\quad + 2(y(\bfx; \D) - \Exp[\D]{y(\bfx; \D)})(\Exp[\D]{y(\bfx; \D)} - \Exp{y|\bfx})
+				\end{align}
+
+				and obtain
+				\begin{align}
+				&\Exp[\D]{(y(\bfx;\D) - \Exp{y|\bfx})^2} = \\
+				&\quad (\Exp[\D]{y(\bfx; \D)} - \Exp{y|\bfx})^2 + \Exp[\D]{(y(\bfx; \D) - \Exp[\D]{y(\bfx; \D)})^2}
+				\end{align}
+			</p>
+			<p>
+				We conclude
+				\[\text{expected loss} = \text{bias}^2 + \text{variance} + \text{noise}\]
+				where
+				\begin{align}
+				\text{bias}^2 &= \int (\Exp[\D]{y(\bfx; \D)} - \Exp{y|\bfx})^2 p(\bfx) \d \bfx, \\
+				\text{variance} &= \int \Exp[\D]{(y(\bfx; \D) - \Exp[\D]{y(\bfx; \D)})^2} p(\bfx) \d \bfx, \\
+				\text{noise} &= 
+				\int \int (y - \Exp{y|\bfx})^2 p(\bfx, y) \d \bfx \d y.
+				\end{align}
+			</p>
 		</main>
 		<p>
 			<a href="./blog.html">Back</a>
