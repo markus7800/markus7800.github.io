@@ -53,8 +53,8 @@
 				If we have observed data \(\bfX = (\bfx_1, \dots \bfx_N)^T\), \(\bfy = (y_1, \dots, y_N)^T\) independently, we can find \(\bfw\) such that we maximise the probability of having observed our data.
 			</p>
 			<p>
-				THe probability of observing given our data and parameters (<i>likelihood</i>) is
-				\[P(\bfy|\bfX,\bfw,\beta) = \prod_{n=1}^N \N(y_n|y(\bfx_n;\bfw), \beta^{-1}).\]
+				The probability of observing given our data and parameters (<i>likelihood</i>) is
+				\[p(\bfy|\bfX,\bfw,\beta) = \prod_{n=1}^N \N(y_n|y(\bfx_n;\bfw), \beta^{-1}).\]
 				Maximising this quantity is equivalent to maximising its logarithm (<i>log-likelihood</i>)
 				\[\ln P(\bfy|\bfX,\bfw,\beta) = \frac{N}{2}\ln\beta - \frac{N}{2}\ln(2\pi)-\beta E_D(\bfw),\]
 				\[E_D(\bfw) = \frac{1}{2}\sum_{n=1}^N(y_n-\bfw^T\phi(\bfx_n))^2.\]
@@ -82,30 +82,64 @@
 			</p>
 			<button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent">
+				<p>
+					\begin{align}
+					\nabla_\bfw L(\bfw) & =
+						\nabla_\bfw E_D(\bfw) + \lambda E_W(\bfw) \\
+
+						&= \nabla_\bfw \frac{1}{2}((\bfy - \bfPhi \bfw)^T(\bfy - \bfPhi \bfw) +  \lambda \bfw^T\bfw) \\
+
+						&= -\bfPhi^T (\bfy - \bfPhi \bfw) + \lambda \bfw \\
+
+						& = -\bfPhi^T\bfy + (\lambda\bfI + \bfPhi^T\bfPhi) \bfw
+					\end{align}
+					\begin{align}
+					\nabla^2_\bfw L(\bfw) = \lambda\bfI + \bfPhi^T\bfPhi
+					\end{align}
+
+					Thus \(\bfw = (\lambda \bfI + \bfPhi^T \bfPhi)^{-1}\bfPhi^T \bfy\) is a minimum as the Hessian is positive definite if \(\bfPhi\) is regular.
+				</p>
 				<p align="right">\(\Box\)</p>
 			</div>
 
 			<h2>Bayesian Estimation</h2>
 			<p>
-				When using the Bayesian framework we need a prior over the parameters \(P(\bfw)\) and use the observed data \(\D\) to update our knowledge of the paramters with the help of Bayes rule
-				\[P(\bfw | \D) = \frac{P(\D | \bfw)P(\bfw)}{P(\D)}\]
+				When using the Bayesian framework we need a prior over the parameters \(p(\bfw)\) and use the observed data \(\D\) to update our knowledge of the paramters with the help of Bayes rule
+				\[p(\bfw | \D) = \frac{p(\D | \bfw)p(\bfw)}{p(\D)}\]
 			</p>
 			<p>
 				We know that
-				\[P(\D | \bfw) = \prod_{n=1}^N \N(y_n|y(\bfx_n;\bfw), \beta^{-1})\]
+				\[p(\D | \bfw) = \prod_{n=1}^N \N(y_n|y(\bfx_n;\bfw), \beta^{-1})\]
 				is the exponential of a quadratic function \(\bfw\) and therefore the conjugate prior is a given by a Gaussian distribution
-				\[P(\bfw) = \N(\bfw | \bfm_0, \bfS_0)\]
+				\[p(\bfw) = \N(\bfw | \bfm_0, \bfS_0)\]
 				with
-				\[P(\bfw|\D) = \N(\bfw|\bfm_N, \bfS_N)\]
+				\[p(\bfw|\D) = \N(\bfw|\bfm_N, \bfS_N)\]
 				where
 				\begin{align}
-				\bfm_N &= \bfS_N(\bfS_0^{-1}\bfm_0 + \beta \bfPhi \bfy) \\
+				\bfm_N &= \bfS_N(\bfS_0^{-1}\bfm_0 + \beta \bfPhi^T \bfy) \\
 				\bfS_N^{-1} &= \bfS_0^{-1} + \beta \bfPhi^T \bfPhi.
 				\end{align}
 			</p>
 
 			<button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent">
+				<p>
+					\begin{align}
+					-2\ln p(\D | \bfw) p(\bfw) &= 
+					\beta (\bfy - \bfPhi\bfw)^T(\bfy - \bfPhi\bfw)
+					 \\
+					&\quad\, +(\bfw- \bfm_0)^T\bfS_0^{-1}(\bfw - \bfm_0) + \text{const} \\
+
+					&= \beta\bfy^T\bfy - \beta2\bfy^T\bfPhi\bfw + \beta\bfw^T\bfPhi^T\bfPhi \bfw \\
+					&\quad\, + \bfw\bfS_0^{-1}\bfw - 2\bfw^T\bfS_0^{-1}\bfm_0 + \bfm_0^T\bfS_0^{-1}\bfm_0 + \text{c.} \\
+
+					&= \bfw^T \bfS_N^{-1}\bfw - 2\bfw^T S_N^{-1} S_N (\beta \bfPhi^T\bfy + \bfS_0^{-1}\bfm_0) + \text{c.} \\
+
+					&= \bfw^T \bfS_N^{-1}\bfw - 2\bfw^T S_N^{-1} \bfm_N + \bfm_N^T S_N^{-1} \bfm_N + \text{c.} \\
+
+					& = (\bfw^T - \bfm_N)^T \bfS_N^{-1}(\bfw^T - \bfm_N)
+					\end{align}
+				</p>
 				<p align="right">\(\Box\)</p>
 			</div>
 
@@ -215,10 +249,10 @@
 				If \(\beta\) is treated as unkown the conjugate prior is Guassian-gamma distributed and the predictive distribution is a Student's t - distribution.
 			</p>
 
-			<button class="collapsible">Proof.</button>
+			<!-- <button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent">
 				<p align="right">\(\Box\)</p>
-			</div>
+			</div> -->
 
 			<h2>Curve Fitting</h2>
 			<p>
