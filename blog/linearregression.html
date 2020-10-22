@@ -137,7 +137,7 @@
 
 					&= \bfw^T \bfS^{-1}\bfw - 2\bfw^T \bfS^{-1} \bfm + \bfm^T \bfS^{-1} \bfm + \text{c.} \\
 
-					& = (\bfw^T - \bfm)^T \bfS^{-1}(\bfw^T - \bfm)
+					& = (\bfw^T - \bfm)^T \bfS^{-1}(\bfw^T - \bfm) + \text{const}
 					\end{align}
 				</p>
 				<p align="right">\(\Box\)</p>
@@ -250,18 +250,65 @@
 				If \(\beta\) is treated as unkown the conjugate prior is Guassian-gamma distributed and the predictive distribution is a Student's t - distribution.
 			</p>
 			<p>
-				\[p(y|\bfx, \D) = \int \int p(y|\bfx, \bfw, \beta)p(\bfw, \beta|\D) \text{d}\bfw \d\beta.\]
+				\begin{align}
+				p(\bfw, \beta) &= \N(\bfw|\bfm_0, \beta^{-1}\bfS_0)\Gamma(\beta|a_0, b_0), \\
+				p(y|\bfx, \bfw, \beta) &= \N(y|y(\bfx;\bfw), \beta^{-1}).
+				\end{align}
+
+				Then
+				\begin{align}
+				p(\bfw, \beta|\D) &= \N(\bfw|\bfm, \beta^{-1}\bfS)\Gamma(\beta|a, b),
+				\end{align}
+				where
+				\begin{align}
+				\bfm &= \bfS(\bfS_0^{-1}\bfm_0 + \bfPhi^T \bfy), \\
+				\bfS^{-1} &= \bfS_0^{-1} + \bfPhi^T \bfPhi, \\
+				a &= a_0 + \frac{N}{2}, \\
+				b &= b_0 + \frac{1}{2}\bfy^T\bfy.
+				\end{align}
+
 
 				\begin{align}
-				p(y|\bfx, \bfw, \beta) &= \N(y|y(\bfx;\bfw), \beta^{-1}), \\
-				p(\bfw, \beta|\D) &= \N(\bfw|\bfm, \beta^{-1}\bfS)\Gamma(\beta|a, b).
+				p(y|\bfx, \D) &= \int \int p(y|\bfx, \bfw, \beta)p(\bfw, \beta|\D) \text{d}\bfw \d\beta \\
+				&= \text{St}(\nu = 2a, \lambda  = (1 + \phi(\bfx)^T\bfS \phi(\bfx)) \frac{a}{b}, \mu = \phi(\bfx)^T \bfm).
 				\end{align}
 			</p>
 
 			<button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent_">
+				<p>
+					The argument of \(\exp\) in \(p(\D | \bfw, \beta) p(\bfw, \beta)\) is
+					\[-\frac{\beta}{2}(\bfy - \bfPhi \bfw)^T(\bfy - \bfPhi \bfw) -\frac{\beta}{2}(\bfw - \bfm_0)^T\bfS_0^{-1}(\bfw - \bfm_0) - b_0 \beta.\]
+
+					The factor is
+					\[\frac{1}{(2\pi)^{p/2}|\bfS_0|^{1/2}}\left(\frac{\beta}{2\pi}\right)^{N/2}\frac{b_0^{a_0}}{\Gamma(a_0)} \beta^{a_0-1}.\]
+
+					Similar to above we have
+					\begin{align}
+					\ln p(\D | \bfw, \beta) p(\bfw, \beta) &= \underbrace{-\frac{\beta}{2}(\bfw - \bfm)^T \bfS^{-1} (\bfw - \bfm)}_{\Delta^2} - \frac{\beta}{2}\bfy^T\bfy - b_0 \beta + \text{c.}
+					\end{align}
+					for
+
+					\begin{align}
+					\bfm &= \bfS(\bfS_0^{-1}\bfm_0 + \bfPhi^T \bfy), \\
+					\bfS^{-1} &= \bfS_0^{-1} + \bfPhi^T \bfPhi.
+					\end{align}
+
+					Also 
+					\begin{align}
+					p(\D | \bfw, \beta) p(\bfw, \beta) &\propto \beta^{N/2}\exp\left(\Delta^2- \frac{\beta}{2}\bfy^T\bfy + -b_0\beta \right) \beta^{a_0-1}
+					\end{align}
+					which gives
+
+					\begin{align}
+					a &= a_0 + \frac{N}{2}, \\
+					b &= b_0 + \frac{1}{2}\bfy^T\bfy.
+					\end{align}
+				</p>
 
 				<p>
+					Further
+
 					\begin{align}
 					p(y|\bfx, \D) &= \int \Gamma(\beta|a, b) \int \N(y|y(\bfx;\bfw), \beta^{-1})\N(\bfw|\bfm, \beta^{-1}\bfS) \d\bfw \d\beta \\
 
@@ -283,7 +330,7 @@
 					&= \frac{\Gamma(\nu/2+1/2)}{\Gamma(\nu/2)}  \left(\frac{\lambda}{\nu\pi }\right)^{1/2} \left(1 + \frac{\lambda(y-\mu)^2}{\nu}\right)^{-\nu/2-1/2}
 				\end{align}
 
-				For \(\nu = 2a=2a\), \(\lambda = \frac{\delta a}{b} = (1 + \phi(\bfx)^T\bfS \phi(\bfx)) \frac{a}{b}\), \(\mu = \phi(\bfx)^T \bfm\).
+				For \(\nu = 2a=\), \(\lambda = \frac{\delta a}{b} = (1 + \phi(\bfx)^T\bfS \phi(\bfx)) \frac{a}{b}\), \(\mu = \phi(\bfx)^T \bfm\).
 
 				</p>
 
