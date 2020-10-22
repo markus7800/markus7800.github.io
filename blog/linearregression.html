@@ -56,7 +56,7 @@
 				The probability of observing given our data and parameters (<i>likelihood</i>) is
 				\[p(\bfy|\bfX,\bfw,\beta) = \prod_{n=1}^N \N(y_n|y(\bfx_n;\bfw), \beta^{-1}).\]
 				Maximising this quantity is equivalent to maximising its logarithm (<i>log-likelihood</i>)
-				\[\ln P(\bfy|\bfX,\bfw,\beta) = \frac{N}{2}\ln\beta - \frac{N}{2}\ln(2\pi)-\beta E_D(\bfw),\]
+				\[\ln p(\bfy|\bfX,\bfw,\beta) = \frac{N}{2}\ln\beta - \frac{N}{2}\ln(2\pi)-\beta E_D(\bfw),\]
 				\[E_D(\bfw) = \frac{1}{2}\sum_{n=1}^N(y_n-\bfw^T\phi(\bfx_n))^2.\]
 				We see that the maximum likelihood estimation of \(\bfw\) can be found by minimising the sum of squared residuals.
 			</p>
@@ -144,7 +144,7 @@
 			</div>
 
 			<p>
-				If we restrict the prior to a zero-mean isotropic Gaussian, \(P(\bfw|\alpha) = \N(\bfw| \mathbf{0}, \alpha^{-1}\bfI)\), we have
+				If we restrict the prior to a zero-mean isotropic Gaussian, \(p(\bfw|\alpha) = \N(\bfw| \mathbf{0}, \alpha^{-1}\bfI)\), we have
 
 				\begin{align}
 				\bfm_N &= \beta\bfS_N \bfPhi^T \bfy\\
@@ -152,7 +152,7 @@
 				\end{align}
 
 				In this case we have
-				\[\ln P(\bfw|\D) = -\frac{\beta}{2}\sum_{n=1}^N(y_n-\bfw^T\phi(\bfx_n))^2 - \frac{\alpha}{2}\bfw^T\bfw + \text{const}. \]
+				\[\ln p(\bfw|\D) = -\frac{\beta}{2}\sum_{n=1}^N(y_n-\bfw^T\phi(\bfx_n))^2 - \frac{\alpha}{2}\bfw^T\bfw + \text{const}. \]
 				Therefore, maximising the posterior is equivalent to the maximum likelihood estimation with regularisation \(\lambda = \frac{\alpha}{\beta}\)
 				\[\bfw_{\text{MAP}}^\alpha = \bfw_\text{ML}^\lambda.\]
 
@@ -163,11 +163,12 @@
 			<h3>Predictive distribution</h3>
 			<p>
 				In the Bayesian framework we are usually not interested in a point estimate of \(\bfw\) but want to directly make predictions by averageing over all parameters. The <i>predictive distribution at \(\bfx\)</i> is given by
-				\[P(y|\bfx, \D, \alpha, \beta) = \int P(y|\bfx, \bfw, \beta)P(\bfw|\D,\alpha,\beta) \text{d}\bfw.\]
+				\[p(y|\bfx, \D) = \int p(y|\bfx, \bfw)p(\bfw|\D) \text{d}\bfw.\]
 				Recall that
-				\[P(y|\bfx, \bfw, \beta) = \N(y|y(\bfx;\bfw), \beta^{-1}), \quad P(\bfw|\D,\alpha,\beta) = \N(\bfw|\bfm_N, \bfS_N).\]
+				\[p(y|\bfx, \bfw) = \N(y|y(\bfx;\bfw), \beta^{-1}), \quad p(\bfw|\D) = \N(\bfw|\bfm_N, \bfS_N).\]
+
 				Thus,
-				\[P(y|\bfx, \D, \alpha, \beta) = \N(y|y(\bfx; \bfm_N), \sigma^2_N(\bfx))\]
+				\[p(y|\bfx, \D) = \N(y|y(\bfx; \bfm_N), \sigma^2_N(\bfx))\]
 				where
 				\begin{align}
 				y(\bfx; \bfm_N) = \bfm_N^T \phi(\bfx), \quad \sigma_N^2(\bfx) = \frac{1}{\beta} + \phi(\bfx)^T \bfS_N \phi(\bfx).
@@ -248,11 +249,46 @@
 			<p>
 				If \(\beta\) is treated as unkown the conjugate prior is Guassian-gamma distributed and the predictive distribution is a Student's t - distribution.
 			</p>
+			<p>
+				\[p(y|\bfx, \D) = \int \int p(y|\bfx, \bfw, \beta)p(\bfw, \beta|\D) \text{d}\bfw \d\beta.\]
 
-			<!-- <button class="collapsible">Proof.</button>
-			<div class="collapsiblecontent">
+				\begin{align}
+				p(y|\bfx, \bfw, \beta) &= \N(y|y(\bfx;\bfw), \beta^{-1}), \\
+				p(\bfw, \beta|\D) &= \N(\bfw|\bfm_N, \beta^{-1}\bfS_N)\Gamma(\beta|a_N, b_N).
+				\end{align}
+			</p>
+
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent_">
+
+				<p>
+					\begin{align}
+					p(y|\bfx, \D) &= \int \Gamma(\beta|a_N, b_N) \int \N(y|y(\bfx;\bfw), \beta^{-1})\N(\bfw|\bfm_N, \beta^{-1}\bfS_N) \d\bfw \d\beta \\
+
+					&= \int \Gamma(\beta|a_N, b_N) \N(y|\phi(\bfx)^T \bfm_N, \beta^{-1}(1 + \phi(\bfx)^T\bfS_N \phi(\bfx)))\d\beta \\
+
+					&=: \int \Gamma(\beta|a, b) \N(y|\mu, \beta^{-1}\delta^{-1})\d\beta \\
+
+					&= \int_0^\infty \frac{b^a \beta^{a-1}}{\Gamma(a)} \left(\frac{\beta\delta}{2\pi}\right)^{1/2}\exp\left(-\beta \frac{\delta(y-\mu)^2}{2} - \beta b\right) \d \beta
+				\end{align}
+
+				Substitute \(z = \beta \left(b + \frac{\delta(y-\mu)^2}{2}\right) =: \beta \kappa\)
+				\begin{align}
+					&= \int_0^\infty \frac{b^a z^{a-1/2}}{\Gamma(a)\kappa^{a-1/2}} \left(\frac{\delta}{2\pi}\right)^{1/2}\exp\left(-z\right) \frac{1}{\kappa} \d z \\
+
+					&= \frac{\Gamma(a+1/2)}{\Gamma(a)} b^a \left(\frac{\delta}{2\pi}\right)^{1/2} \kappa^{-a-1/2} \\
+
+					&= \frac{\Gamma(a+1/2)}{\Gamma(a)}  \left(\frac{\delta}{2\pi b}\right)^{1/2} \left(1 + \frac{\delta(y-\mu)^2}{2b}\right)^{-a-1/2} \\
+
+					&= \frac{\Gamma(\nu/2+1/2)}{\Gamma(\nu/2)}  \left(\frac{\lambda}{\nu\pi }\right)^{1/2} \left(1 + \frac{\lambda(y-\mu)^2}{\nu}\right)^{-\nu/2-1/2}
+				\end{align}
+
+				For \(\nu = 2a=2a_N\), \(\lambda = \frac{\delta a}{b} = (1 + \phi(\bfx)^T\bfS_N \phi(\bfx)) \frac{a_N}{b_N}\), \(\mu = \phi(\bfx)^T \bfm_N\).
+
+				</p>
+
 				<p align="right">\(\Box\)</p>
-			</div> -->
+			</div>
 
 			<h2>Curve Fitting</h2>
 			<p>
