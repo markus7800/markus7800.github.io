@@ -12,6 +12,7 @@
 			\newcommand{\bfx}{\mathbf{x}}
 			\newcommand{\bfX}{\mathbf{X}}
 			\newcommand{\bfy}{\mathbf{y}}
+			\newcommand{\bfz}{\mathbf{z}}
 			\newcommand{\bfw}{\mathbf{w}}
 			\newcommand{\bft}{\mathbf{t}}
 			\newcommand{\N}{\mathcal{N}}
@@ -20,6 +21,9 @@
 			\newcommand{\bfI}{\mathbf{I}}
 			\newcommand{\bfm}{\mathbf{m}}
 			\newcommand{\bfS}{\mathbf{S}}
+			\newcommand{\bfL}{\mathbf{L}}
+			\newcommand{\bfA}{\mathbf{A}}
+			\newcommand{\bfb}{\mathbf{b}}
 			\newcommand{\d}{\text{d}}
 			\newcommand{\Exp}[2][]{\mathbb{E}_{#1}\left[#2\right]}
 		\)
@@ -37,7 +41,7 @@
 			<p>
 				Define the linear regression function as
 				\[y(\bfx;\bfw) = \bfw^T \phi(\bfx)\]
-				with basis functions \(\phi = (\phi_1, \dots, \phi_d)T\) and \(\phi_0(\bfx) := 1\).
+				with basis functions \(\phi = (\phi_1, \dots, \phi_d)^T\) and \(\phi_0(\bfx) := 1\).
 			</p>
 			<p>
 				We assume that our variables follow a linear model with Gaussian noise \(\epsilon \sim \N(0, \beta^{-1})\) such that
@@ -54,7 +58,7 @@
 				Maximising this quantity is equivalent to maximising its logarithm (<i>log-likelihood</i>)
 				\[\ln P(\bfy|\bfX,\bfw,\beta) = \frac{N}{2}\ln\beta - \frac{N}{2}\ln(2\pi)-\beta E_D(\bfw),\]
 				\[E_D(\bfw) = \frac{1}{2}\sum_{n=1}^N(y_n-\bfw^T\phi(\bfx_n))^2.\]
-				We see that the maximum likelihood estimation of \(\bfw\) can be found by minising the sum of squared residuals.
+				We see that the maximum likelihood estimation of \(\bfw\) can be found by minimising the sum of squared residuals.
 			</p>
 			<p>
 				We can solve for \(\bfw\) analytically and obtain
@@ -138,8 +142,74 @@
 
 			<button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent">
+				<h3>Claim.</h3>
+				<p>
+					For \(p(\bfx)=\N(\bfx | \bfm, \bfS)\), \(p(\bfy|\bfx) = \N(\bfA \bfx + \bfb, \bfL)\) then
+
+					\begin{align}
+					p(\bfy) = \N(\bfy | \bfA\bfm + \bfb, \bfL + \bfA \bfS \bfA^T).
+					\end{align}
+				</p>
+
+				<p style="font-style: italic">Proof.</p>
+				<p>
+					Set \(\bfz = (\bfx, \bfy)^T\). We use following decomposition
+					\begin{align}
+					-\frac{1}{2}(\bfz - \mu)^T\Sigma^{-1}(\bfz - \mu) = -\frac{1}{2} \bfz^T\Sigma^{-1} \bfz + \bfz^T \Sigma^{-1} \mu + \text{const.}
+					\end{align}
+				</p>
+				<p>
+					We look at the quadratic terms.
+					\begin{align}
+					\ln p(\bfz) &= \ln p(\bfx) + \ln p(\bfy|\bfx) \\
+
+					&= -\frac{1}{2}(\bfx - \bfm)^T \bfS^{-1}(\bfx - \bfm)\\
+					&\quad\,-\frac{1}{2}(\bfy - \bfA\bfx - \bfb)^T \bfL^{-1}(\bfy - \bfA\bfx - \bfb) + \text{const} \\
+
+					&=  -\frac{1}{2}\bfx^T(\bfS^{-1} + \bfA^T \bfL^{-1} \bfA)\bfx -\frac{1}{2} \bfy^T \bfL^{-1}\bfy\\
+					&\quad\, + \frac{1}{2}\bfy^T\bfL^{-1}\bfA \bfx + \frac{1}{2} \bfx^T\bfA^T\bfL^{-1}\bfy + \dots \\
+
+					&= -\frac{1}{2} \begin{pmatrix} \bfx \\ \bfy \end{pmatrix}^T
+					\begin{pmatrix}
+					\bfS^{-1} + \bfA^T \bfL^{-1} \bfA & -\bfA^T\bfL^{-1} \\
+					-\bfL^{-1}\bfA & \bfL^{-1}
+					\end{pmatrix}
+					\begin{pmatrix} \bfx \\ \bfy \end{pmatrix}
+					+ \dots
+					\end{align}
+
+					Inverting this matrix gives
+					\begin{align}
+					\operatorname{cov}[\bfz] = 
+					\begin{pmatrix}
+					\bfS & \bfS \bfA^T \\
+					\bfA \bfS & \bfL + \bfA \bfS \bfA^T
+					\end{pmatrix}.
+					\end{align}
+
+					The linear terms are
+					\begin{align}
+					\bfx^T \bfS^{-1} \bfm - \bfx^T \bfA^T \bfL^{-1}\bfb + \bfy^T\bfL^{-1} \bfb = 
+					\begin{pmatrix} \bfx \\ \bfy \end{pmatrix}^T
+					\begin{pmatrix} \bfS^{-1}\bfm - \bfA^T \bfL^{-1} \bfb\\ \bfL^{-1}\bfb \end{pmatrix}.
+					\end{align}
+
+					Therefore
+					\begin{align}
+					\Exp{\bfz} = \begin{pmatrix} \bfm \\ \bfA \bfm + \bfb \end{pmatrix}.
+					\end{align}
+				</p>
+
+
+				<p align="right">\(\Box\)</p>
+
+				<p>
+					Write \(\bfm = \bfm_N, \bfS = \bfS_N, \bfA = \phi(\bfx)^T, \bfb = 0, \bfL = \frac{1}{\beta}.\)
+				</p>
 				<p align="right">\(\Box\)</p>
 			</div>
+
+			<h3>Unknown Variance</h3>
 
 			<p>
 				If \(\beta\) is treated as unkown the conjugate prior is Guassian-gamma distributed and the predictive distribution is a Student's t - distribution.

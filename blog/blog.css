@@ -76,8 +76,9 @@ a {
 
 .collapsiblecontent {
   padding: 0 18px;
-  display: none;
+  /*display: none;*/
   overflow: hidden;
+  font-size: 24px;
 }
 .collapsiblecontentwopad {
   display: none;
