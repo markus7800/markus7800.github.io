@@ -113,11 +113,11 @@
 				is the exponential of a quadratic function \(\bfw\) and therefore the conjugate prior is a given by a Gaussian distribution
 				\[p(\bfw) = \N(\bfw | \bfm_0, \bfS_0)\]
 				with
-				\[p(\bfw|\D) = \N(\bfw|\bfm_N, \bfS_N)\]
+				\[p(\bfw|\D) = \N(\bfw|\bfm, \bfS)\]
 				where
 				\begin{align}
-				\bfm_N &= \bfS_N(\bfS_0^{-1}\bfm_0 + \beta \bfPhi^T \bfy) \\
-				\bfS_N^{-1} &= \bfS_0^{-1} + \beta \bfPhi^T \bfPhi.
+				\bfm &= \bfS(\bfS_0^{-1}\bfm_0 + \beta \bfPhi^T \bfy) \\
+				\bfS^{-1} &= \bfS_0^{-1} + \beta \bfPhi^T \bfPhi.
 				\end{align}
 			</p>
 
@@ -133,11 +133,11 @@
 					&= \beta\bfy^T\bfy - \beta2\bfy^T\bfPhi\bfw + \beta\bfw^T\bfPhi^T\bfPhi \bfw \\
 					&\quad\, + \bfw\bfS_0^{-1}\bfw - 2\bfw^T\bfS_0^{-1}\bfm_0 + \bfm_0^T\bfS_0^{-1}\bfm_0 + \text{c.} \\
 
-					&= \bfw^T \bfS_N^{-1}\bfw - 2\bfw^T S_N^{-1} S_N (\beta \bfPhi^T\bfy + \bfS_0^{-1}\bfm_0) + \text{c.} \\
+					&= \bfw^T \bfS^{-1}\bfw - 2\bfw^T \bfS^{-1} \bfS (\beta \bfPhi^T\bfy + \bfS_0^{-1}\bfm_0) + \text{c.} \\
 
-					&= \bfw^T \bfS_N^{-1}\bfw - 2\bfw^T S_N^{-1} \bfm_N + \bfm_N^T S_N^{-1} \bfm_N + \text{c.} \\
+					&= \bfw^T \bfS^{-1}\bfw - 2\bfw^T \bfS^{-1} \bfm + \bfm^T \bfS^{-1} \bfm + \text{c.} \\
 
-					& = (\bfw^T - \bfm_N)^T \bfS_N^{-1}(\bfw^T - \bfm_N)
+					& = (\bfw^T - \bfm)^T \bfS^{-1}(\bfw^T - \bfm)
 					\end{align}
 				</p>
 				<p align="right">\(\Box\)</p>
@@ -147,8 +147,8 @@
 				If we restrict the prior to a zero-mean isotropic Gaussian, \(p(\bfw|\alpha) = \N(\bfw| \mathbf{0}, \alpha^{-1}\bfI)\), we have
 
 				\begin{align}
-				\bfm_N &= \beta\bfS_N \bfPhi^T \bfy\\
-				\bfS_N^{-1} &= \alpha \bfI + \beta \bfPhi^T \bfPhi.
+				\bfm &= \beta\bfS \bfPhi^T \bfy\\
+				\bfS^{-1} &= \alpha \bfI + \beta \bfPhi^T \bfPhi.
 				\end{align}
 
 				In this case we have
@@ -165,13 +165,13 @@
 				In the Bayesian framework we are usually not interested in a point estimate of \(\bfw\) but want to directly make predictions by averageing over all parameters. The <i>predictive distribution at \(\bfx\)</i> is given by
 				\[p(y|\bfx, \D) = \int p(y|\bfx, \bfw)p(\bfw|\D) \text{d}\bfw.\]
 				Recall that
-				\[p(y|\bfx, \bfw) = \N(y|y(\bfx;\bfw), \beta^{-1}), \quad p(\bfw|\D) = \N(\bfw|\bfm_N, \bfS_N).\]
+				\[p(y|\bfx, \bfw) = \N(y|y(\bfx;\bfw), \beta^{-1}), \quad p(\bfw|\D) = \N(\bfw|\bfm, \bfS).\]
 
 				Thus,
-				\[p(y|\bfx, \D) = \N(y|y(\bfx; \bfm_N), \sigma^2_N(\bfx))\]
+				\[p(y|\bfx, \D) = \N(y|y(\bfx; \bfm), \sigma^2_N(\bfx))\]
 				where
 				\begin{align}
-				y(\bfx; \bfm_N) = \bfm_N^T \phi(\bfx), \quad \sigma_N^2(\bfx) = \frac{1}{\beta} + \phi(\bfx)^T \bfS_N \phi(\bfx).
+				y(\bfx; \bfm) = \bfm^T \phi(\bfx), \quad \sigma^2(\bfx) = \frac{1}{\beta} + \phi(\bfx)^T \bfS \phi(\bfx).
 				\end{align}
 			</p>
 
@@ -239,7 +239,7 @@
 				<p align="right">\(\Box\)</p>
 
 				<p>
-					Write \(\bfm = \bfm_N, \bfS = \bfS_N, \bfA = \phi(\bfx)^T, \bfb = 0, \bfL = \frac{1}{\beta}.\)
+					Write \(\bfx = \bfw, \bfy = y, \bfm = \bfm, \bfS = \bfS, \bfA = \phi(\bfx)^T, \bfb = 0, \bfL = \frac{1}{\beta}.\)
 				</p>
 				<p align="right">\(\Box\)</p>
 			</div>
@@ -254,7 +254,7 @@
 
 				\begin{align}
 				p(y|\bfx, \bfw, \beta) &= \N(y|y(\bfx;\bfw), \beta^{-1}), \\
-				p(\bfw, \beta|\D) &= \N(\bfw|\bfm_N, \beta^{-1}\bfS_N)\Gamma(\beta|a_N, b_N).
+				p(\bfw, \beta|\D) &= \N(\bfw|\bfm, \beta^{-1}\bfS)\Gamma(\beta|a, b).
 				\end{align}
 			</p>
 
@@ -263,9 +263,9 @@
 
 				<p>
 					\begin{align}
-					p(y|\bfx, \D) &= \int \Gamma(\beta|a_N, b_N) \int \N(y|y(\bfx;\bfw), \beta^{-1})\N(\bfw|\bfm_N, \beta^{-1}\bfS_N) \d\bfw \d\beta \\
+					p(y|\bfx, \D) &= \int \Gamma(\beta|a, b) \int \N(y|y(\bfx;\bfw), \beta^{-1})\N(\bfw|\bfm, \beta^{-1}\bfS) \d\bfw \d\beta \\
 
-					&= \int \Gamma(\beta|a_N, b_N) \N(y|\phi(\bfx)^T \bfm_N, \beta^{-1}(1 + \phi(\bfx)^T\bfS_N \phi(\bfx)))\d\beta \\
+					&= \int \Gamma(\beta|a, b) \N(y|\phi(\bfx)^T \bfm, \beta^{-1}(1 + \phi(\bfx)^T\bfS \phi(\bfx)))\d\beta \\
 
 					&=: \int \Gamma(\beta|a, b) \N(y|\mu, \beta^{-1}\delta^{-1})\d\beta \\
 
@@ -283,7 +283,7 @@
 					&= \frac{\Gamma(\nu/2+1/2)}{\Gamma(\nu/2)}  \left(\frac{\lambda}{\nu\pi }\right)^{1/2} \left(1 + \frac{\lambda(y-\mu)^2}{\nu}\right)^{-\nu/2-1/2}
 				\end{align}
 
-				For \(\nu = 2a=2a_N\), \(\lambda = \frac{\delta a}{b} = (1 + \phi(\bfx)^T\bfS_N \phi(\bfx)) \frac{a_N}{b_N}\), \(\mu = \phi(\bfx)^T \bfm_N\).
+				For \(\nu = 2a=2a\), \(\lambda = \frac{\delta a}{b} = (1 + \phi(\bfx)^T\bfS \phi(\bfx)) \frac{a}{b}\), \(\mu = \phi(\bfx)^T \bfm\).
 
 				</p>
 
