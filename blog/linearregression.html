@@ -23,9 +23,12 @@
 			\newcommand{\bfS}{\mathbf{S}}
 			\newcommand{\bfL}{\mathbf{L}}
 			\newcommand{\bfA}{\mathbf{A}}
+			\newcommand{\bfC}{\mathbf{C}}
+			\newcommand{\bfD}{\mathbf{D}}
 			\newcommand{\bfb}{\mathbf{b}}
 			\newcommand{\d}{\text{d}}
 			\newcommand{\Exp}[2][]{\mathbb{E}_{#1}\left[#2\right]}
+			\newcommand{\Var}[2][]{\mathbb{V}_{#1}\left[#2\right]}
 		\)
 
 		<title>Linear Regression</title>
@@ -101,6 +104,52 @@
 				</p>
 				<p align="right">\(\Box\)</p>
 			</div>
+
+			<h3>Gauss-Markov Theorem.</h3>
+			<p>
+				The ML estimator \(\bfw_\text{ML}\) is the best linear unbiased estimator (BLUE).
+				\begin{align}
+				\bfw_\text{ML} &= \underset{\hat\bfw: \Exp{\hat\bfw}=\bfw}{\operatorname{argmin}}  \text{MSE}(\bfw - \hat\bfw) \\
+				&= \underset{\hat\bfw: \Exp{\hat\bfw}=\bfw}{\operatorname{argmin}}  \Exp{(\bfw - \hat \bfw)^2} \\
+				&=  \underset{\hat\bfw: \Exp{\hat\bfw}=\bfw}{\operatorname{argmin}}  \Exp{\bfw - \Exp{\hat\bfw}}^2 + \Var{\hat\bfw} \\
+				&=  \underset{\hat\bfw: \Exp{\hat\bfw}=\bfw}{\operatorname{argmin}} \Var{\hat\bfw}
+				\end{align}
+			</p>
+
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p>
+					A linear estimator is of form
+					\[\hat \bfw = \bfC \bfy.\]
+					Define \(\bfD = \bfC - (\bfPhi^T \bfPhi)^{-1}\bfPhi^T\).
+
+					\begin{align}
+					\Exp{\hat \bfw} &= \Exp{\bfC \bfy} = \Exp{\bfC(\bfPhi \bfw + \epsilon)} \\
+
+					&= (\bfPhi^T \bfPhi)^{-1}\bfPhi^T + \bfD)\bfPhi \bfw \\
+
+					&= (\bfI + \bfD\bfPhi)\bfw
+					\end{align}
+					Thus
+					\(\bfD\bfPhi = 0.\)
+
+					\begin{align}
+					\Var{\hat\bfw} &= \Var{\bfC\bfy} = \bfC \Var{\bfy} \bfC^T = \beta^{-1}\bfC\bfC^T \\
+					&=\beta^{-1} (
+					(\bfPhi^T \bfPhi)^{-1}\bfPhi^T \bfPhi (\bfPhi^T \bfPhi)^{-1}\\
+					&\quad+ (\bfPhi^T \bfPhi)^{-1}\bfPhi^T\bfD^T \\
+					&\quad+ \bfD \bfPhi (\bfPhi^T \bfPhi)^{-1} \\
+					&\quad + \bfD\bfD^T) \\
+
+					&=\beta^{-1} (\bfPhi^T \bfPhi)^{-1} + \beta^{-1}\bfD\bfD^T \\
+
+					&= \Var{\hat\bfw} + \beta^{-1}\bfD\bfD^T \ge \Var{\hat\bfw}
+					\end{align}
+				</p>
+
+				<p align="right">\(\Box\)</p>
+			</div>
+
 
 			<h2>Bayesian Estimation</h2>
 			<p>
