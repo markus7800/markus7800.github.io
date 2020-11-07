@@ -204,15 +204,22 @@
 
  			<h3>Test for Statistical Independence</h3>
  			<p>
- 				We have two categorical variables \(P,Q\) with \(I, J\) levels and \(p_1^*,\dots, p_I^*\), \(q_1^*,\dots, q_J^*\) true probabiliites.
+ 				We have two categorical variables \(A,B\) with \(I, J\) levels and \(p_1^*,\dots, p_I^*\), \(q_1^*,\dots, q_J^*\) true probabiliites.
  				\[\chi^2 = \sum_{i=1}^I\sum_{j=1}^J\frac{(O_{ij}-E_{ij})^2}{E_{ij}} = n \sum_{i,j}p_iq_j \left( \frac{O_{ij}/n - p_iq_j}{p_iq_j}\right) \approx \chi^2_{(I-1)(J-1)}\]
  				where \(O_{ij}\) are the sample counts for level \(i\) and \(j\), \(p_i = \sum_j O_{ij} /n \), \(q_j = \sum_i O_{ij} / n\),  \(E_{ij} = np_iq_j\) are the expected counts for \(n\) total observations. The counts can be arranged in a contigency table.
  			</p>
  			<p>
  				Let \(P_{ij}=O_{ij}/n\). If the variables are independent,
- 				\[\Null: P \text{ independent from } Q,\]
+ 				\[\Null: A \text{ independent from } B,\]
  				we should have have
  				\[P_{ij} \approx p_i q_j \iff O_{ij} \approx E_{ij} \iff \chi^2 \approx 0.\]
+ 			</p>
+
+ 			<p>
+ 				If we only have binary categorical variabels and don't have a lot samples we cannot approximate with the chi-squared distribution. We can use FIsher's Exact Test.
+ 				Let \(a=P(A=1,B=1),\) \(b=P(A=1,B=0),\) \(c=P(A=0,B=1),\) \(d=P(A=0,B=0).\)<br>
+ 				If we have \(n\) samples then for the sample count of \(a\) we have
+ 				\[\hat a \sim \text{Hyp}(N=n,M=n(a+c),n=n(a+b)).\]
  			</p>
 		</main>
 		<p>
