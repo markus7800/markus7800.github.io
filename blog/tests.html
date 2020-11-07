@@ -23,13 +23,13 @@
 		<h1>Test test test...</h1>
 		<main>
 			<h2>Z - tests</h2>
-			<h3>Test for normal mean - known variance</h3>
+			<h3>Test for Normal Mean - Known Variance</h3>
 			<p>
 				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma^2)\), iid.
 				\[\Null: \mu = \mu_0\]
 				\[\frac{\overline X - \mu_0}{\sigma / \sqrt{n}} \sim \N(0,1)\]
 			</p>
-			<h3>Binomial test</h3>
+			<h3>Test for Proportion / Binomial test</h3>
 			<p>
 				If \(X = X_1, \dots, X_n \sim \text{Bernoulli}(p)\) then
 				\[\overline X \sim \frac{1}{n}\text{Binom}(n,p) \approx \N(p, p(1-p)/n)\]
@@ -40,7 +40,17 @@
 
 				where \(k = \sum_{i=1}^n X_i \sim \text{Binom}(n,p).\)
 			</p>
-
+			<h3>Test for Difference in Proportion</h3>
+			<p>
+				If there are is a second sample \(Y = Y_1, \dots, Y_m \sim \text{Bernoulli}(q)\) we can test for difference in proportions. 
+				\[\Null: p - q = w_0\]
+				\[\frac{\hat p - \hat q - w_0}{\hat \sigma} \approx \N(0,1)\]
+				with \(\hat p = \overline X,\) \(\hat q = \overline Y,\)
+				\[\bar p = \frac{n \hat p + m \hat q}{n+m}, \quad \hat\sigma = \sqrt{\bar p(1-\bar p)\left(\frac{1}{n}+ \frac{1}{m}\right)}.\]
+			</p>
+			<p>
+				In all proportion tests we should have more than 30 samples.
+			</p>
 
 			<h2>Student's t tests</h2>
 			<h3>One sample</h3>
@@ -48,6 +58,9 @@
 				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma^2)\), iid.
 				\[\Null: \mu = \mu_0\]
 				\[\frac{\overline{X} - \mu_0}{S_X / \sqrt{n}} \sim t_{n-1}\]
+			</p>
+			<p>
+				Note that here we have "equality". In the proportion test we only have an approximation. We have \(t_n \to \N(0,1)\) and for \(n > 30\) the approximation is good enough.
 			</p>
 			<h3>Two independent samples (unpaired)</h3>
 			<p><i>Common variance.</i>
