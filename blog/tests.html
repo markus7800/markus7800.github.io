@@ -136,11 +136,36 @@
 			</p>
 			<p>
 				Under the null we have
-				\[\text{RegSS} / \sigma^2 \sim \chi^2_{k-1}, \quad \text{RSS} / \sigma^2 \sim \chi^2_{N-k}.\]
+				\[
+				\text{RegSS} / \sigma^2 \sim \chi^2_{k-1}, \quad \text{RSS} / \sigma^2 \sim \chi^2_{N-k}.\]
 				The test statistic is 
-				\[\frac{\text{RegSS} / (k-1)}{\text{RSS} / (N-k)} \sim F_{k-1,N-k}.\]
+				
+				\begin{align}
+				\frac{\text{between-group var}}{\text{within-group var}} = \frac{\text{explained var}}{\text{unexplained var}} = \frac{\text{RegSS} / (k-1)}{\text{RSS} / (N-k)}
+				\end{align}
+				which is F-distributed \(\sim F_{k-1,N-k}.\)
 			</p>
 
+			<h3>two-way ANOVA / MANOVA</h3>
+			<p>
+				The test can be extended to multiple factors but gets more complicated.
+			</p>
+
+			<p>
+				In general the groups should be balanced (same number of observations) and the assumption about normality should not be violated. F-tests are sensitive.
+			</p>
+			<p>
+				With the ANOVA it is tested whether the variance between groups is greater than withing groups. So we can decide if a classifaction is meaningful. 
+			</p>
+			<p><i>Example.</i> 
+				Suppose we wanted to predict the weight of a dog based on a certain set of characteristics of each dog. One way to do that is to explain the distribution of weights by dividing the dog population into groups based on those characteristics. A successful grouping will split dogs such that (a) each group has a low variance of dog weights (meaning the group is relatively homogeneous) and (b) the mean of each group is distinct (if two groups have the same mean, then it isn't reasonable to conclude that the groups are, in fact, separate in any meaningful way).
+				<div id="images">
+					<img src="res/tests/ANOVA_no_fit.png"  width="30%">
+					<img src="res/tests/ANOVA_fair_fit.jpg"  width="30%">
+					<img src="res/tests/ANOVA_very_good_fit.jpg"  width="30%">
+				</div>
+				Above we have Young vs old, and short-haired vs long-haired; Pet vs Working breed and less athletic vs more athletic; Weight by breed.
+			</p>
 
 		</main>
 		<p>
