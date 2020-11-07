@@ -22,33 +22,36 @@
 		</p>
 		<h1>Test test test...</h1>
 		<main>
-			<h2>Normal test</h2>
-			<h3>Test for mean - known variance</h3>
+			<h2>Z - tests</h2>
+			<h3>Test for normal mean - known variance</h3>
 			<p>
-				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma)\), iid.
+				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma^2)\), iid.
 				\[\Null: \mu = \mu_0\]
 				\[\frac{\overline X - \mu_0}{\sigma / \sqrt{n}} \sim \N(0,1)\]
 			</p>
+			<h3>Binomial test</h3>
 			<p>
 				If \(X = X_1, \dots, X_n \sim \text{Bernoulli}(p)\) then
-				\[\overline X \sim \frac{1}{n}\text{Binom}(n,p) \approx \N(p, \sqrt{p(1-p)/n})\]
+				\[\overline X \sim \frac{1}{n}\text{Binom}(n,p) \approx \N(p, p(1-p)/n)\]
 				and
 				\[\Null: p = p_0\]
 
-				\[\frac{\overline X - p_0}{\sqrt{p_0(1-p_0) / n}} \approx \N(0,1).\]
+				\[\frac{\overline X - p_0}{\sqrt{p_0(1-p_0) / n}} = \frac{k - n p_0}{\sqrt{np_0(1-p_0)}} \approx \N(0,1)\]
+
+				where \(k = \sum_{i=1}^n X_i \sim \text{Binom}(n,p).\)
 			</p>
 
 
-			<h2>Student's t test</h2>
+			<h2>Student's t tests</h2>
 			<h3>One sample</h3>
 			<p>
-				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma)\), iid.
+				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma^2)\), iid.
 				\[\Null: \mu = \mu_0\]
 				\[\frac{\overline{X} - \mu_0}{S_X / \sqrt{n}} \sim t_{n-1}\]
 			</p>
 			<h3>Two independent samples (unpaired)</h3>
 			<p><i>Common variance.</i>
-				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma)\), iid., \(Y = Y_1, \dots, Y_m \sim \N(\mu_Y,\sigma)\), iid.
+				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma^2)\), iid., \(Y = Y_1, \dots, Y_m \sim \N(\mu_Y,\sigma^2)\), iid.
 				\[\Null: \mu_X - \mu_Y = w_0\]
 				\[
 					\frac{\overline X - \overline Y - w_0}{S_p \sqrt{\frac{1}{n} + \frac{1}{m}}} \sim t_{n+m-2}
@@ -68,7 +71,7 @@
 				\[S_p = \sqrt{\frac{S_X^2 + S_Y^2}{2}}.\]
 			</p>
 			<p><i>Unequal variance - Welch test.</i>
-				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma_X)\), iid., \(Y = Y_1, \dots, Y_m \sim \N(\mu_Y,\sigma_Y)\), iid.
+				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma_X^2)\), iid., \(Y = Y_1, \dots, Y_m \sim \N(\mu_Y,\sigma_Y^2)\), iid.
 				\[\Null: \mu_X - \mu_Y = w_0\]
 
 				\[
@@ -83,14 +86,21 @@
 
 			<h3>Two dependent samples (paired)</h3>
 			<p>
-				For \(X = X_1, \dots, X_n\), iid., \(Y = Y_1, \dots, Y_n \), iid. Requirement: Differences \(D_i = X_i - Y_i\) are independent and (approximately) \(\overline D \sim \N(\mu_D,S_D/\sqrt{n}).\)
+				For \(X = X_1, \dots, X_n\), iid., \(Y = Y_1, \dots, Y_n \), iid. Requirement: Differences \(D_i = X_i - Y_i\) are independent and (approximately) \(\overline D \sim \N(\mu_D,S_D^2/n).\)
 				\[\Null: \mu_X - \mu_Y = w_0\]
 
 				\[\frac{\overline{D} - w_0}{S_D / \sqrt{n}} \sim t_{n-1}.\]
 			</p>
 
 
-			<h2>ANOVA</h2>
+			<h2>F-Tests</h2>
+			<h3>Equality of Variance</h3>
+			<p>
+				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma_X^2)\), iid., \(Y = Y_1, \dots, Y_m \sim \N(\mu,\sigma_Y^2)\), iid.
+				\[\Null: \sigma_X = \sigma_Y\]
+				\[\frac{S_X^2}{S_Y^2} \sim F_{n-1, m-1}\]
+			</p>
+
 			<h3>one-way ANOVA</h3>
 			<p>
 				Investigation of influence of <i>one</i> factor on random variable by considering the means. It is the generalisation of the two sample t test.
@@ -106,7 +116,7 @@
 
 				\[y_{ij} = \mu_i + \epsilon_{ij} = \mu + \tau_i + \epsilon_{ij}, \quad i=1,\dots,k, \enspace j=1,\dots,n_i\]
 				where
-				\(\epsilon_{ij} \sim \N(0,\sigma)\) iid., \(\mu_i = \mu + \tau_i\) is the influence of the factor and \(n_1+\cdots+n_k=N.\)
+				\(\epsilon_{ij} \sim \N(0,\sigma^2)\) iid., \(\mu_i = \mu + \tau_i\) is the influence of the factor and \(n_1+\cdots+n_k=N.\)
 			</p>
 			<p>
 				We want to find point estimates of \(\mu,  \mu_i\) and \(\tau_i\).
@@ -164,9 +174,30 @@
 					<img src="res/tests/ANOVA_fair_fit.jpg"  width="30%">
 					<img src="res/tests/ANOVA_very_good_fit.jpg"  width="30%">
 				</div>
+			</p>
+			<p>
 				Above we have Young vs old, and short-haired vs long-haired; Pet vs Working breed and less athletic vs more athletic; Weight by breed.
 			</p>
 
+
+			<h2>Chi-Squared Tests</h2>
+			<h3>Goodness of Fit of a Distribution</h3>
+			<p>
+				It is assumed that we have a \(k\) categories with true frequency probabilities \(p_i\), \(i=1,\dots,k.\) (multinomial distribution). <br>
+				The Pearson's cumulative test statistic is given by
+				\[\chi^2 = \sum_{i=1}^k \frac{(O_i-E_i)^2}{E_i} = n \sum_{i=1}^k \frac{(f_i - p_i)^2}{p_i} \approx \chi^2_{k-1}\] where
+				\(n\) is the number of observation, \(O_i\) is the number of observations, \(E_i = np_i\) the expected number of observations and \(f_i = O_i/n\) the fraction of observations in group \(i\). That is \[\Null: E \sim \text{Multinomial}(n,p).\]
+				For proof of the approximation see <a href="https://arxiv.org/pdf/1808.09171.pdf">here</a>.
+ 			</p>
+ 			<p>
+ 				For the special case of \(p = (p_1,1-p_1)\) we have \(E_1 \sim \text{Binom}(n,p_1),\) \(E_2 = n-E_1.\)
+ 				Then
+ 				\begin{align}
+ 				\chi_2 &= \frac{(O_1 - np_1)^2}{n p_1} + \frac{(n-O_1 - n(1-p_1))^2}{n (1-p_1)} \\
+ 				&= \left( \frac{O_1 - n p_1}{\sqrt{np_1(1-p_1)}}\right)^2 \sim \chi^2_1
+ 				\end{align}
+ 				This test is closely related to the Binomial test.
+ 			</p>
 		</main>
 		<p>
 			<a href="./blog.html">Back</a>
