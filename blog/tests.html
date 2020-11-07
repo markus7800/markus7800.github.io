@@ -22,6 +22,23 @@
 		</p>
 		<h1>Test test test...</h1>
 		<main>
+			<h2>Normal test</h2>
+			<h3>Test for mean - known variance</h3>
+			<p>
+				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma)\), iid.
+				\[\Null: \mu = \mu_0\]
+				\[\frac{\overline X - \mu_0}{\sigma / \sqrt{n}} \sim \N(0,1)\]
+			</p>
+			<p>
+				If \(X = X_1, \dots, X_n \sim \text{Bernoulli}(p)\) then
+				\[\overline X \sim \frac{1}{n}\text{Binom}(n,p) \approx \N(p, \sqrt{p(1-p)/n})\]
+				and
+				\[\Null: p = p_0\]
+
+				\[\frac{\overline X - p_0}{\sqrt{p_0(1-p_0) / n}} \approx \N(0,1).\]
+			</p>
+
+
 			<h2>Student's t test</h2>
 			<h3>One sample</h3>
 			<p>
@@ -66,11 +83,65 @@
 
 			<h3>Two dependent samples (paired)</h3>
 			<p>
-				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma)\), iid., \(Y = Y_1, \dots, Y_n \sim \N(\mu_Y,\sigma)\), iid. Requirement: Differences \(D_i = X_i - Y_i\) are independent and (approximately) \(\overline D \sim \N(\mu_D,S_D/\sqrt{n})\).
+				For \(X = X_1, \dots, X_n\), iid., \(Y = Y_1, \dots, Y_n \), iid. Requirement: Differences \(D_i = X_i - Y_i\) are independent and (approximately) \(\overline D \sim \N(\mu_D,S_D/\sqrt{n}).\)
 				\[\Null: \mu_X - \mu_Y = w_0\]
 
 				\[\frac{\overline{D} - w_0}{S_D / \sqrt{n}} \sim t_{n-1}.\]
 			</p>
+
+
+			<h2>ANOVA</h2>
+			<h3>one-way ANOVA</h3>
+			<p>
+				Investigation of influence of <i>one</i> factor on random variable by considering the means. It is the generalisation of the two sample t test.
+
+				\[\Null: \mu_1 = \mu_2 = \dots = \mu_k\]
+			</p>
+			<p>
+				Requirement: Factor levels have to be independent. Resiuduals must be zero-mean normal with same variance (also between groups).
+			</p>
+			<p>
+				It is assumed that the observations belonging to a group are the same (-noise) and that the variance is explained by the factor alone.
+
+
+				\[y_{ij} = \mu_i + \epsilon_{ij} = \mu + \tau_i + \epsilon_{ij}, \quad i=1,\dots,k, \enspace j=1,\dots,n_i\]
+				where
+				\(\epsilon_{ij} \sim \N(0,\sigma)\) iid., \(\mu_i = \mu + \tau_i\) is the influence of the factor and \(n_1+\cdots+n_k=N.\)
+			</p>
+			<p>
+				We want to find point estimates of \(\mu,  \mu_i\) and \(\tau_i\).
+
+				Let
+				\[\overline y_i = \frac{1}{n_i}\sum_{j=1}^{n_i} y_{ij}, \quad s_i^2 = \frac{1}{n_i-1}\sum_{j=1}^{n_i}(y_{ij}-\overline y_i)^2\]
+
+				Then the sample man is
+				\[\overline y = \frac{1}{N}\sum_{i=1}^k n_i \overline y_i.\]
+
+				We take \(\hat \mu = \overline y\), \(\hat \mu_i = \overline y_i\) and \(\hat \tau_i = \hat \mu_i - \hat \mu.\)
+				The residuals are \(\hat \epsilon_{ij} = y_{ij} - \overline y_i.\)
+			</p>
+			<p>
+				The decomposition of variance is given by
+				\begin{align}
+				\underbrace{\sum_{n=1}^N (y_{n} - \overline y)^2}_{\text{TSS}} =
+				\underbrace{\sum_{n=1}^N (\hat  y_{n} - \overline y)^2}_\text{RegSS} +
+				\underbrace{\sum_{n=1}^N (y_n - \overline y)^2}_\text{RSS}
+				\end{align}
+				In our case \(\hat y_{ij} = \overline y_i\) and so
+				\begin{align}
+				\text{TSS} &= \sum_{i=1}^k\sum_{j=1}^{n_i} (y_{ij} - \overline y)^2 \\
+				\text{RegSS} &= \sum_{i=1}^k n_i (\overline y_i - \overline y)^2 = \sum_{i=1}^k n_i \hat \tau_i^2 \\
+				\text{RSS} &= \sum_{i=1}^k \sum_{j=1}^{n_i} \hat \epsilon_{ij}^2 = \sum_{i=1}^k\sum_{j=1}^{n_i} (y_{ij}-\overline y_i)^2 = \sum_{i=1}^k (n_i-1)s_i^2
+				\end{align}
+			</p>
+			<p>
+				Under the null we have
+				\[\text{RegSS} / \sigma^2 \sim \chi^2_{k-1}, \quad \text{RSS} / \sigma^2 \sim \chi^2_{N-k}.\]
+				The test statistic is 
+				\[\frac{\text{RegSS} / (k-1)}{\text{RSS} / (N-k)} \sim F_{k-1,N-k}.\]
+			</p>
+
+
 		</main>
 		<p>
 			<a href="./blog.html">Back</a>
