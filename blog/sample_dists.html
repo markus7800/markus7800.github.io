@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<link rel="icon" type="image/png" href="./res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		\(
+			\newcommand{\N}{\mathcal{N}}
+		\)
+
+		<title>Distributions of Samples</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Distributions of Samples</h1>
+		<main>
+			<p>
+
+				Let \(Z_i\), \(i = 1, \dots, n\) be iid. standard normal distributed \(Z_i \sim \N(0, 1)\), then
+
+				\[\sum_{i=1}^n Z_i^2 \sim \chi^2_n.\]
+			</p>
+
+			<p>
+				For \(U_1 \sim \chi^2_{k_1}\), \(U_2 \sim \chi^2_{k_2}\) independent
+				\[\frac{U_1/k_1}{U_2/k_2} \sim F_{k_1,k_2}.\]
+			</p>
+
+			<p>
+				For \(T \sim t_n\)
+				\[T^2 \sim F_{1,n}, \quad T^{-2} \sim F_{n,1}.\]
+			</p>
+
+			<p>
+				Let \(X_i\), \(i = 1, \dots, n\) be iid. normal distributed \(X_i \sim \N(\mu, \sigma)\), then
+
+				\[
+				\overline X = \frac{1}{n}\sum_{i=1}^n X_i \sim \N(\mu, \frac{\sigma}{\sqrt{n}}),
+				\]
+
+				\[
+				\sum_{i=1}^n (X_i - \overline X)^2 \sim \sigma^2 \chi^2_{n-1} \quad \text{(is independent from } \overline X),
+				\]
+
+
+				\[
+				n(\overline X - \mu)^2 \sim \sigma^2 \chi^2_1,
+				\]
+
+				\[
+				\left(\frac{\overline X - \mu}{\hat \sigma /\sqrt{n}}\right)^2 = \frac{n(\overline X - \mu)^2}{\frac{1}{n-1} \sum_{i=1}^n (X_i - \overline X)^2} \sim \frac{\chi^2_1}{\frac{1}{n-1}\chi_{n-1}^2} \sim F_{1,n-1}
+ 				\]
+
+				\[
+				\frac{(n-1) \hat \sigma^2}{\sigma^2} \sim \chi^2_{n-1},
+				\]
+
+				\[
+				\frac{\overline X - \mu}{\hat \sigma /\sqrt{n}} \sim t_{n-1}
+ 				\]
+
+ 			See <a href="https://en.wikipedia.org/wiki/Cochran%27s_theorem">Cochran's theorem.</a>
+			</p>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./blog.css">
+		<link rel="icon" type="image/png" href="./res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		\(
+			\newcommand{\Null}{\mathcal{H}_0}
+			\newcommand{\N}{\mathcal{N}}
+		\)
+
+		<title>Test test test...</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		<h1>Test test test...</h1>
+		<main>
+			<h2>Student's t test</h2>
+			<h3>One sample</h3>
+			<p>
+				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma)\), iid.
+				\[\Null: \mu = \mu_0\]
+				\[\frac{\overline{X} - \mu_0}{S_X / \sqrt{n}} \sim t_{n-1}\]
+			</p>
+			<h3>Two independent samples (unpaired)</h3>
+			<p><i>Common variance.</i>
+				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma)\), iid., \(Y = Y_1, \dots, Y_m \sim \N(\mu_Y,\sigma)\), iid.
+				\[\Null: \mu_X - \mu_Y = w_0\]
+				\[
+					\frac{\overline X - \overline Y - w_0}{S_p \sqrt{\frac{1}{n} + \frac{1}{m}}} \sim t_{n+m-2}
+				\]
+				where
+				\[S_p = \sqrt{\frac{(n-1)S_X^2 + (m-2)S_Y^2}{n+m-2}}\]
+				is the pooled standard deviation. \(S_p^2\) is an unbiased estimated for \(\sigma^2\).
+			</p>
+			<p>
+				Can be applied if \(0.5 < S_X / S_Y < 2\).
+			</p>
+			<p>
+				If \(m=n\)
+				\[
+					\frac{\overline X - \overline Y - w_0}{S_p \sqrt{\frac{2}{n}}} \sim t_{2n-2},
+				\]
+				\[S_p = \sqrt{\frac{S_X^2 + S_Y^2}{2}}.\]
+			</p>
+			<p><i>Unequal variance - Welch test.</i>
+				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma_X)\), iid., \(Y = Y_1, \dots, Y_m \sim \N(\mu_Y,\sigma_Y)\), iid.
+				\[\Null: \mu_X - \mu_Y = w_0\]
+
+				\[
+				\frac{\overline X - \overline Y - w_0}{\overline S} \approx t_\nu, \quad \text{where} \quad \overline S = \sqrt{\frac{S_X^2}{n} + \frac{S_Y^2}{m}},
+				\]
+				\[
+				\nu = \left(\frac{S_X^2}{n} + \frac{S_Y^2}{m}\right)^2 {\huge/} \left(\frac{(S_X^2/n)^2}{n-1} + \frac{(S_Y^2/m)^2}{m-1} \right)
+				\]
+
+				Recommended: \(m \approx n\), \(m,n > 30\).
+			</p>
+
+			<h3>Two dependent samples (paired)</h3>
+			<p>
+				For \(X = X_1, \dots, X_n \sim \N(\mu_X,\sigma)\), iid., \(Y = Y_1, \dots, Y_n \sim \N(\mu_Y,\sigma)\), iid. Requirement: Differences \(D_i = X_i - Y_i\) are independent and (approximately) \(\overline D \sim \N(\mu_D,S_D/\sqrt{n})\).
+				\[\Null: \mu_X - \mu_Y = w_0\]
+
+				\[\frac{\overline{D} - w_0}{S_D / \sqrt{n}} \sim t_{n-1}.\]
+			</p>
+		</main>
+		<p>
+			<a href="./blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="./collapsible.js"></script>
+</html>
