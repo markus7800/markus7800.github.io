@@ -195,6 +195,15 @@
 
 
 			<h2>Chi-Squared Tests</h2>
+			<h3>Test For Normal Variance</h3>
+			<p>
+				For \(X = X_1, \dots, X_n \sim \N(\mu,\sigma_X^2)\), iid.
+				\[\Null: \sigma = \sigma_0\]
+				\[\frac{(n-1) S_X^2}{\sigma_0^2} \sim \chi^2_{n-1}\]
+
+				\[\frac{\sqrt{n-1} S_X}{\sigma_0} \sim \chi_{n-1}\]
+			</p>
+
 			<h3>Goodness of Fit of a Distribution</h3>
 			<p>
 				It is assumed that we have a \(k\) categories with true frequency probabilities \(p_i^*\), \(i=1,\dots,k.\) (multinomial distribution). <br>
@@ -234,6 +243,38 @@
  				If we have \(n\) samples then for the sample count of \(a\) we have
  				\[\hat a \sim \text{Hyp}(N=n,M=n(a+c),n=n(a+b)).\]
  			</p>
+
+ 			<h2>Rank stuff</h2>
+ 			<h3>Mann-Whiteny U-Test / Wilcoxon Rank Sum Test</h3>
+ 			<p>
+				For \(X = X_1, \dots, X_n \), iid., \(Y = Y_1, \dots, Y_m \), iid.
+				\[\Null: P(X > Y) = P(Y < X) \text{ or}\]
+				\[\Null: X \text{ and } Y \text{ have same distribution}\]
+				\[U = \sum_{i=1}^n \sum_{j=1}^m S(X_i, Y_j)\]
+				where
+				\begin{align}
+				S(X,Y) = \begin{cases}
+					1, & \text{ if } Y < X \\
+					0.5, & \text{ if } Y = X \\ 
+					0, & \text{ if } Y > X. \\
+				\end{cases}
+				\end{align}
+			</p>
+			<p>
+				For small sample size <20 the distribution is tabulated but for large sample size
+				\[\frac{U - \mu_U}{\sigma_U} \approx \N(0,1)\]
+				where
+				\[\mu_U = \frac{nm}{2}, \quad \sigma_U = \sqrt{\frac{mn(n+m+1)}{12}}.\]
+			</p>
+			<p>
+				Let \(R(X_i)\) denote the rank of \(X_i\) in the combined sample \(X \cup Y.\) Then
+				\[U = \sum_{i=1}^n R(X_i) - \frac{n(n-1)}{2}.\]
+			</p>
+			<p>
+				If there are observations which share a rank than the standard deviation should be corrected.
+				\[\sigma_U^\text{corr} = \sqrt{\frac{nm}{12}\left((N+1) - \sum_{i=1}^k\frac{t_i^3-t_i}{N(N-1)}\right)}\]
+				where \(N=n+m\) and \(t_i\) is the number of observations sharing rank \(i\) with \(k\) distinct ranks.
+			</p>
 		</main>
 		<p>
 			<a href="./blog.html">Back</a>
