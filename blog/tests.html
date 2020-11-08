@@ -244,7 +244,7 @@
  				\[\hat a \sim \text{Hyp}(N=n,M=n(a+c),n=n(a+b)).\]
  			</p>
 
- 			<h2>Rank stuff</h2>
+ 			<h2>Tests Based on Rank</h2>
  			<h3>Mann-Whiteny U-Test / Wilcoxon Rank Sum Test</h3>
  			<p>
 				For \(X = X_1, \dots, X_n \), iid., \(Y = Y_1, \dots, Y_m \), iid.
@@ -261,7 +261,7 @@
 				\end{align}
 			</p>
 			<p>
-				For small sample size <20 the distribution is tabulated but for large sample size
+				For small sample size <30 the distribution is tabulated but for large sample size
 				\[\frac{U - \mu_U}{\sigma_U} \approx \N(0,1)\]
 				where
 				\[\mu_U = \frac{nm}{2}, \quad \sigma_U = \sqrt{\frac{mn(n+m+1)}{12}}.\]
@@ -274,6 +274,35 @@
 				If there are observations which share a rank than the standard deviation should be corrected.
 				\[\sigma_U^\text{corr} = \sqrt{\frac{nm}{12}\left((N+1) - \sum_{i=1}^k\frac{t_i^3-t_i}{N(N-1)}\right)}\]
 				where \(N=n+m\) and \(t_i\) is the number of observations sharing rank \(i\) with \(k\) distinct ranks.
+			</p>
+
+			<h3>Kruskal-Wallis H-test</h3>
+			<p>
+				We have  \(k\) independent groups \(Y_i = Y_{ij},\) \(j=1,\dots,n_i\), \(i = 1,\dots,k.\)
+
+				\[\Null: Y_i \text{ have same distribution}\]
+
+				\[H = (N-1)\frac{\sum_{i=1}^k n_i (\bar r_i - \bar r)^2}{\sum_{i=1}^k\sum_{j=1}^{n_i}(r_{ij} - \bar r)^2}\]
+				where \(r_{ij}\) denotes the rank of \(Y_{ij}\) in the combined sample, \(\bar r_i\) are the average rank per group \(\bar r = 0.5(N+1)\) is the average rank of all \(N\) observations.
+			</p>
+			<p>
+				If there are no ties in the ranks then
+				\[H = \frac{12}{N(N-1)} \sum_{i=1}^k n_i (\bar r_i - \bar r)^2\]
+				If there are ties this expression can be corrected by
+				\[H = \left(\frac{12}{N(N-1)} \sum_{i=1}^k n_i (\bar r_i - \bar r)^2 \right) {\huge /} \left(1 - \frac{1}{N^3-N}\sum_{i=1}^g (t_i^3 -t_i)\right)\]
+				where \(t_i\) is again the number of observations sharing rank \(i\) for \(G\) distinct ranks.
+			</p>
+			<p>
+				For small sample size <30 the distribution is tabulated but for large sample size
+				\[H \approx \chi^2_{k-1}.\]
+			</p>
+			<p>
+				A significant Kruskal–Wallis test indicates that at least one sample stochastically dominates one other sample.
+			</p>
+
+			<p><br></p>
+			<p>
+				The Wilcoxon Rank Sum test is the non-parametric equivalent of a two sample unpaired t-test. The Kruskal-Wallis H-test is the non-parametric equivalent of the one-way ANOVA. It extends the Wilcoxon Rank Sum test the same way one-way ANOVA does the two sample unpaired t-test.
 			</p>
 		</main>
 		<p>
