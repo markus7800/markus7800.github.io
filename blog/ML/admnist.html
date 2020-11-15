@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		\(
+		\newcommand{\bfx}{\mathbf{x}}
+		\newcommand{\bfA}{\mathbf{A}}
+		\newcommand{\bfB}{\mathbf{B}}
+		\newcommand{\bfC}{\mathbf{C}}
+		\newcommand{\R}{\mathbb{R}}
+		\)
+
+		<title>Automatic Differentiation and MNIST</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Back</a>
+		</p>
+		<h2>Automatic Differentiation and MNIST</h2>
+		<main>
+			<p>
+				Automatic differentiation is based on the multivariate chainrule: <br>
+				\(f:\R^n \to \R\), \(g:\R^m \to \R^n\), \(h:\R^n \to \R^l\)
+				\[
+				d (h \circ g)(\bfx) = d h(g(\bfx)) dg(\bfx),
+				\]
+				\[
+				\nabla (f \circ g)(\bfx) = \nabla f(g(\bfx))^T dg(\bfx),
+				\]
+				\begin{align}
+				\frac{\partial (f \circ g)}{\partial x_i}(\bfx) =
+				\nabla f(g(\bfx))^T
+				\begin{bmatrix}
+				\frac{\partial g_1}{\partial x_i} (\bfx) \\
+				\vdots \\
+				\frac{\partial g_m}{\partial x_i} (\bfx)
+				\end{bmatrix}
+				= \sum_{j=1}^m \frac{\partial f}{\partial x_j} (g(\bfx)) \frac{\partial g_j}{\partial x_i} (\bfx).
+				\end{align}
+				So we make a forward pass and calculate \(f(g(\bfx)).\) If we know the gradient of \(f\) at \(g(\bfx)\) we can backpropagate it to \(\bfx\) via above formula.
+			</p>
+			<p>
+				<i>Example. Matrix multiplication.</i><br>
+				\(\bfA \in \R^{m \times n}\), \(\bfB \in \R^{n \times l},\)
+				\(f(\bfA \bfB) = f(\bfC) \in \R\).<br>
+
+
+				Let \(\nabla_\bfC f(\bfC) = \nabla\) such that
+				\[\frac{\partial f}{\partial c_{ij}}(\bfC) = \nabla_{ij}.\]
+
+				By definition of matrix multiplication
+				\[c_{ij} = \sum_{k=1}^n a_{ik}b_{kj}, \quad \frac{\partial c_{ij}}{\partial a_{ik}} = b_{kj}, \quad \frac{\partial c_{ij}}{\partial b_{kj}} = a_{ik}.\]
+
+				From the chain rule it follows that
+
+				\[\frac{\partial f}{\partial  a_{ik}}(\bfC) = \sum_{j=1}^l b_{kj}\nabla_{ij}, \quad \frac{\partial f}{\partial b_{kj}}(\bfC) = \sum_{i=1}^m a_{ik}\nabla_{ij}\]
+
+				which can be summerised as
+
+				\[\frac{df}{d\bfA} =  \nabla\bfB^T, \quad \frac{df}{d\bfB} = \bfA^T \nabla. \]
+			</p>
+			<p>
+				<i>Example. Convolution code.</i>
+				<div id="images">
+					<img src="res/admnist/conv1.png", width="600px">
+					<img src="res/admnist/conv2.png", width="600px">
+				</div>
+			</p>
+			<h2>Implementation.</h2>
+			<p>
+				I used custom structs which keep track of the parents which created them. By overloading operators we calculate the forward pass and create a tree. As \(\text{id}\circ f = f\) and \(\nabla_f f = 1\) we know the gradient at the root node and propagate it back layer by layer.
+				<div id="images">
+					<img src="res/admnist/backward.png" width="600px">
+				</div>
+			</p>
+			<p>
+				With this method a wide range of operations can be differentiated. Like for example an arbitratry retrieval of elements. The gradient is backpropagated by simply adding it to the correct indexes.
+				<div id="images">
+					<img src="res/admnist/getindex.png" width="600px">
+				</div>
+			</p>
+
+			<h2>MNIST</h2>
+			<p>
+				With alot of operations implemented I was able to create and differentiate following deep neural network:
+				<div id="images">
+					<img src="res/admnist/model.png" width="600px">
+				</div>
+			</p>
+			<p>
+				After 35 epochs witch batchsize 128 and ADAM optimiser an accuracy of 98.84% was reached.
+				Below can bee seen all correctly labeled images (left) and all wrongly labeld images (right).
+				<div id="images">
+					<img src="res/admnist/righta_pad_2.gif" width="48%">
+
+					<img src="res/admnist/wronga_pad_2.gif" width="48%">
+				</div>
+			</p>
+			<p>
+				Code available <a href="https://github.com/markus7800/MathAndAlgos/tree/master/Algorithms/AutomaticDifferentiation">here</a> and <a href="https://github.com/markus7800/MathAndAlgos/tree/master/Algorithms/ADNN">here</a>.
+			</p>
+		</main>
+		<p>
+			<a href="../blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
