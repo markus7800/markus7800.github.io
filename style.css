@@ -59,6 +59,18 @@ img {
  	 margin-left: auto;
  	 margin-right: auto;
 }*/
+#profilepic {
+		width: 200px;
+		border-radius: 100px;
+		box-shadow: 0px 0px 20px #888888;
+	}
+#profilepiccontainer {
+	width: 200px;
+	float:left
+}
+#profiletext {
+	margin-left: 220px
+}
 
 @media only screen and (max-device-width: 600px) {
     h1 {
@@ -86,6 +98,18 @@ img {
 
 	p {
 		font-size: 3rem;
+	}
+
+	#profilepic {
+		width: 400px;
+		border-radius: 200px;
+		box-shadow: 0px 0px 20px #888888;
+	}
+	#profilepiccontainer {
+		width: 400px;
+	}
+	#profiletext {
+		margin-left: 0px
 	}
 }
 
