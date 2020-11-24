@@ -60,10 +60,10 @@ img {
  	 margin-right: auto;
 }*/
 #profilepic {
-		width: 200px;
-		border-radius: 100px;
-		box-shadow: 0px 0px 20px #888888;
-	}
+	width: 200px;
+	border-radius: 100px;
+	box-shadow: 0px 0px 20px #888888;
+}
 #profilepiccontainer {
 	width: 200px;
 	float:left
@@ -107,6 +107,7 @@ img {
 	}
 	#profilepiccontainer {
 		width: 400px;
+		float: none;
 	}
 	#profiletext {
 		margin-left: 0px
