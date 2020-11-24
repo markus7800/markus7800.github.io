@@ -11,6 +11,7 @@
 		<meta name="msapplication-TileColor" content="#ffffff">
 		<meta name="theme-color" content="#ffffff">
 		<script src="res/snake.js"></script>
+		<script src="res/lazyload.js"></script>
 		<title>Markus Boeck's Homepage</title>
 	</head>
 	<body>
@@ -26,16 +27,22 @@
 					<img class="centered" src="res/hello_crop.gif" alt="hello gif">
 				</div>
 				<h2>About</h2>
-				<div id="images" >
-					<img src="profile_pic/markus2020.jpeg" width="400px", style="border-radius: 200px; box-shadow: 0px 0px 20px #888888">
+				<div style="margin:auto;">
+					<div style="width: 200px; float:left">
+						<img src="profile_pic/markus2020.jpeg" width="200px", style="border-radius: 100px; box-shadow: 0px 0px 20px #888888">
+					</div>
+					<div style="margin-left: 220px">
+						<p>
+						I recently obtained my Bachelor's Degree in Technical Mathematics at TU Wien.
+						Through the study I discovered my interest in the theoretical foundations
+						of machine learning.
+						Currently I am pursuing a Master's in Data Science.
+						<!-- Take a look at my <a href="res/Lebenslauf2020.pdf" target="_blank">CV</a>. -->
+						</p>
+					</div>
 				</div>
-				<p>
-					I recently obtained my Bachelor's Degree in Technical Mathematics at TU Wien.
-					Through the study I discovered my interest in the theoretical foundations
-					of machine learning.
-					Currently I am pursuing a Master's in Data Science.
-					<!-- Take a look at my <a href="res/Lebenslauf2020.pdf" target="_blank">CV</a>. -->
-				</p>
+				
+				
 
 				<h2>Bachelor's Thesis</h2>
 				<p>
@@ -45,8 +52,8 @@
 					I derived the sample complexity of tabular algorithms and considered the incorporation of risk
 					measures in the action selection process.
 					<div id="images">
-						<img class="centered" src="res/rldiagram.svg" alt="reinforcement learning diagram" width="45%" style="background-color:white;">
-						<img class="centered" src="res/catdist.svg" alt="categorical distribution example" width="45%">
+						<img class="lazy" data-src="res/rldiagram.svg" alt="reinforcement learning diagram" width="45%" style="background-color:white;">
+						<img class="lazy" data-src="res/catdist.svg" alt="categorical distribution example" width="45%">
 					</div>
 				</p>
 				<p><br></p>
@@ -64,19 +71,19 @@
 				<div>
 					<h3>MNIST from Scratch</h3>
 					<p>
-						Implementation of automatic differentiation library and testing with deep neural network on MNIST dataset.
+						Implementation of automatic differentiation library and testing with deep neural network on MNIST dataset in JULIA.
 					</p>
 					<div id="images">
-						<img src="./blog/ML/res/admnist/righta_pad_2_short.gif" width="60%">
+						<img class="lazy" data-src="./blog/ML/res/admnist/righta_pad_2_short.gif" width="60%">
 					</div>
 					<h3>CartPole with RL</h3>
 					<p>
 						Reinforcement Learning in continuous state space.
-						The task was to swingup and balance a pendulum by only applying a horizontal force at the cart.
+						The task was to swingup and balance a pendulum by only applying a horizontal force to the cart.
 						The states were approximated by a neural net.
 					</p>
 					<div id="images">
-						<img src="./res/swingup10s.gif">
+						<img class="lazy" data-src="./res/swingup10s.gif">
 					</div>
 
 					<h3>Covid-19 Predictive Modelling</h3>
@@ -84,7 +91,7 @@
 						Least Square Regression based on Susceptible-Infected-Removed (SIR) model.
 						Has no predictive value as it overfits a lot.
 					</p>
-					<img src="res/covid.svg" alt="covid prediction" width="95%">
+					<img class="lazy" data-src="res/covid.svg" alt="covid prediction" width="95%">
 
 					<p><br></p>
 					<h3>Simplified Snake AI with RL</h3>
@@ -117,7 +124,7 @@
 						Produces fancy pictures.
 					</p>
 					<div id="images">
-						<img class="centered" src="res/field.svg" alt="fancy picture" width="95%">
+						<img class="lazy" data-src="res/field.svg" alt="fancy picture" width="95%">
 					</div>
 
 					<p><br></p>
@@ -129,9 +136,9 @@
 						and velocity of the phone.
 					</p>
 					<div id="images">
-						<img class="centered" src="res/ping1.jpg" width="30%">
-						<img class="centered" src="res/ping2.jpg" width="30%">
-						<img class="centered" src="res/accelerometer.png" width="30%">
+						<img class="lazy" data-src="res/ping1.jpg" width="30%">
+						<img class="lazy" data-src="res/ping2.jpg" width="30%">
+						<img class="lazy" data-src="res/accelerometer.png" width="30%">
 					</div>
 
 					<p><br></p>
