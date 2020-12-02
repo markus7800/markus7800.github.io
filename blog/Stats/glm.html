@@ -13,6 +13,7 @@
 			\newcommand{\bfX}{\mathbf{X}}
 			\newcommand{\bfR}{\mathbf{R}}
 			\newcommand{\bfeta}{\boldsymbol{\eta}}
+			\newcommand{\bfmu}{\boldsymbol{\mu}}
 			\newcommand{\bfu}{\mathbf{u}}
 			\newcommand{\bfw}{\mathbf{w}}
 			\newcommand{\bfW}{\mathbf{W}}
@@ -68,7 +69,7 @@
 				\[\ln p (\bfy | \bfeta, s) =\frac{1}{s} \left(\bfa^T \bfy - g(\bfa) \right) + \ln h(\bfy,s).\]
 				We also get
 
-				\[\bfeta = \psi(\hat\bfy) = \psi(f(\bfa)) = \bfa = \bfW^T \bfx.\]
+				\[\bfeta = \psi(\hat\bfy) = \psi(f(\bfa)) = \bfa = \bfW^T \bfx, \quad f^{-1} = \psi.\]
 			
 
 				Differentiating with respect to \(\bfW\) gives
@@ -128,7 +129,7 @@
 				where the matrix \(\bfW\) is in its vectorised form \(\overline \bfW \in \R^{dp}.\)
 			</p>
 			<p>
-				For independent observations \(\bfX = (\bfx_1, \dots, \bfx_N)^T\), \(\bfY = (\bfy_1, \dots, \bfy_N)^T\), where \((\bfx_j)_0 = 1\) if we use an intercept, the likelihood factorises and thus the batch gradients and hessian are given by
+				For independent observations \(\bfX = (\bfx_1, \dots, \bfx_N)^T \in \R^{n \times d}\), \(\bfY = (\bfy_1, \dots, \bfy_N)^T \in \R^{n \times p}\), where \((\bfx_j)_0 = 1\) if we use an intercept, the likelihood factorises and thus the batch gradients and hessian are given by
 				\begin{align}
 				-\nabla_{\bfW}\ln(\bfY | \bfX) &=\frac{1}{s}\sum_{n=1}^N \bfx_n^T(\hat\bfy_n - \bfy_n) \in \R^{d \times p} \\
 				&= \frac{1}{s}\bfX (\hat\bfY - \bfY), \\
@@ -143,13 +144,95 @@
 			<h3>Univariate Gaussian.</h3>
 			<p>
 				Here we have
-				\[p(y|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(\frac{1}{2\sigma^2}(y-\mu)^2 \right).\]
+				\[p(y|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(-\frac{(y-\mu)^2}{2\sigma^2} \right).\]
 				This can be rewritten with
 				\begin{align}
-				\eta &= \mu \\
-				s &= \sigma
+				\eta &= \mu, \\
+				s &= \sigma^2, \\
+				g(\eta) &= \frac{\eta^2}{2}, \\
+				h(y, s) &= \frac{1}{\sqrt{2\pi s}}\exp\left(-\frac{y^2}{2s}\right).
 				\end{align}
+				We get \(\hat y = \eta\) and therefore \(\psi = \operatorname{id}\) and \(f = \operatorname{id}.\)
+				We obtained univariate linear regression \(\hat y (\bfx) = \bfw^T\bfx!\)
+
+				The associated loss function is the mean squared error
+				\[\ln p(\bfy | \bfx, \sigma^2, \bfw) = \frac{1}{\sigma^2} \sum_{n=1}^N \left(y_n - \hat y(\bfx)\right)^2 + \text{const.}\]
 			</p>
+
+			<h3>Isotropic Mulitvariate Gaussian.</h3>
+			<p>
+				\[p(\bfy | \bfmu, \sigma^2) = \frac{1}{(2\pi \sigma^2)^{d/2}} \exp\left(-\frac{1}{2\sigma^2}(\bfy - \bfmu)^T(\bfy - \bfmu)\right). \]
+
+				It is easy to see that
+				\begin{align}
+				\bfeta &= \bfmu, \\
+				s &= \sigma^2, \\
+				g(\bfeta) &= \frac{1}{2}\bfmu^T\bfmu, \\
+				h(\bfy, s) &= \frac{1}{(2\pi s)^{d/2}} \exp \left(-\frac{1}{2s}\bfy^T\bfy\right).
+				\end{align}
+
+				Again we have \(\hat \bfy = \bfeta\) and obtained multivariate linear regression \(\hat\bfy(\bfx) = \bfW^T\bfx\) with mean squared loss
+				\[\ln p(\bfY | \bfY, \sigma^2, \bfW) = \frac{1}{\sigma^2} \sum_{n=1}^N ||\bfy_n - \hat y(\bfx)||^2_2 + \text{const.}\]
+			</p>
+
+			<h3>Bernoulli.</h3>
+			<p>
+				\[p(y|\mu) = \mu^y (1-\mu)^{1-y}, \quad y \in \{0,1\}\]
+
+				Write the mass function in form of
+				\[p(y|\mu) = \exp\left(y\ln \mu + (1-y)\ln(1-\mu)\right) = \exp\left(\ln\left(\frac{\mu}{1-\mu}\right)y +\ln(1-\mu)\right)\]
+
+				\begin{align}
+				\eta &= \ln\left(\frac{\mu}{1-\mu}\right) \quad \text{(logit function)}, \\
+				s &= 1, \\
+				f(\eta) &= \frac{1}{1 + \exp(-\eta)} \quad \text{(sigmoid function $\sigma$)},\\
+				g(\eta) &= \ln(1 + \exp(\eta)),\\
+				h(\eta, s) &= 1.
+				\end{align}
+
+				We got two-class logistic regression \(\hat y(\bfx) = \sigma(\bfw^T\bfx)\)!
+
+				Here we have the cross entropy loss function
+
+				\[\ln p(\bfy | \bfx, \bfw) = \sum_{n=1}^N y_n \ln \hat y_n + (1-y)\ln(1-\hat y_n).\]
+
+			</p>
+
+			<h3>Categorical.</h3>
+			<p>
+				\[p(\bfy | \bfmu) = \prod_{i=1}^p \mu_i^{y_i}, \quad \text{$\bfy$ is onehot enoding.} \]
+
+				This density function can be expressed as
+				\[p(\bfy | \bfmu) = \exp\left(\sum_{i=1}^p y_i \ln \mu_i\right).\]
+				An easy variant would be \(\bfeta = (\ln \mu_1, \dots, \ln \mu_p)^T\) but the following is also possible:
+				\begin{align}
+				\eta_j &= \ln \frac{\mu_j}{1-\sum_{i=1}^{p-1}\mu_i}, \eta_p = 0,\\ 
+				s &= 1, \\
+				f_j(\bfeta) &= \frac{\exp(\eta_j)}{\sum_{i=1}^{p} \exp(\eta_i)} \quad \text{(softmax function)}, \\
+				g(\bfeta) &= 0, \\
+				h(\bfeta, s) &= 1.
+				\end{align}
+
+				We obtained multi-class logistic regression with \(\hat\bfy (\bfx) = \operatorname{softmax}(\bfW^T\bfx)\) with multi-class cross entropy loss
+				\[\ln p(\bfY | \bfX, \bfW) = \sum_{n=1}^N \sum_{i=1}^p y_{ni} \ln \hat y_{ni}.\]
+			</p>
+
+			<h3>Poisson.</h3>
+			<p>
+				\[p(y|\lambda) = \frac{\lambda^y}{y!}\exp(-\lambda), \quad y \in \mathbb{N}.\]
+
+				It is easy to rewrite
+				\begin{align}
+				\eta &= \ln \lambda, \\
+				s &= 1, \\
+				g(\eta) &= \exp(\eta), \\
+				h(y, s) &= \frac{1}{y!}.
+				\end{align}
+
+				We have \(\psi = \ln\), \(f = \exp\). As expected we obtain Poisson regression \(\hat y(\bfx) = \exp(\bfw^T\bfx)\) with
+				\ln\[p(\bfy | \bfx, \bfw) = \sum_{n=1}^N \left( y_n \ln \hat y_n - \hat y_n - \ln y_n!\right)\]
+			</p>
+
 		</main>
 		<p>
 			<a href="../blog.html">Back</a>
