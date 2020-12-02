@@ -201,6 +201,8 @@
 
 				\[f'(a) = \frac{\exp(-a)}{(1+\exp(-a))^2} = \frac{1}{1+\exp(-a)}\left(1-\frac{1}{1+\exp(-a)} \right) = \hat y (1 - \hat y). \]
 
+
+				The same link and activation function work for the Binomial distribution, but with \(g(\eta) = n \ln(1+\exp(\eta)\) and \(h(y) = \left(\frac{n}{y} \right).\)
 			</p>
 
 			<h3>Categorical.</h3>
@@ -223,6 +225,9 @@
 
 				Lastly,
 				\[\frac{\partial f_j}{\partial a_i}(\bfa) = \frac{\delta_{ij}\exp(a_i) - \exp(a_j)\exp(a_i)}{\left( \sum_{k=1}^p \exp(a_k) \right)^2 } = \hat y_j(\delta_{ij} - \hat y_i).\]
+
+
+				The same link and activation function work for the Multinomial distribution, but with \(g(\bfeta) = n \ln\left(\sum_{i=1}^p \exp(\eta_i)\right)\) and \(h(y) = \frac{n!}{\prod_{i=1}^p y_i}.\)
 			</p>
 
 			<h3>Poisson.</h3>
