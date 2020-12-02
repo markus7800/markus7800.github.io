@@ -101,7 +101,7 @@
 			</p>
 			<p>
 				The hessian can be computed in terms of following blocks:
-				\[\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\nabla f_j(\bfa)_i \bfx \bfx^T\]
+				\[\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\frac{\partial f_j}{\partial a_i} (\bfa) \bfx \bfx^T\]
 				<button class="collapsible">Proof.</button>
 				<div class="collapsiblecontent">
 					<p>
@@ -114,7 +114,7 @@
 						\end{align}
 						which results in
 						\begin{align}
-						\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\nabla_{\bfw_i}(\hat y_j - y_j) \bfx= \frac{1}{s}\nabla f_j(\bfa)_i \bfx \bfx^T.
+						\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\nabla_{\bfw_i}(\hat y_j - y_j) \bfx= \frac{1}{s}\frac{\partial f_j}{\partial a_i}(\bfa) \bfx \bfx^T.
 						\end{align}
 					</p>
 					<p align="right">\(\Box\)</p>
@@ -135,7 +135,8 @@
 				&= \frac{1}{s}\bfX (\hat\bfY - \bfY), \\
 
 				-\nabla_{\bfw_i}\nabla_{\bfw_j} \ln p (\bfY | \bfX) &= \frac{1}{s}\sum_{n=1}^N \nabla f_j(\bfa_n)_i \bfx_n \bfx_n^T\\
-				&= \bfX^T \bfR \bfX, \quad \text{where} \quad \bfR = \frac{1}{s}\text{diag}(\nabla f_j(\bfa_n)_i).
+				&= \bfX^T \bfR \bfX, \\&
+				\quad \text{where} \quad \bfR = \frac{1}{s}\text{diag}\left(\frac{\partial f_j}{\partial a_i}(\bfa_n), n=1,\dots,N\right).
 				\end{align}
 			</p>
 
@@ -196,6 +197,10 @@
 
 				\[\ln p(\bfy | \bfx, \bfw) = \sum_{n=1}^N y_n \ln \hat y_n + (1-y)\ln(1-\hat y_n).\]
 
+				Lastly,
+
+				\[f'(a) = \frac{\exp(-a)}{(1+\exp(-a))^2} = \frac{1}{1+\exp(-a)}\left(1-\frac{1}{1+\exp(-a)} \right) = \hat y (1 - \hat y). \]
+
 			</p>
 
 			<h3>Categorical.</h3>
@@ -215,6 +220,9 @@
 
 				We obtained multi-class logistic regression with \(\hat\bfy (\bfx) = \operatorname{softmax}(\bfW^T\bfx)\) with multi-class cross entropy loss
 				\[\ln p(\bfY | \bfX, \bfW) = \sum_{n=1}^N \sum_{i=1}^p y_{ni} \ln \hat y_{ni}.\]
+
+				Lastly,
+				\[\frac{\partial f_j}{\partial a_i}(\bfa) = \frac{\delta_{ij}\exp(a_i) - \exp(a_j)\exp(a_i)}{\left( \sum_{k=1}^p \exp(a_k) \right)^2 } = \hat y_j(\delta_{ij} - \hat y_i).\]
 			</p>
 
 			<h3>Poisson.</h3>
@@ -230,8 +238,13 @@
 				\end{align}
 
 				We have \(\psi = \ln\), \(f = \exp\). As expected we obtain Poisson regression \(\hat y(\bfx) = \exp(\bfw^T\bfx)\) with
-				\ln\[p(\bfy | \bfx, \bfw) = \sum_{n=1}^N \left( y_n \ln \hat y_n - \hat y_n - \ln y_n!\right)\]
+				\ln\[p(\bfy | \bfx, \bfw) = \sum_{n=1}^N \left( y_n \ln \hat y_n - \hat y_n - \ln y_n!\right).\]
+
+				Lastly,
+				\[f'(a) = \exp(a) = \hat y.\]
 			</p>
+
+			<h3>And many more...</h3>
 
 		</main>
 		<p>
