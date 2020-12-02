@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		\(
+			\newcommand{\bfx}{\mathbf{x}}
+			\newcommand{\bfX}{\mathbf{X}}
+			\newcommand{\bfR}{\mathbf{R}}
+			\newcommand{\bfeta}{\boldsymbol{\eta}}
+			\newcommand{\bfu}{\mathbf{u}}
+			\newcommand{\bfw}{\mathbf{w}}
+			\newcommand{\bfW}{\mathbf{W}}
+			\newcommand{\bfH}{\mathbf{H}}
+			\newcommand{\bfy}{\mathbf{y}}
+			\newcommand{\bfY}{\mathbf{Y}}
+			\newcommand{\bfa}{\mathbf{a}}
+			\newcommand{\d}{\operatorname{d}}
+			\newcommand{\Exp}[1]{\mathbb{E}\left[ #1\right]}
+			\newcommand{\R}{\mathbb{R}}
+		\)
+
+		<titleGeneralized Linear Models></title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Back</a>
+		</p>
+		<h1>Generalized Linear Models</h1>
+		<main>
+			<h2>Model</h2>
+			<p>
+				A generalized linear model (GLM) consists of an exponential family of distributions specfied (in its canonical form) by parameters \(\bfeta\), functions \(h, g, \bfu\) and dispersion parameter \(s\) such that
+				\[p(\bfy | \bfeta, s) = h(\bfy, s)\exp\left(\frac{1}{s}\left(\bfeta^T \bfu(\bfy)- g(\bfeta)\right)\right),\]
+				a linear predictor \[\bfa = \bfW^T \bfx \in \R^{p};\]
+				and a link function \(f^{-1}\) such that \[\Exp{\bfy | \bfx} = f(\bfa) = f(\bfw^T \bfx) \in \R^p.\]
+			</p>
+			<p>
+				Variable \(\bfy \in \R^p\) is to be predicted from \(\bfx \in \R^d\), we assume a distribution on the target variable (an exponential family) and link it to a linear predictor \(\bfx^T\bfw\) by function \(f^{-1}\).
+				The function \(f\) is called activation function. Note that \(\bfeta\) can be thought of a function of input \(\bfx\), \(\bfeta = \bfeta(\bfx).\)
+			</p>
+
+			<h2>Deriving the Derivatives</h2>
+
+			<p>
+				From now on we assume that \(\bfu = \operatorname{id}\). In this case \(\bfeta\) is called canonical parameter.
+
+				For all exponential families it holds that 
+				\[\hat \bfy := f(\bfW^T \bfx) =  \Exp{\bfy|\bfeta} = \Exp{\bfu(\bfy)|\bfeta} = \nabla g(\bfeta) .\]
+
+				Therefore, there must exist a functional relation
+				\[\bfeta = \psi(\hat\bfy).\]
+
+				Now we can write the log likelihood as
+				\begin{align}
+				 \ln p (\bfy | \bfeta, s)
+				&=  \frac{1}{s} \left(\bfeta^T \bfy - g(\bfeta)\right) + \ln h(\bfy,s)\\
+				&= \frac{1}{s} \left(\psi(f(\bfa))^T \bfy - g(\psi(f(\bfa))) \right) + \ln h(\bfy,s).
+				\end{align}
+
+				Now it would be nice if can choose the link function such that \(\psi \circ f = \operatorname{id}\) and obtain
+				\[\ln p (\bfy | \bfeta, s) =\frac{1}{s} \left(\bfa^T \bfy - g(\bfa) \right) + \ln h(\bfy,s).\]
+				We also get
+
+				\[\bfeta = \psi(\hat\bfy) = \psi(f(\bfa)) = \bfa = \bfW^T \bfx.\]
+			
+
+				Differentiating with respect to \(\bfW\) gives
+				\begin{align}
+				\nabla_\bfW -\ln p (\bfy | \bfeta, s)^T &=  \frac{1}{s}\nabla g(\bfa)^T \d \bfa(\bfW) - \frac{1}{s} \bfy^T \d \bfa(\bfW) \\
+				&=  \frac{1}{s}\hat\bfy^T \d \bfa(\bfW) - \frac{1}{s} \bfy^T \d \bfa(\bfW) \\
+				&= \frac{1}{s}(\hat\bfy - \bfy)^T \d \bfa(\bfW) .
+				\end{align}
+			</p>
+			<p>
+				The gradient can be written in matrix form
+				\[ \nabla_\bfW -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\bfx^T(\hat\bfy - \bfy) \in \R^{d \times p}\]
+				<button class="collapsible">Proof.</button>
+				<div class="collapsiblecontent">
+					<p>
+						As \(\bfW = (\bfw_1, \dots, \bfw_p) \in \R^{d \times p} \cong \R^{dp}\) we have \(\d \bfa(\bfW) \in \R^{p \times (dp)}.\) But as the \(j\)-th row of \(\bfa\) is only dependent on the \(j\)-th row of \(\bfW^T\) we can write
+						\begin{align}
+						\d \bfa(\bfW) = \begin{pmatrix}
+						(\nabla_{\bfw_1} a_1)^T & 0 & \cdots & 0\\
+						0 & (\nabla_{\bfw_2} a_2)^T & \cdots & 0\\
+						\vdots &\vdots & \ddots & \vdots \\
+						0 & 0 & \cdots & (\nabla_{\bfw_p} a_p)^T
+						\end{pmatrix}
+						\end{align}
+						and as all \(\nabla_{\bfw_j} a_j = \bfx\) the resulting gradient can be written as \(\frac{1}{s}\bfx(\hat\bfy - \bfy)^T.\)
+					</p>
+					<p align="right">\(\Box\)</p>
+				</div>
+			</p>
+			<p>
+				The hessian can be computed in terms of following blocks:
+				\[\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\nabla f_j(\bfa)_i \bfx \bfx^T\]
+				<button class="collapsible">Proof.</button>
+				<div class="collapsiblecontent">
+					<p>
+						\begin{align}
+						\nabla_{\bfW}(\hat y_j - y_j)^T = \d f_j(\bfa) \d\bfa (\bfW)  = (\nabla f_j(\bfa)_1\bfx^T, \dots, \nabla f_j(\bfa)_p \bfx^T)
+						\end{align}
+						and thus
+						\begin{align}
+						\nabla_{\bfw_i}(\hat y_j - y_j) = \d f_j(\bfa) \d\bfa (\bfW)  = \nabla f_j(\bfa)_i\bfx
+						\end{align}
+						which results in
+						\begin{align}
+						\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\nabla_{\bfw_i}(\hat y_j - y_j) \bfx= \frac{1}{s}\nabla f_j(\bfa)_i \bfx \bfx^T.
+						\end{align}
+					</p>
+					<p align="right">\(\Box\)</p>
+				</div>
+			</p>
+
+			<p>
+				Now we can use the same Newton-Raphson optimisation algorithm for several distributions,
+				\begin{align}
+				\overline\bfW_\text{new} = \overline\bfW_\text{old} - \bfH^{-1}\nabla_{\overline\bfW} l,
+				\end{align}
+				where the matrix \(\bfW\) is in its vectorised form \(\overline \bfW \in \R^{dp}.\)
+			</p>
+			<p>
+				For independent observations \(\bfX = (\bfx_1, \dots, \bfx_N)^T\), \(\bfY = (\bfy_1, \dots, \bfy_N)^T\), where \((\bfx_j)_0 = 1\) if we use an intercept, the likelihood factorises and thus the batch gradients and hessian are given by
+				\begin{align}
+				-\nabla_{\bfW}\ln(\bfY | \bfX) &=\frac{1}{s}\sum_{n=1}^N \bfx_n^T(\hat\bfy_n - \bfy_n) \in \R^{d \times p} \\
+				&= \frac{1}{s}\bfX (\hat\bfY - \bfY), \\
+
+				-\nabla_{\bfw_i}\nabla_{\bfw_j} \ln p (\bfY | \bfX) &= \frac{1}{s}\sum_{n=1}^N \nabla f_j(\bfa_n)_i \bfx_n \bfx_n^T\\
+				&= \bfX^T \bfR \bfX, \quad \text{where} \quad \bfR = \frac{1}{s}\text{diag}(\nabla f_j(\bfa_n)_i).
+				\end{align}
+			</p>
+
+			<h2>Examples.</h2>
+
+			<h3>Univariate Gaussian.</h3>
+			<p>
+				Here we have
+				\[p(y|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(\frac{1}{2\sigma^2}(y-\mu)^2 \right).\]
+				This can be rewritten with
+				\begin{align}
+				\eta &= \mu \\
+				s &= \sigma
+				\end{align}
+			</p>
+		</main>
+		<p>
+			<a href="../blog.html">Back</a>
+		</p
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
