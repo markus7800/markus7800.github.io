@@ -216,7 +216,7 @@
 				\eta_j &= \ln \frac{\mu_j}{1-\sum_{i=1}^{p-1}\mu_i}, \eta_p = 0,\\ 
 				s &= 1, \\
 				f_j(\bfeta) &= \frac{\exp(\eta_j)}{\sum_{i=1}^{p} \exp(\eta_i)} \quad \text{(softmax function)}, \\
-				g(\bfeta) &= 0, \\
+				g(\bfeta) &= \ln\left(\sum_{i=1}^p \exp(\eta_i) \right), \\
 				h(\bfeta, s) &= 1.
 				\end{align}
 
