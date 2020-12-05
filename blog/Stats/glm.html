@@ -134,7 +134,7 @@
 				-\nabla_{\bfW}\ln(\bfY | \bfX) &=\frac{1}{s}\sum_{n=1}^N \bfx_n^T(\hat\bfy_n - \bfy_n) \in \R^{d \times p} \\
 				&= \frac{1}{s}\bfX (\hat\bfY - \bfY), \\
 
-				-\nabla_{\bfw_i}\nabla_{\bfw_j} \ln p (\bfY | \bfX) &= \frac{1}{s}\sum_{n=1}^N \nabla f_j(\bfa_n)_i \bfx_n \bfx_n^T\\
+				-\nabla_{\bfw_i}\nabla_{\bfw_j} \ln p (\bfY | \bfX) &= \frac{1}{s}\sum_{n=1}^N \frac{\partial f_j}{\partial a_i}(\bfa_n) \bfx_n \bfx_n^T\\
 				&= \bfX^T \bfR \bfX, \\&
 				\quad \text{where} \quad \bfR = \frac{1}{s}\text{diag}\left(\frac{\partial f_j}{\partial a_i}(\bfa_n), n=1,\dots,N\right).
 				\end{align}
