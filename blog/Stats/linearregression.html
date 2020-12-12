@@ -174,19 +174,20 @@
 			<div class="collapsiblecontent">
 				<p>
 					\begin{align}
-					-2\ln p(\D | \bfw) p(\bfw) &= 
+					&-2\ln p(\D | \bfw) p(\bfw) \\
+
+					&\quad= 
 					\beta (\bfy - \bfPhi\bfw)^T(\bfy - \bfPhi\bfw)
-					 \\
-					&\quad\, +(\bfw- \bfm_0)^T\bfS_0^{-1}(\bfw - \bfm_0) + \text{const} \\
+					 +(\bfw- \bfm_0)^T\bfS_0^{-1}(\bfw - \bfm_0) + \text{const} \\
 
-					&= \beta\bfy^T\bfy - \beta2\bfy^T\bfPhi\bfw + \beta\bfw^T\bfPhi^T\bfPhi \bfw \\
-					&\quad\, + \bfw\bfS_0^{-1}\bfw - 2\bfw^T\bfS_0^{-1}\bfm_0 + \bfm_0^T\bfS_0^{-1}\bfm_0 + \text{c.} \\
+					&\quad= \beta\bfy^T\bfy - \beta2\bfy^T\bfPhi\bfw + \beta\bfw^T\bfPhi^T\bfPhi \bfw \\
+					&\quad\quad\, + \bfw\bfS_0^{-1}\bfw - 2\bfw^T\bfS_0^{-1}\bfm_0 + \bfm_0^T\bfS_0^{-1}\bfm_0 + \text{c.} \\
 
-					&= \bfw^T \bfS^{-1}\bfw - 2\bfw^T \bfS^{-1} \bfS (\beta \bfPhi^T\bfy + \bfS_0^{-1}\bfm_0) + \text{c.} \\
+					&\quad= \bfw^T \bfS^{-1}\bfw - 2\bfw^T \bfS^{-1} \bfS (\beta \bfPhi^T\bfy + \bfS_0^{-1}\bfm_0) + \text{c.} \\
 
-					&= \bfw^T \bfS^{-1}\bfw - 2\bfw^T \bfS^{-1} \bfm + \bfm^T \bfS^{-1} \bfm + \text{c.} \\
+					&\quad= \bfw^T \bfS^{-1}\bfw - 2\bfw^T \bfS^{-1} \bfm + \bfm^T \bfS^{-1} \bfm - \bfm^T \bfS^{-1} \bfm + \text{c.} \\
 
-					& = (\bfw^T - \bfm)^T \bfS^{-1}(\bfw^T - \bfm) + \text{const}
+					&\quad= (\bfw - \bfm)^T \bfS^{-1}(\bfw - \bfm) + \text{const}
 					\end{align}
 				</p>
 				<p align="right">\(\Box\)</p>
@@ -313,7 +314,7 @@
 				\bfm &= \bfS(\bfS_0^{-1}\bfm_0 + \bfPhi^T \bfy), \\
 				\bfS^{-1} &= \bfS_0^{-1} + \bfPhi^T \bfPhi, \\
 				a &= a_0 + \frac{N}{2}, \\
-				b &= b_0 + \frac{1}{2}\bfy^T\bfy.
+				b &= b_0 + \frac{1}{2}(\bfy^T\bfy + \bfm_0^T \bfS_0^{-1}\bfm_0 - \bfm^T \bfS^{-1} \bfm).
 				\end{align}
 
 
@@ -334,7 +335,9 @@
 
 					Similar to above we have
 					\begin{align}
-					\ln p(\D | \bfw, \beta) p(\bfw, \beta) &= \underbrace{-\frac{\beta}{2}(\bfw - \bfm)^T \bfS^{-1} (\bfw - \bfm)}_{\Delta^2} - \frac{\beta}{2}\bfy^T\bfy - b_0 \beta + \text{c.}
+					\ln p(\D | \bfw, \beta) p(\bfw, \beta)
+					&= \underbrace{-\frac{\beta}{2}(\bfw - \bfm)^T \bfS^{-1} (\bfw - \bfm)}_{\Delta^2} \\
+					&- \beta \underbrace{\frac{1}{2}(\bfy^T\bfy + \bfm_0^T \bfS_0^{-1}\bfm_0 - \bfm^T \bfS^{-1} \bfm)}_{\Delta}- b_0 \beta + \text{c.}
 					\end{align}
 					for
 
@@ -345,13 +348,13 @@
 
 					Also 
 					\begin{align}
-					p(\D | \bfw, \beta) p(\bfw, \beta) &\propto \beta^{N/2}\exp\left(\Delta^2- \frac{\beta}{2}\bfy^T\bfy + -b_0\beta \right) \beta^{a_0-1}
+					p(\D | \bfw, \beta) p(\bfw, \beta) &\propto \beta^{N/2}\exp\left(\Delta^2- \beta(b_0 + \Delta)  \right) \beta^{a_0-1}
 					\end{align}
 					which gives
 
 					\begin{align}
 					a &= a_0 + \frac{N}{2}, \\
-					b &= b_0 + \frac{1}{2}\bfy^T\bfy.
+					b &= b_0 + \frac{1}{2}(\bfy^T\bfy + \bfm_0^T \bfS_0^{-1}\bfm_0 - \bfm^T \bfS^{-1} \bfm).
 					\end{align}
 				</p>
 
