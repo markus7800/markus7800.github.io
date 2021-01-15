@@ -87,7 +87,7 @@ function game() {
 	ctx.fillRect(px*gs,py*gs,gs-2,gs-2)
 
 	if(ax==px && ay==py) {
-		console.log("ate apple")
+		// console.log("ate apple")
 		ax=Math.floor(Math.random()*tc);
 		ay=Math.floor(Math.random()*tc);
 		n = 0
