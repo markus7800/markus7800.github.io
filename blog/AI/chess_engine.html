@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Chess Engine</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Back</a>
+		</p>
+		<h1 style="font-size: 48px">Writing a Chess Engine</h1>
+		
+		<h2>Programming Chess</h2>
+		<p>
+			Before even considering the search, at its core a chess engine has to be able to simulate a chess game.
+			It is critical to be able to generate all possible moves for a given position very fast.
+		</p>
+		<h3>Board Representation</h3>
+		<p>
+			The best way to represent a chess board is to use an unsigned 64 bit integer for each piece and each player. Additionally, en-passant and castling rules have to be stored.
+		</p>
+		<div id="images">
+			<img src="res/board_rep_2.png" width="800px">
+		</div>
+		<p>
+			This way we can work with fast bitwise operations. For exampe <code>knigths & blacks</code> gives an integer representening all positions occupied by black knights.
+		</p>
+		<h3>Move Generation</h3>
+		<p>
+			For every piece and every board tile all possible moves if the board was empty are precomputed and stored. In addition, for every pair of board tiles the first tile emits a ray and the second tile casts a shadow on the board which is stored. The tiles between a pair of tiles is also precomputed.
+		</p>
+		<div id="images">
+			<img src="res/movegen.png" width="800px">
+		</div>
+		<p>
+			First, all pinned pieces are computed at once. These are pieces that cannot be move because the king would be in check.
+		</p>
+		<p>
+			Then, for each unpinned piece, for example the queen, we take all possible moves if the board was empty (left picture) and substract all shadows of hit pieces (red in mid picture) and own pieces (blue in mid picture). As a result we get all fields were the queen can move to (right picture).
+		</p>
+		<p>
+			Pawn and king moves take extra care (capture is different from pushing, en passant, castling, cannot move into check).
+		</p>
+		<p>
+			If the king is in check, the player is only allowed to make moves after which the king is not in check anymore. If this is not possible it is checkmate.
+			To accommodate this, I simply try the move, check if the king is in check, and then undo the move (this can be made more efficient but it happens rarely enough).
+		</p>
+		<h3>Performance</h3>
+		<p>
+			With my implementation I am able to generate up to 100 million board positions per second.
+		</p>
+
+		<h2>Evaluation</h2>
+
+		<h2>Search</h2>
+
+		<h2>Opening</h2>
+
+		<h2>Endgame</h2>
+
+		<h2>Example Games</h2>
+		
+		<p>
+			<a href="../blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
