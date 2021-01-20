@@ -262,10 +262,67 @@ end
 		</table>
 
 		<h2>Opening</h2>
+		<p>
+			A human chess player has to study a lot of theory to survive the opening on a competitive level.
+			We can collect all available theory in a table from which every position can be looked up in an instant.
+			I only included some opening theory of the queen's gambit.
+		</p>
 
 		<h2>Endgame</h2>
+		<p>
+			When the number of pieces on the board is small there is a chance that it is a theoretical win, draw or loss. However, even for simple configurations, like king + queen vs king, it is possible that it takes up to 28 moves to checkmate.
+			My engine is too slow to find such a mate and here it is beneficial to employ endgame tablebases, essentially precomputed checkmates.
+		</p>
+		<p>
+			For a three piece tablebase this is not too difficult and works like this: Generate all positions with two kings and rook, or queen. Now filter for all positions were black is mated.
+			Then go one ply back.
+			Cool, we have found all mates in 1.
+			Now, search for all positions were regardless of blacks move white can deliver mate.
+			I call these desperate positions in 1.
+			Then continue for mates in 2, desperate positions in 2, etc.
+		</p>
+		<p>
+			The known mates and desperate positions are stored in a dictionary with the number of required moves.
+			This way we can later find the quickest mate.
+			If a position with three pieces is not in the table it is a draw.
+		</p>
+		<pre>
+			<code>
+positions = generate_all_3_piece_boards()
+new_desperate_positions = find_checkmates(positions)
+all_desperate_positions = new_desperate_positions
+all_mates = []
+i = 0
+while length(new_desperate_positions) > 0
+  i += 1
+   # find all mate in i
+  new_mates = find_mates_in_next_move(new_desperate_positions)
+  append(all_mates, new_mates)
 
-		<h2>Example Games</h2>
+  # find all positions where each moves leads to known mate
+  dps = find_desperate_positions(all_mates)
+
+  # filter for new desperate positions
+  new_desperate_positions = setdiff(dps, all_desperate_positions)
+  append(all_desperate_positions, new_desperate_positions)
+end
+			</code>
+		</pre>
+		<p>
+			Now our engine has flawless endgame technique (when three pieces are on the board).
+		</p>
+
+		<div id="images">
+			<div id="chess-board-endgame-technique" style="width: 300px"></div>
+			<div style="margin-top: 10px">
+				<button id="chess-star-endgame-techniquet">Start</button>
+				<button id="chess-prev-endgame-technique">Prev</button>
+				<button id="chess-next-endgame-technique">Next</button>
+				<button id="chess-play-endgame-technique">Play</button>
+			</div>
+			<script type="text/javascript" src="res/endgame_technique.js"></script>
+		</div>
+		<h2>Games</h2>
 
 		<h2>Possible Improvements</h2>
 		
