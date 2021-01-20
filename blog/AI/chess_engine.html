@@ -7,6 +7,15 @@
 		<link rel="icon" type="image/png" href="../res/m.png">
 		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<link rel="stylesheet"
+      href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+      integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
+      crossorigin="anonymous">
+      	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+		<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
+		        integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
+		        crossorigin="anonymous"></script>
 
 		<title>Chess Engine</title>
 	</head>
@@ -61,11 +70,115 @@
 
 		<h2>Search</h2>
 
+		<h3>Minimax</h3>
+		<p>
+			The Minimax-Algorithm is a basic search algorithm for zero-sum two person games with perfect information like chess.
+			It assumes that one party wants to maximise the score while the other wants to minimise the score.
+			In chess usually white is the one to maximise the score.
+			At it's core, the Minimax-Algorithm wants to find the move that maximises the minimal obtainable board value after the move for white and minimise the maximal obtainable board value after the move for black.
+			This logic can be applied recursively.
+			For any evaluation function determines the optimal move if the search reaches all terminal nodes which is impossible in chess.
+			Thus, the algorithm is only executed up to a certain depth.
+		</p>
+
+		<p>
+		<code>
+			function minimax()<br>
+			end
+		</code>
+		</p>
+
+		<h3>AlphaBeta</h3>
+		<p>
+			The AlphaBeta-Algorithm is an improvement over the Minimax-Algorithm.
+			It employs a basic pruning strategy.
+			It adds two variables to the search which represent the worst case scenario for each player.
+			By convention, <code>alpha</code> is the minimum value that white can achieve, while <code>beta</code> is the maximum value that black can achieve.
+
+			If we are at a node for white and we find a move with value that exceeds <code>beta</code> we stop the search at this node (<code>beta</code>-cutoff) because black already knows a line were the worst case would result in <code>beta</code>.
+			So black would prevent the current line from happening.
+			An equivalent statemant can be made if black is to move where we speak of an <code>alpha</code>-cutoff.
+		</p>
+		
+		<h3>Quiescence Search</h3>
+		<p>
+			If we simply stop at a certain search depth and use the current board value we may overlook that our queen could be captured next move which would drastically change the value (horizon effect).
+			To avoid this I perform at each leaf all possible capture moves in the best move order (AlphaBeta).
+			When there are no more captures possible the board is considered quiet.
+			This could be extended to look for checkmates as well.
+		</p>
+
+		<h3>MTD(f)</h3>
+		<p>
+			A null window search is a AlphaBeta call with minimal window size <code>alpha = v-1, beta = v</code> for some value <code>v</code>.
+			This leads to many cutoffs and is thus a more narrow search.
+			If we guess the value to be <code>v</code> and the search returns a higher value then we can be sure that <code>v</code> is a lower bound. Conversely, if it returns a lower value we have an upper bound.
+		</p>
+		<p>
+			The MTD(f)-Algorithm uses this fact and performs many null window searches until lower and upper bound converge.
+			If we guess the value correctly, only two null window searches are necessary for termination.
+			This algorithm is fast if we memoize and reuse the computed values from previous searches.
+		</p>
+
+		<h3>Iterative Deepening</h3>
+		<p>
+			As the name suggests it can be beneficial to iteratively increase the search depth.
+			Shallower searches are faster and we get a better and better value estimate that can be used as starting point for the next depth.
+			I sped up the search by reusing the search tree from shallower depths.
+		</p>
+
+		<h3>Performance Comparison</h3>
+
+		<p>
+			The following position was searched up to depth 6 (plus quiescence search).
+			The table shows the number of explored nodes and spent time for different algorithms.
+			For comparison the required time to generate all reachable positions is given.
+		</p>
+		<div id="chess-board-perfcomp" style="width: 300px"></div>
+		<script>
+			Chessboard('chess-board-perfcomp', {
+			  position: 'r2qkb1r/1Q3pp1/pN1p3p/3P1P2/3pP3/4n3/PP4PP/1R3RK1 w - - 0 1',
+			  pieceTheme: '../../res/chesspieces/wikipedia/{piece}.png',
+			  orientation: 'black'
+			})
+		</script>
+
+		<table>
+		  <tr>
+		    <th></th>
+		    <th>Number of Nodes</th>
+		    <th>Time</th>
+		  </tr>
+		  <tr>
+		    <td>Move Generation</td>
+		    <td>873 377 600</td>
+		    <td>7.694s</td>
+		  </tr>
+		  <tr>
+		    <td>AlphaBeta</td>
+		    <td>832 634</td>
+		    <td>1.092s</td>
+		  </tr>
+		  <tr>
+		    <td>MTD(f)</td>
+		    <td>658 447</td>
+		    <td>0.851s</td>
+		  </tr>
+		  <tr>
+		    <td>Iterative MTD(f)</td>
+		    <td>518 774</td>
+		    <td>0.626s</td>
+		  </tr>
+		</table>
+		
+
 		<h2>Opening</h2>
 
 		<h2>Endgame</h2>
 
 		<h2>Example Games</h2>
+
+		<h2>Possible Improvements</h2>
 		
 		<p>
 			<a href="../blog.html">Back</a>

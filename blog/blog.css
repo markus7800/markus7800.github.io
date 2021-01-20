@@ -45,6 +45,18 @@ a {
 	color: deepskyblue;
 }
 
+td {
+  text-align:right;
+  font-size: 24px;
+  padding: 8px;
+}
+
+th {
+  text-align:right;
+  font-size: 24px;
+  padding: 32px;
+}
+
 
 .centered {
     display: inline-block;
