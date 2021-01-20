@@ -16,6 +16,7 @@
 		<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
 		        integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
 		        crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="code.css">
 
 		<title>Chess Engine</title>
 	</head>
@@ -80,13 +81,34 @@
 			For any evaluation function determines the optimal move if the search reaches all terminal nodes which is impossible in chess.
 			Thus, the algorithm is only executed up to a certain depth.
 		</p>
+		<pre>
+		  <code>
+function minimax(board, white, depth)
+  moves = get_moves(board, white)
+  if length(moves) == 0 || depth == 0
+    return eval(board)
+  end
 
-		<p>
-		<code>
-			function minimax()<br>
-			end
-		</code>
-		</p>
+  if white
+    value = MIN_VALUE
+    for move in moves
+      make_move(board, move)
+      value = max(value, minimax(board, !white, depth-1))
+      undo_move(board, move)
+    end
+  else
+    value = MAX_VALUE
+    for move in moves
+       make_move(board, move)
+       value = min(value, minimax(board, !white, depth-1))
+       undo_move(board, move)
+    end
+  end
+
+  return value
+end
+		  </code>
+		</pre>
 
 		<h3>AlphaBeta</h3>
 		<p>
@@ -107,6 +129,39 @@
 			When there are no more captures possible the board is considered quiet.
 			This could be extended to look for checkmates as well.
 		</p>
+		<pre>
+		  <code>
+function alphabeta(board, white, depth, alpha, beta)
+  moves = get_moves(board, white)
+  if length(moves) == 0 || depth == 0
+    return <font style="color: blue">quiesce(board, white, alpha, depth)</font>
+  end
+
+  if white
+    value = MIN_VALUE
+    for move in moves
+      make_move(board, move)
+      value = max(value, alphabeta(board,!white,depth-1,alpha,beta))
+      undo_move(board, move)
+      <font style="color: blue">alpha = max(alpha, value)</font>
+      <font style="color: blue">if alpha >= beta break</font>
+    end
+  else
+    value = MAX_VALUE
+    for move in moves
+       make_move(board, move)
+       value = min(value, alphabeta(board,!white,depth-1,alpha,beta))
+       undo_move(board, move)
+       <font style="color: blue">beta = min(beta, value)</font>
+       <font style="color: blue">if alpha <= beta break</font>
+    end
+  end
+
+  return value
+end
+		  </code>
+		</pre>
+
 
 		<h3>MTD(f)</h3>
 		<p>
@@ -120,12 +175,47 @@
 			This algorithm is fast if we memoize and reuse the computed values from previous searches.
 		</p>
 
+		<pre>
+		  <code>
+function MTDF(board, white, depth, guess)
+  value = guess
+  upper = MAX_VALUE
+  lower = MIN_VALUE
+
+  while lower < upper
+    beta = max(value, lower + 1)
+    value = AlphaBeta(board, white, depth, beta-1, beta)
+    if value < beta
+      upper = value
+    else
+      lower = value
+    end
+  end
+
+  return value
+end
+		  </code>
+		</pre>
+
 		<h3>Iterative Deepening</h3>
 		<p>
 			As the name suggests it can be beneficial to iteratively increase the search depth.
 			Shallower searches are faster and we get a better and better value estimate that can be used as starting point for the next depth.
 			I sped up the search by reusing the search tree from shallower depths.
 		</p>
+		<pre>
+		  <code>
+function IterativeMTDF(board, white, min_depth, max_depth)
+  value = 0
+  
+  for depth in min_depth:max_depth
+    value = MTDF(board, white, depth, value)
+  end
+
+  return value
+end
+		  </code>
+		</pre>
 
 		<h3>Performance Comparison</h3>
 
@@ -170,7 +260,6 @@
 		    <td>0.626s</td>
 		  </tr>
 		</table>
-		
 
 		<h2>Opening</h2>
 
