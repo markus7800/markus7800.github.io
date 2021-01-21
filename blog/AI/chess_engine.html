@@ -26,7 +26,10 @@
 			<a href="../blog.html">Back</a>
 		</p>
 		<h1 style="font-size: 48px">Writing a Chess Engine</h1>
-		
+		<p>
+			The goal was to write a programm that can beat me consistently in a game of chess (not that hard). Code available at my <a href="https://github.com/markus7800/Beth">github</a>.
+		</p>
+
 		<h2>Programming Chess</h2>
 		<p>
 			Before even considering the search, at its core a chess engine has to be able to simulate a chess game.
@@ -134,14 +137,14 @@ end
 function alphabeta(board, white, depth, alpha, beta)
   moves = get_moves(board, white)
   if length(moves) == 0 || depth == 0
-    return <font style="color: blue">quiesce(board, white, alpha, depth)</font>
+    return <font style="color: blue">quiesce(board, white, alpha, beta)</font>
   end
 
   if white
     value = MIN_VALUE
     for move in moves
       make_move(board, move)
-      value = max(value, alphabeta(board,!white,depth-1,alpha,beta))
+      value=max(value,alphabeta(board,!white,depth-1,alpha,beta))
       undo_move(board, move)
       <font style="color: blue">alpha = max(alpha, value)</font>
       <font style="color: blue">if alpha >= beta break</font>
@@ -150,7 +153,7 @@ function alphabeta(board, white, depth, alpha, beta)
     value = MAX_VALUE
     for move in moves
        make_move(board, move)
-       value = min(value, alphabeta(board,!white,depth-1,alpha,beta))
+       value=min(value,alphabeta(board,!white,depth-1,alpha,beta))
        undo_move(board, move)
        <font style="color: blue">beta = min(beta, value)</font>
        <font style="color: blue">if alpha <= beta break</font>
@@ -315,14 +318,135 @@ end
 		<div id="images">
 			<div id="chess-board-endgame-technique" style="width: 300px"></div>
 			<div style="margin-top: 10px">
-				<button id="chess-star-endgame-techniquet">Start</button>
+				<button id="chess-star-endgame-techniquet">Reset</button>
 				<button id="chess-prev-endgame-technique">Prev</button>
 				<button id="chess-next-endgame-technique">Next</button>
 				<button id="chess-play-endgame-technique">Play</button>
 			</div>
 			<script type="text/javascript" src="res/endgame_technique.js"></script>
 		</div>
-		<h2>Games</h2>
+
+
+		<h2>Best Games</h2>
+		
+		<p>
+			Highest win (chess.com engine level 20 (2400)).<br>
+			Brilliant 44th  move leads to winning queen with tactics.
+		</p>
+		<div style="overflow: hidden; width:740px">
+			<div id="images" style="float: left">
+				<p id="chess-move-highest">Move: 1</p>
+				<div id="chess-board-highest" style="width: 400px"></div>
+				<div style="margin-top: 10px">
+					<button id="chess-start-highest">Reset</button>
+					<button id="chess-prev-highest">Prev</button>
+					<button id="chess-next-highest">Next</button>
+					<button id="chess-play-highest">Play</button>
+				</div>
+			</div>
+
+			<div style="width:300px; height:500px; overflow-y:scroll; float: left; padding-left: 40px;">
+				<p id="chess-pgn-highest" style="white-space: pre-line"></p>
+			</div>
+
+			<script type="text/javascript" src="res/highest.js"></script>
+		</div>
+		<p><br><br></p>
+
+		<p>
+			Simplification to winning endgame against chess.com engine level 12(1600).<br>
+		</p>
+		<div style="overflow: hidden; width:740px">
+			<div id="images" style="float: left">
+				<p id="chess-move-nice_simpli">Move: 1</p>
+				<div id="chess-board-nice_simpli" style="width: 400px"></div>
+				<div style="margin-top: 10px">
+					<button id="chess-start-nice_simpli">Reset</button>
+					<button id="chess-prev-nice_simpli">Prev</button>
+					<button id="chess-next-nice_simpli">Next</button>
+					<button id="chess-play-nice_simpli">Play</button>
+				</div>
+			</div>
+
+			<div style="width:300px; height:500px; overflow-y:scroll; float: left; padding-left: 40px;">
+				<p id="chess-pgn-nice_simpli" style="white-space: pre-line"></p>
+			</div>
+
+			<script type="text/javascript" src="res/nice_simpli.js"></script>
+		</div>
+		<p><br><br></p>
+
+
+
+		<p>
+			Nice knight, bishop, rook checkmate against chess.com engine level 14 (1800).<br>
+		</p>
+		<div style="overflow: hidden; width:740px">
+			<div id="images" style="float: left">
+				<p id="chess-move-NBRcheckmate">Move: 1</p>
+				<div id="chess-board-NBRcheckmate" style="width: 400px"></div>
+				<div style="margin-top: 10px">
+					<button id="chess-start-NBRcheckmate">Reset</button>
+					<button id="chess-prev-NBRcheckmate">Prev</button>
+					<button id="chess-next-NBRcheckmate">Next</button>
+					<button id="chess-play-NBRcheckmate">Play</button>
+				</div>
+			</div>
+
+			<div style="width:300px; height:500px; overflow-y:scroll; float: left; padding-left: 40px;">
+				<p id="chess-pgn-NBRcheckmate" style="white-space: pre-line"></p>
+			</div>
+
+			<script type="text/javascript" src="res/NBRcheckmate.js"></script>
+		</div>
+		<p><br><br></p>
+
+		<p>
+			Endgame fight against chess.com engine level 14 (1800).
+		</p>
+		<div style="overflow: hidden; width:740px">
+			<div id="images" style="float: left">
+				<p id="chess-move-endgame_fight">Move: 1</p>
+				<div id="chess-board-endgame_fight" style="width: 400px"></div>
+				<div style="margin-top: 10px">
+					<button id="chess-start-endgame_fight">Reset</button>
+					<button id="chess-prev-endgame_fight">Prev</button>
+					<button id="chess-next-endgame_fight">Next</button>
+					<button id="chess-play-endgame_fight">Play</button>
+				</div>
+			</div>
+
+			<div style="width:300px; height:500px; overflow-y:scroll; float: left; padding-left: 40px;">
+				<p id="chess-pgn-endgame_fight" style="white-space: pre-line"></p>
+			</div>
+
+			<script type="text/javascript" src="res/endgame_fight.js"></script>
+		</div>
+		<p><br><br></p>
+
+		<p>
+			Doesn't even take the queen.
+		</p>
+		<div style="overflow: hidden; width:740px">
+			<div id="images" style="float: left">
+				<p id="chess-move-gangsta">Move: 1</p>
+				<div id="chess-board-gangsta" style="width: 400px"></div>
+				<div style="margin-top: 10px">
+					<button id="chess-start-gangsta">Reset</button>
+					<button id="chess-prev-gangsta">Prev</button>
+					<button id="chess-next-gangsta">Next</button>
+					<button id="chess-play-gangsta">Play</button>
+				</div>
+			</div>
+
+			<div style="width:300px; height:500px; overflow-y:scroll; float: left; padding-left: 40px;">
+				<p id="chess-pgn-gangsta" style="white-space: pre-line"></p>
+			</div>
+
+			<script type="text/javascript" src="res/gangsta.js"></script>
+		</div>
+		<p><br><br></p>
+
 
 		<h2>Possible Improvements</h2>
 		
