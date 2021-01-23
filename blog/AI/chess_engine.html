@@ -71,6 +71,20 @@
 		</p>
 
 		<h2>Evaluation</h2>
+		<p>
+			The evaluation function is arguably the most important aspect of a chess engine.
+			If I know which position is winning and which position is loosing I would only need to investigate the immediate moves and all further search would be redundant. Such function can be attempted to learn with machine learning, can be handcrafted based on existing chess theory, or can be a combination of both.
+		</p>
+		<p>
+			I did not include any learning yet and crafted an evaluation function from my knowledge.
+			It includes a basic piece count (pawn=1, bishop=knight=3, rook=5, queen=9), penalises bad pawn structure (isolated, doubled pawns), rewards passed pawns and the occupation of the center squares and encourages knight and bishop development.
+			King safety is estimated by rewarding a king at the sides of the board behind pawns.
+			In the endgame the advancement of pawns is rewarded and the king safety not that much enforced anymore.
+			If the opponent does only have pawns, the players king is encourage to force the other king into corners to find checkmates in winning positions.
+		</p>
+		<p>
+			As at is now, the evaluation function seems to work fine but results also in unwanted behavior which is discussed further down.
+		</p>
 
 		<h2>Search</h2>
 
@@ -330,7 +344,7 @@ end
 		<h2>Best Games</h2>
 		
 		<p>
-			Highest win (chess.com engine level 20 (2400)).<br>
+			Highest win against chess.com engine level 20 (2400).<br>
 			Brilliant 44th  move leads to winning queen with tactics.
 		</p>
 		<div style="overflow: hidden; width:740px">
@@ -449,7 +463,108 @@ end
 
 
 		<h2>Possible Improvements</h2>
-		
+		<h3>Fixing Weaknesses With Better Board Evaluation</h3>
+		<p>
+			If the queen is on its original position the engine will sometimes try to "castle manually" out in the open. In the following position the white's move was Kd2 which is immediately punished by stronger opponents.
+			<div id="chess-board-weak-1" style="width: 300px"></div>
+			<script>
+				Chessboard('chess-board-weak-1', {
+				  position: 'rnbqkbnr/pp3ppp/4p3/3p4/3P4/4B3/PP1KPPPP/RN1Q1BNR b kq - 0 5',
+				  pieceTheme: '../../res/chesspieces/wikipedia/{piece}.png',
+				  orientation: 'white'
+				})
+			</script>
+		</p>
+		<p>
+			For the following position my engine suggests Rxe5 misjudgeing a simplification to pawn endgame. 
+			<div id="chess-board-weak-2" style="width: 300px"></div>
+			<script>
+				Chessboard('chess-board-weak-2', {
+				  position: '8/8/1p2k3/3Rb1p1/P1P2p2/P4P2/8/6K1 w - - 0 44',
+				  pieceTheme: '../../res/chesspieces/wikipedia/{piece}.png',
+				  orientation: 'white'
+				})
+			</script>
+		</p>
+		<h3>Including Threefold Repetition Detection</h3>
+		<p>
+			In some positions the engine blunderes a threefold repetion from a winning position as it does not know that the rule exists - yet.
+		</p>
+
+		<h3>Improving Quiescence Search</h3>
+		<p>
+			Now most of the search time is spent in the quiescence search. This should be improved to search deeper.
+		</p>
+
+		<h3>Adjusting Search Depth Dynamically</h3>
+		<p>
+			If the opponent delivers check or threatens the king an extended search should be performed. As of now the engine misses longer mateing patterns.
+		</p>
+
+		<h3>Extending Endgame Tablebase</h3>
+		<p>
+			Generate 5-men and/or pawn endgame tablebases.
+		</p>
+
+		<h3>Extending Opening Book</h3>
+		<p>
+			Include more theory so that engine does not have to come up with opening theory on the fly (and castles manually).
+		</p>
+
+		<h3>More pruning</h3>
+		<p>
+			We have to go deeper! Now the usual search depth (without quiesce) is at 7-8 plys. Too few. Null move pruning, razoring, better move order could improve that.
+		</p>
+
+		<h3>Principal Variation Search Instead of AlphaBeta</h3>
+		<p>
+			MTD(f) may be faster with PVS. A good transposition table (store only frequent positions) could be also beneficial.
+		</p>
+
+		<h3>Use Opponents Time</h3>
+		<p>
+			Anticipate opponents move and search on their clock.
+		</p>
+
+		<h3>Keep Search Tree</h3>
+		<p>
+			Do not throw away the search tree after making a move.
+			Only prune the branches which were not played.
+		</p>
+
+		<h3>Multi Threading</h3>
+		<p>
+			A multi threading would speed up the search significantly.
+			It is unlikely that I am able to do that, though.
+		</p>
+
+		<h2>Did I Achieve My Goal?</h2>
+		<p>
+			Yes, the engine beats me without a drop of sweat :).
+		</p>
+		<div style="overflow: hidden; width:740px">
+			<div id="images" style="float: left">
+				<p id="chess-move-beat_me">Move: 1</p>
+				<div id="chess-board-beat_me" style="width: 400px"></div>
+				<div style="margin-top: 10px">
+					<button id="chess-start-beat_me">Reset</button>
+					<button id="chess-prev-beat_me">Prev</button>
+					<button id="chess-next-beat_me">Next</button>
+					<button id="chess-play-beat_me">Play</button>
+				</div>
+			</div>
+
+			<div style="width:300px; height:500px; overflow-y:scroll; float: left; padding-left: 40px;">
+				<p id="chess-pgn-beat_me" style="white-space: pre-line"></p>
+			</div>
+
+			<script type="text/javascript" src="res/beth_beats_me.js"></script>
+		</div>
+		<p><br><br></p>
+		<p>
+			Try it your self! Instructions <a href="https://github.com/markus7800/Beth">here</a>. JULIA required.
+		</p>
+
 		<p>
 			<a href="../blog.html">Back</a>
 		</p>
