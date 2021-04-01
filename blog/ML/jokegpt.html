@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+		<title>Super Human Humor with GPT2</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Back</a>
+		</p>
+		<h1>Super Human Humor with GPT2</h1>
+		<main>
+			<h2>Technical Details</h2>
+			<p>The goal of this project is to train a machine learning model to make jokes.</p>
+			
+			<p>
+				I found this <a href="https://medium.com/swlh/fine-tuning-gpt-2-for-magic-the-gathering-flavour-text-generation-3bafd0f9bb93">blog post</a> which trained GPT2 to generate Magic the Gathering text. I decided to adopt it for my project.
+			</p>
+			<p>
+				Next, I needed a training data set. 
+				I found a <a href="https://github.com/taivop/joke-dataset">data set</a> of all submission to the subreddit <a href="https://www.reddit.com/r/Jokes/">r/jokes</a> till 2017.
+				In order to be able to generate jokes on more recent topics, I scraped the subreddit from 2017 to 2020 with <a href="https://pushshift.io/">pushshift</a>.
+			</p>
+			<p>
+				I selected all posts with more than 100 upvotes which were less than 300 characters long.
+				This left me with 32663 jokes with which I fine-tuned GPT2 for 4 epochs.
+				This took around an hour using a Tesla T4 through Google Colab.
+			</p>
+
+			<h2>Example Jokes</h2>
+			<p>
+				I selected a few generated jokes that made sense and were original (not known jokes).
+				As <a href="https://www.reddit.com/r/Jokes/">r/jokes</a> likes dark humor, my model readily spits out offensive jokes. So trigger warning for the light hearted reader!
+			</p>
+
+			<button id="jokebutton">Random Joke!</button>
+			<code>
+			<p id="joke" style="white-space: pre-line"></p>
+			</code>
+
+			<h2>Conclusion</h2>
+			<p>
+				One could argue that my model really only produces nonsense. But I firmly believe that it simply transcended human humor. So why should we understand it?!
+			</p>
+
+		</main>
+		<p>
+			<a href="../blog.html">Back</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+	<script type="text/javascript" src="res/jokegpt/jokes.js"></script>
+
+</html>
