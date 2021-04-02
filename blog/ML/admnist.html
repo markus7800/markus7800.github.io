@@ -69,6 +69,16 @@
 
 				\[\frac{df}{d\bfA} =  \nabla\bfB^T, \quad \frac{df}{d\bfB} = \bfA^T \nabla. \]
 			</p>
+			<pre><code class="julia">
+function *(self::DMat, other::DMat)
+    res = DMat(self.s*other.s, prev=[self, other], op="*")
+    res.backward = function bw(∇)
+        self.∇ .+=  ∇ * adjoint(other.s)
+        other.∇ .+= adjoint(self.s) * ∇
+    end
+    return demote(res)
+end
+			</code></pre>
 			<p>
 				<i>Example. Convolution code.</i>
 
