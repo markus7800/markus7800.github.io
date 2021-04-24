@@ -599,7 +599,7 @@ It gives your legs a good workout",
 
 
 "Coronavirus\n\
-One day, my Grandma asked me to pass her a virus, so I passed her the poliovirus. But then I passed her the diarrhea, then I passed her the anal.",
+One day, my Grandma asked me to pass her a virus, so I passed her the poliovirus. But then I passed her the diarrhea.",
 
 
 "Coronavirus is a fun and dangerous virus.\n\
