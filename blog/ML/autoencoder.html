@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Autoencoding MNIST</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		<h1>Autoencoding MNIST</h1>
+		<main>
+			<p>
+				This work was inspired by <a href="https://n8python.github.io/mnistLatentSpace/">n8python</a>.
+			</p>
+			<p>
+				The aim of an autoencoder is to learn a representation for a set of data, typically for dimensionality reduction.
+			</p>
+			<p>
+				The MNIST data set contains 28x28 gray scale images of digits and is thus 784 dimensional data.
+				However, the most important features of digits can be captured with much less dimensions.
+			</p>
+			<p>
+				An artificial neural network for autoencoding typically squeezes the data to lower and lower dimension before expanding it again to its original shape.
+				The loss is then the squared difference of the input to the output,
+				\begin{align}
+					L(\mathbf{x}) = ||y_\mathbf{w}(\mathbf{x}) - \mathbf{x}||_2^2.
+				\end{align}
+
+				After training the neural network it can be split into two parts:<br>
+
+				- Encoder: the part that reduces the dimension<br>
+
+				- Decoder: the part that expands the dimension<br>
+			</p>
+			<p>
+				Below you can see the architecture comprised of fully connected layers used for autoencoding MNIST.
+				All activations are \(\text{tanh}\) except for the output of the encoder and decoder where the activation was chosen to be \(\text{sigmoid}\) such that the values are in \([0,1].\)
+			</p>
+			<div id="images">
+				<img src="res/autoencoder/AutoEncoder.svg">
+			</div>
+			<p>
+				Now we can encode all images with two values in \([0,1].\) This two dimensional space is called latent space.
+				Since the neural network is continuous, moving in latent space and decoding to image space results in two dimensional continuous transformations of one digit into another.
+			</p>
+			<div id="images">
+				<img src="res/autoencoder/4_pairs.gif">
+			</div>
+
+			<p>
+				It is interesting to see that similarly shaped numbers are close together in the latent space.
+				For example, 3 is close to 8 and 4 is close to 9. For both we just need to "close or open the loops" to get from one to the other. Also 1 and 7 are neighbours as they are basically just one line.
+				We can also see that the numbers are a little bit fuzzy compared to the original data set. This is because the 784 dimensional image space cannot be reduced to two dimensions without some loss of information.
+			</p>
+
+			<p>
+				Code avaiable <a href="https://github.com/markus7800/MathAndAlgos/tree/master/MachineLearning/AutoEncoder">here</a>.
+			</p>
+		</main>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
