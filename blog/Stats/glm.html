@@ -65,23 +65,23 @@
 				&= \frac{1}{s} \left(\psi(f(\bfa))^T \bfy - g(\psi(f(\bfa))) \right) + \ln h(\bfy,s).
 				\end{align}
 
-				Now it would be nice if can choose the link function such that \(\psi \circ f = \operatorname{id}\) and obtain
+				Now it would be nice if we can choose the link function such that \(\psi \circ f = \operatorname{id}\) and obtain
 				\[\ln p (\bfy | \bfeta, s) =\frac{1}{s} \left(\bfa^T \bfy - g(\bfa) \right) + \ln h(\bfy,s).\]
-				We also get
+				We then get
 
 				\[\bfeta = \psi(\hat\bfy) = \psi(f(\bfa)) = \bfa = \bfW^T \bfx, \quad f^{-1} = \psi.\]
 			
 
 				Differentiating with respect to \(\bfW\) gives
 				\begin{align}
-				\nabla_\bfW -\ln p (\bfy | \bfeta, s)^T &=  \frac{1}{s}\nabla g(\bfa)^T \d \bfa(\bfW) - \frac{1}{s} \bfy^T \d \bfa(\bfW) \\
+				\nabla_\bfW (-\ln p (\bfy | \bfeta, s)^T) &=  \frac{1}{s}\nabla g(\bfa)^T \d \bfa(\bfW) - \frac{1}{s} \bfy^T \d \bfa(\bfW) \\
 				&=  \frac{1}{s}\hat\bfy^T \d \bfa(\bfW) - \frac{1}{s} \bfy^T \d \bfa(\bfW) \\
 				&= \frac{1}{s}(\hat\bfy - \bfy)^T \d \bfa(\bfW) .
 				\end{align}
 			</p>
 			<p>
 				The gradient can be written in matrix form
-				\[ \nabla_\bfW -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\bfx^T(\hat\bfy - \bfy) \in \R^{d \times p}\]
+				\[ \nabla_\bfW (-\ln p (\bfy | \bfeta, s)) = \frac{1}{s}\bfx^T(\hat\bfy - \bfy) \in \R^{d \times p}\]
 				<button class="collapsible">Proof.</button>
 				<div class="collapsiblecontent">
 					<p>
@@ -101,7 +101,7 @@
 			</p>
 			<p>
 				The hessian can be computed in terms of following blocks:
-				\[\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\frac{\partial f_j}{\partial a_i} (\bfa) \bfx \bfx^T\]
+				\[\nabla_{\bfw_i}\nabla_{\bfw_j} (-\ln p (\bfy | \bfeta, s)) = \frac{1}{s}\frac{\partial f_j}{\partial a_i} (\bfa) \bfx \bfx^T\]
 				<button class="collapsible">Proof.</button>
 				<div class="collapsiblecontent">
 					<p>
@@ -114,7 +114,7 @@
 						\end{align}
 						which results in
 						\begin{align}
-						\nabla_{\bfw_i}\nabla_{\bfw_j} -\ln p (\bfy | \bfeta, s) = \frac{1}{s}\nabla_{\bfw_i}(\hat y_j - y_j) \bfx= \frac{1}{s}\frac{\partial f_j}{\partial a_i}(\bfa) \bfx \bfx^T.
+						\nabla_{\bfw_i}\nabla_{\bfw_j} (-\ln p (\bfy | \bfeta, s)) = \frac{1}{s}\nabla_{\bfw_i}(\hat y_j - y_j) \bfx= \frac{1}{s}\frac{\partial f_j}{\partial a_i}(\bfa) \bfx \bfx^T.
 						\end{align}
 					</p>
 					<p align="right">\(\Box\)</p>
@@ -124,14 +124,14 @@
 			<p>
 				Now we can use the same Newton-Raphson optimisation algorithm for several distributions,
 				\begin{align}
-				\overline\bfW_\text{new} = \overline\bfW_\text{old} - \bfH^{-1}\nabla_{\overline\bfW} l,
+				\overline\bfW_\text{new} = \overline\bfW_\text{old} - \bfH^{-1}\nabla_{\overline\bfW} \ln p(\bfY | \bfX),
 				\end{align}
 				where the matrix \(\bfW\) is in its vectorised form \(\overline \bfW \in \R^{dp}.\)
 			</p>
 			<p>
 				For independent observations \(\bfX = (\bfx_1, \dots, \bfx_N)^T \in \R^{n \times d}\), \(\bfY = (\bfy_1, \dots, \bfy_N)^T \in \R^{n \times p}\), where \((\bfx_j)_0 = 1\) if we use an intercept, the likelihood factorises and thus the batch gradients and hessian are given by
 				\begin{align}
-				-\nabla_{\bfW}\ln(\bfY | \bfX) &=\frac{1}{s}\sum_{n=1}^N \bfx_n^T(\hat\bfy_n - \bfy_n) \in \R^{d \times p} \\
+				-\nabla_{\bfW}\ln p(\bfY | \bfX) &=\frac{1}{s}\sum_{n=1}^N \bfx_n^T(\hat\bfy_n - \bfy_n) \in \R^{d \times p} \\
 				&= \frac{1}{s}\bfX (\hat\bfY - \bfY), \\
 
 				-\nabla_{\bfw_i}\nabla_{\bfw_j} \ln p (\bfY | \bfX) &= \frac{1}{s}\sum_{n=1}^N \frac{\partial f_j}{\partial a_i}(\bfa_n) \bfx_n \bfx_n^T\\
@@ -202,7 +202,7 @@
 				\[f'(a) = \frac{\exp(-a)}{(1+\exp(-a))^2} = \frac{1}{1+\exp(-a)}\left(1-\frac{1}{1+\exp(-a)} \right) = \hat y (1 - \hat y). \]
 
 
-				The same link and activation function work for the Binomial distribution, but with \(g(\eta) = n \ln(1+\exp(\eta)\) and \(h(y) = \left(\frac{n}{y} \right).\)
+				The same link and activation function work for the Binomial distribution, but with \(g(\eta) = n \ln(1+\exp(\eta))\) and \(h(y) = \left(\frac{n}{y} \right).\)
 			</p>
 
 			<h3>Categorical.</h3>
