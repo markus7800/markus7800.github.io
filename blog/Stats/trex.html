@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Random Walking on the Surface of a T-Rex</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		<h2>Random Walking on the Surface of a T-Rex</h2>
+		<main>
+			<p>
+				The surface distribution is defined by
+				\[p(x) \propto \exp\left(-\frac{1}{10}d(x, \texttt{T-REX})\right),\]
+				where \(d(x, \texttt{T-REX})\) is the Euclidean distance to the surface of the T-REX
+				which is modelled by 1375 points which form 2598 triangles.
+			</p>
+			<p>
+				The distance is calculated by finding the closest point on each triangle \(\Delta\) by projecting \(x\) onto the plane of \(\Delta\) and then performing a coordinate transform on the basis given by two side vectors \(\Delta\).
+				The calculation is sped up by only calculating the distane to the 25 closest triangles.
+			</p>
+			<p>
+				The random walk is obtained by running the Metropolis-Hastings algorithm for
+				one million iterations.
+			</p>
+			<div id="images">
+				<img src="./res/trex/trex.gif">
+			</div>
+		</main>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
