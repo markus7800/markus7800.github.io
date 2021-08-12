@@ -42,7 +42,8 @@
 		<main>
 			<h2>Introduction</h2>
 			<p>
-				The use of machine learning methods in materials science aids human experts in finding task-specific compounds and structures at reduced cost. Specifically, the estimation of materials properties can be accelerated using trained models and applied to large libraries of candidates. However, finding suitable materials descriptors as basis for learning is challenging. Traditional approaches fulfill all the requirements set by fundamental physics but are best suited for simple fully connected model architectures. Convolutional neural networks based on a three-dimensional grid representation (voxelization) are a priori much more flexible, but need to be trained not to violate the translation and rotation symmetries of physics.
+				The use of machine learning methods in materials science aids human experts in finding task-specific compounds and structures at reduced cost. Specifically, the estimation of materials properties can be accelerated using trained models and applied to large libraries of candidates. However, finding suitable materials descriptors as basis for learning is challenging.
+				Traditional approaches are based on manually crafted features that fulfill all the requirements set by fundamental physics but are best suited for simple fully connected model architectures. Convolutional neural networks based on a three-dimensional grid representation (voxelization), as considered in this work, are a priori much more flexible, but need to be trained not to violate the translation and rotation symmetries of physics.
 			</p>
 
 			<h2>3D Descriptor</h2>
@@ -111,8 +112,8 @@ and
     h(\bfg) &= \int_0^1\int_0^1\int_0^1 s\left(\bfA\bfx\right)\exp(-2\pi i \,\bfm \cdot \bfx)dx_1 dx_2 dx_3 \\
     &= \int_0^1\int_0^1\int_0^1 \frac{1}{(2\pi)^{3/2}\sigma^3} \sum_{\bfn \in\Z^3}\exp\left(-\frac{1}{2\sigma^2}(\bfA\bfx - \bfA\bfn)^T(\bfA\bfx - \bfA\bfn)\right)\exp(-2\pi i\, \bfm \cdot \bfx)d\bfx \\
     &= \sum_{\bfn \in\Z^3} \int_0^1\int_0^1\int_0^1 \frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}(\bfx - \bfn)^T\bfA^T\bfA(\bfx - \bfn)\right)\exp(-2\pi i\, \bfm \cdot \bfx)d\bfx\\
-    &= \sum_{\bfn \in\Z^3} \int_{n_3}^{n_3+1}\int_{n_2}^{n_2+1}\int_{n_1}^{n_1+1} \frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(-2\pi i\, \bfm \cdot \bfx -2\pi i\, \underbrace{\bfm \cdot\bfn}_{\in \Z})d\bfx\\
-    &= \int_{\R^3}\frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(-2\pi i\, \bfm \cdot \bfx)d\bfx\\
+    &= \sum_{\bfn \in\Z^3} \int_{n_3-1}^{n_3}\int_{n_2-1}^{n_2}\int_{n_1-1}^{n_1} \frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(-2\pi i\, \bfm \cdot \bfx -2\pi i\, \underbrace{\bfm \cdot\bfn}_{\in \Z})d\bfx\\
+    &= \int_{\R^3}\frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(2\pi i\, \bfm \cdot \bfx)d\bfx\\
     &= \frac{1}{(2\pi)^3}\int_{\R^3}\frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2(2\pi\sigma )^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(i\, \bfm \cdot \bfx)d\bfx\\
     &= |(\bfA^T\bfA)^{-1}|^{1/2}\int_{\R^3}\frac{1}{(2\pi)^{3/2}|(2\pi\sigma)^2(\bfA^T\bfA)^{-1}|^{1/2}} \exp\left(-\frac{1}{2(2\pi\sigma )^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(i \,\bfm \cdot \bfx)d\bfx\\
     &= \frac{1}{|\bfA^T\bfA|^{1/2}}\int_{\R^3} \N(\bfx | \boldsymbol{0}, (2\pi\sigma)^2 (\bfA^T\bfA)^{-1}) \exp(i \,\bfm \cdot \bfx) d\bfx \\
@@ -133,7 +134,7 @@ and the proof is complete.
 If the atom is placed at position \(\bfmu\), then write \(\bfmu = \bfA\bfnu\) and we have
 \begin{align*}
     h(\bfg) &= \int_0^1\int_0^1\int_0^1 s\left(\bfA\bfx - \bfmu\right)\exp(-2\pi i \,\bfm \cdot \bfx)dx_1 dx_2 dx_3 \\
-    &=\int_{\nu_3}^{\nu_3+1}\int_{\nu_2}^{\nu_2+1}\int_{\nu_1}^{\nu_1+1} s\left(\bfA\bfx\right)\exp(-2\pi i \,\bfm \cdot (\bfx + \bfnu))dx_1 dx_2 dx_3 \\
+    &=\int_{-(\nu_3-1)}^{-\nu_3}\int_{-(\nu_2-1)}^{-\nu_2}\int_{-(\nu_1-1)}^{-\nu_1} s\left(\bfA\bfx\right)\exp(-2\pi i \,\bfm \cdot (\bfx + \bfnu))dx_1 dx_2 dx_3 \\
     &= \frac{1}{|\bfA|}\exp(-2\pi i \,\bfm \cdot \bfA^{-1}\bfmu)\exp\left(-\frac{1}{2}(2\pi\sigma)^2 \bfm^T (\bfA^T\bfA)^{-1} \bfm\right) \\
     &= \frac{1}{|\bfA|}\exp(- i \,\bfm^T\bfB^T\bfmu)\exp\left(-\frac{1}{2}\sigma^2 \bfm^T\bfB^T\bfB\bfm\right) \\
     &= \frac{1}{|\bfA|}\exp(- i \,\bfg \cdot \bfmu)\exp\left(-\frac{1}{2}\sigma^2 \bfg \cdot \bfg\right)
@@ -151,9 +152,22 @@ For multiple atoms at positions \(\bfmu_i\) all repeat according to \(\bfA\), th
 				<p align="right">\(\Box\)</p>
 			</div>
 
+			<h3>Relation to Dirac distributions</h3>
 			<p>
-				Furthermore, the Fourier coefficient have following in- and equivariance properties:
+				Note that if \(\sigma=0\), then
+\begin{align*}
+    h(\bfg) = \frac{1}{|\bfA|} \sum_{j=1}^n \exp(- i \bfg \cdot \bfmu_j),
+\end{align*}
+which corresponds to a field quantity consisting of Dirac distributions
+\begin{align*}
+ s(\bfx) = \sum_{j=1}^n\sum_{\bfn \in\Z^3} \delta_{\bfmu_j + \bfA \bfn}(\bfx).
+\end{align*}
 			</p>
+
+			<!-- <p>
+				Furthermore, the Fourier coefficient have following in- and equivariance properties:
+			</p> -->
+			<h3>Properties</h3>
 			<p>
 				<i>Translational invariance.</i>
 For the translation \(\tilde\bfmu_j := \bfmu_j + \mathbf{t}\), then still \(\tilde\bfA = \bfA\) and
