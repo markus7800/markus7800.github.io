@@ -37,15 +37,16 @@
 				\[
 				\nabla (f \circ g)(\bfx) = \nabla f(g(\bfx))^T dg(\bfx),
 				\]
+				We have for \(i=1,\dots,m\)
 				\begin{align}
 				\frac{\partial (f \circ g)}{\partial x_i}(\bfx) =
 				\nabla f(g(\bfx))^T
 				\begin{bmatrix}
 				\frac{\partial g_1}{\partial x_i} (\bfx) \\
 				\vdots \\
-				\frac{\partial g_m}{\partial x_i} (\bfx)
+				\frac{\partial g_n}{\partial x_i} (\bfx)
 				\end{bmatrix}
-				= \sum_{j=1}^m \frac{\partial f}{\partial x_j} (g(\bfx)) \frac{\partial g_j}{\partial x_i} (\bfx).
+				= \sum_{j=1}^n \frac{\partial f}{\partial x_j} (g(\bfx)) \frac{\partial g_j}{\partial x_i} (\bfx).
 				\end{align}
 				So we make a forward pass and calculate \(f(g(\bfx)).\) If we know the gradient of \(f\) at \(g(\bfx)\) we can backpropagate it to \(\bfx\) via above formula.
 			</p>
