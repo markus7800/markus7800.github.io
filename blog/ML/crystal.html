@@ -112,7 +112,7 @@ and
     h(\bfg) &= \int_0^1\int_0^1\int_0^1 s\left(\bfA\bfx\right)\exp(-2\pi i \,\bfm \cdot \bfx)dx_1 dx_2 dx_3 \\
     &= \int_0^1\int_0^1\int_0^1 \frac{1}{(2\pi)^{3/2}\sigma^3} \sum_{\bfn \in\Z^3}\exp\left(-\frac{1}{2\sigma^2}(\bfA\bfx - \bfA\bfn)^T(\bfA\bfx - \bfA\bfn)\right)\exp(-2\pi i\, \bfm \cdot \bfx)d\bfx \\
     &= \sum_{\bfn \in\Z^3} \int_0^1\int_0^1\int_0^1 \frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}(\bfx - \bfn)^T\bfA^T\bfA(\bfx - \bfn)\right)\exp(-2\pi i\, \bfm \cdot \bfx)d\bfx\\
-    &= \sum_{\bfn \in\Z^3} \int_{n_3-1}^{n_3}\int_{n_2-1}^{n_2}\int_{n_1-1}^{n_1} \frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(-2\pi i\, \bfm \cdot \bfx -2\pi i\, \underbrace{\bfm \cdot\bfn}_{\in \Z})d\bfx\\
+    &= \sum_{\bfn \in\Z^3} \int_{-n_3}^{1-n_3}\int_{-n_2}^{1-n_2}\int_{-n_1}^{1-n_1} \frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(-2\pi i\, \bfm \cdot \bfx -2\pi i\, \underbrace{\bfm \cdot\bfn}_{\in \Z})d\bfx\\
     &= \int_{\R^3}\frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2\sigma^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(2\pi i\, \bfm \cdot \bfx)d\bfx\\
     &= \frac{1}{(2\pi)^3}\int_{\R^3}\frac{1}{(2\pi)^{3/2}\sigma^3} \exp\left(-\frac{1}{2(2\pi\sigma )^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(i\, \bfm \cdot \bfx)d\bfx\\
     &= |(\bfA^T\bfA)^{-1}|^{1/2}\int_{\R^3}\frac{1}{(2\pi)^{3/2}|(2\pi\sigma)^2(\bfA^T\bfA)^{-1}|^{1/2}} \exp\left(-\frac{1}{2(2\pi\sigma )^2}\bfx^T\bfA^T\bfA\bfx\right)\exp(i \,\bfm \cdot \bfx)d\bfx\\
@@ -134,7 +134,7 @@ and the proof is complete.
 If the atom is placed at position \(\bfmu\), then write \(\bfmu = \bfA\bfnu\) and we have
 \begin{align*}
     h(\bfg) &= \int_0^1\int_0^1\int_0^1 s\left(\bfA\bfx - \bfmu\right)\exp(-2\pi i \,\bfm \cdot \bfx)dx_1 dx_2 dx_3 \\
-    &=\int_{-(\nu_3-1)}^{-\nu_3}\int_{-(\nu_2-1)}^{-\nu_2}\int_{-(\nu_1-1)}^{-\nu_1} s\left(\bfA\bfx\right)\exp(-2\pi i \,\bfm \cdot (\bfx + \bfnu))dx_1 dx_2 dx_3 \\
+    &=\int_{-\nu_3}^{1-\nu_3}\int_{-\nu_2}^{1-\nu_2}\int_{-\nu_1}^{1-\nu_1} s\left(\bfA\bfx\right)\exp(-2\pi i \,\bfm \cdot (\bfx + \bfnu))dx_1 dx_2 dx_3 \\
     &= \frac{1}{|\bfA|}\exp(-2\pi i \,\bfm \cdot \bfA^{-1}\bfmu)\exp\left(-\frac{1}{2}(2\pi\sigma)^2 \bfm^T (\bfA^T\bfA)^{-1} \bfm\right) \\
     &= \frac{1}{|\bfA|}\exp(- i \,\bfm^T\bfB^T\bfmu)\exp\left(-\frac{1}{2}\sigma^2 \bfm^T\bfB^T\bfB\bfm\right) \\
     &= \frac{1}{|\bfA|}\exp(- i \,\bfg \cdot \bfmu)\exp\left(-\frac{1}{2}\sigma^2 \bfg \cdot \bfg\right)
