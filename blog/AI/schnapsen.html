@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Schnapsen Engine</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		<h1>Schnapsen Engine</h1>
+		<div id="images">
+			<img src="res/schnapsen/cards.png", width="45%">
+		</div>
+		<main>
+			<h2>Rules</h2>
+			<p>
+				Look up the rules <a href="https://en.wikipedia.org/wiki/Schnapsen">here</a>.
+			</p>
+			<h2>Basic Idea</h2>
+			<p>
+				Solve Schnapsen with all cards open to see with alpha-beta search.
+				This can be done in a fraction of a second.
+			</p>
+			<p>
+				In the real game, make every possible assignment of unknown cards and select move that works best on average.
+				We select the move with smallest probability of losing. We could also use greatest expected score.
+			</p>
+			<p>
+				Problem: Too many assignments:
+			</p>
+			<table>
+				<tr>
+					<th>Move</th>
+					<th>Number of assignments</th>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>\(\pmatrix{14 \\ 5} \cdot 9! = 726\,485\,760\)</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>\(\pmatrix{13 \\ 4} \cdot 9! = 259\,459\,200\)</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>\(\pmatrix{12 \\ 5} \cdot 7! = 3\,991\,680\)</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>\(\pmatrix{11 \\ 4} \cdot 7! = 1\,663\,200\)</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>\(\pmatrix{10 \\ 5} \cdot 5! = 30\,240\)</td>
+				</tr>
+			</table>
+			<p>
+				Explanation: At the beginning we have 5 cards and 1 card of the talon is open.
+				So the opponent has 5 out of 14 cards on the hand and the talon has 9! possible orderings.
+				At the second move, the opponent has played a card.
+				So we do not know 4 out of 13 cards in his hand. The talon remains unchanged.
+			</p>
+			<p>
+				Note that these numbers are worst case.
+				If we would lock the talon at move 4, then we only care about the cards on the hand \(\pmatrix{10 \\ 5} = 252.\)
+				We can only test all assignments after move 4. But we can evaluate all locking moves at every time since \(\pmatrix{? \\ 5} \le 2002
+				\) is small.
+			</p>
+
+			<h2>Bayesian Estimates</h2>
+			<p>
+				So for move 1 - 4, we cannot test all assignments. We will randomly choose \(N\) assignments instead and perform Bayesian analysis.
+			</p>
+			<p>
+				We model the losing probability with a Beta distribution, which is a conjugate prior to the Bernoulli distribution (event of losing).
+				Starting with an uninformative prior \(\text{Beta}(1,1).\)
+				If we lose \(S\) out of \(N\) games the posterior becomes \(\text{Beta}(1 + S, 1 + N - S).\)
+				We then estimate the losing probability with the mean \(\frac{\alpha}{\alpha + \beta} = \frac{1+S}{N + 2} \approx \frac{S}{N}\)
+				and can provide confidence bounds with the standard deviation \(\sqrt{\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}} \approx \sqrt{\frac{\frac{S}{N}\cdot \frac{N-S}{N}}{N}} \le \frac{1}{2\sqrt{N}}.\)
+				We choose \(N = 2500\) to get 1% precision.
+			</p>
+			<p>
+				We model the score with a categorical variable \(\in \{-3,-2,-1,0,1,2,3\}.\)
+				The conjugate prior is a Dirichlet distribution with uninformative prior \(\text{Dirichlet}(1,1,1,1,1,1,1)\) and posterior \(\text{Dirichlet}(1 + c_1,\dots,1+c_7) = \text{Dirichlet}(\alpha),\) where \(c_i\) are the number of observations in category \(i\).
+			</p>
+			<p>
+				Let \(P \sim \text{Dirichlet}(\alpha)\), then \(\text{expected score} = P \cdot (-3,-2,-1,0,1,2,3) = P \cdot S.\)
+				It holds that \(\text{var}(P \cdot S) = \sum_{i,j} S_i \cdot S_j \cdot \text{Cov}(P_i, P_j)\) and
+				\(\text{Cov}(P_i, P_j) = \frac{\delta_{ij} p_i - p_i p_j}{N + 7 + 1} \le \frac{1}{N},\) \(p = \frac{\alpha}{N + 7}\) and thus \(\text{var}(\text{expected score}) \le \frac{3^2 \cdot 7^2}{N}.\)
+			</p>
+		</main>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
