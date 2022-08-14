@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Borwein Integrals</title>
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		<h1>Borwein Integrals: Misleading Patterns</h1>
+		<main>
+			<p>
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}dx = \pi\]
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}dx = \pi\]
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}\frac{\sin(x/5)}{x/5}dx = \pi\]
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}\frac{\sin(x/5)}{x/5}\frac{\sin(x/7)}{x/7}dx = \pi\]
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}\frac{\sin(x/5)}{x/5}\frac{\sin(x/7)}{x/7}\frac{\sin(x/9)}{x/9}dx = \pi\]
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}\frac{\sin(x/5)}{x/5}\frac{\sin(x/7)}{x/7}\frac{\sin(x/9)}{x/9}\frac{\sin(x/11)}{x/11}dx = \pi\]
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}\frac{\sin(x/5)}{x/5}\frac{\sin(x/7)}{x/7}\frac{\sin(x/9)}{x/9}\frac{\sin(x/11)}{x/11}\frac{\sin(x/13)}{x/13}dx = \pi\]
+			\[\int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}\cdots \frac{\sin(x/13)}{x/13}\frac{\sin(x/15)}{x/15}dx \approx \pi -4.62 \cdot 10^{-11}\]
+			</p>
+			<h2>But why?</h2>
+			<p>
+				Let's define \(X_n \sim \text{Unif}(-a_n, a_n),\) \(S = \sum_{n=1}^N X_n,\) then the characteristic function is given by
+				\[\mathbb{E}\left[\exp(i \omega S)\right] = \prod_{n=1}^N \frac{\sin(a_n \omega)}{a_n \omega}.\]
+			</p>
+			<p>
+				We obtain the pdf by inverse Fourier transform
+				\[p_S(x) = \frac{1}{2\pi}\int_{-\infty}^\infty \prod_{n=1}^N \frac{\sin(a_n \omega)}{a_n \omega} \exp(-i \omega x) d\omega.\]
+			</p>
+			<p>
+				We get the integral of interest at 0,
+				\[p_S(0) = \frac{1}{2\pi}\int_{-\infty}^\infty \prod_{n=1}^N \frac{\sin(a_n \omega)}{a_n \omega}d\omega.\]
+			</p>
+
+			<p>
+				Lemma. Let \(U \sim \text{Unif}(a,b)\) and \(\text{supp}(X) = [c,d] \subseteq [a,b],\) then
+				\[p_{U+X}(z) = \frac{1}{b-a}, \quad a+d \le z \le b+c.\]
+			</p>
+			
+			<p>For \(a+d \le z \le b+c,\) \(c \le x \le d\) it holds that \(a \le z-x \le b\).</p>
+			<p>
+				\begin{align}
+				p_{U+X}(z) &= \int_{c}^{d} p_U(z-x) p_X(x)dx\\
+				&=  \frac{1}{b-a} \int_{c}^{d} p_X(x)dx\\
+				&=  \frac{1}{b-a}
+				\end{align}
+			</p>
+			<p align="right">\(\Box\)</p>
+
+			<p>
+				For \(X_n \sim \text{Unif}(-\frac{1}{n}, \frac{1}{n})\), since \(\frac{1}{3} + \frac{1}{5}+\cdots + \frac{1}{13} < 1\)
+				\[\frac{1}{2} = p_{X_1 + (X_3 + X_5 +\cdots + X_{13})} = \frac{1}{2\pi} \int_{-\infty}^\infty \frac{\sin(x)}{x}\frac{\sin(x/3)}{x/3}\cdots \frac{\sin(x/13)}{x/13}dx.\]
+			</p>
+			<p>
+				But \(\frac{1}{3} + \frac{1}{5}+\cdots + \frac{1}{15} > 1\) and the equality does not hold anymore.
+			</p>
+		</main>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
