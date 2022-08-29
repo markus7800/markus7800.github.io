@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Kulback-Leibler Divergence and Variational Inference</title>
+		\(
+			\newcommand{\bfx}{\mathbf{x}}
+			\newcommand{\bfX}{\mathbf{X}}
+			\newcommand{\bfR}{\mathbf{R}}
+			\newcommand{\bfeta}{\boldsymbol{\eta}}
+			\newcommand{\bfmu}{\boldsymbol{\mu}}
+			\newcommand{\bfu}{\mathbf{u}}
+			\newcommand{\bfw}{\mathbf{w}}
+			\newcommand{\bfW}{\mathbf{W}}
+			\newcommand{\bfH}{\mathbf{H}}
+			\newcommand{\bfy}{\mathbf{y}}
+			\newcommand{\bfY}{\mathbf{Y}}
+			\newcommand{\bfa}{\mathbf{a}}
+			\newcommand{\d}{\operatorname{d}}
+			\newcommand{\Exp}[2]{\mathbb{E}_{#1}\left[ #2\right]}
+			\newcommand{\R}{\mathbb{R}}
+			\newcommand{\KL}{D_{\text{KL}}}
+			\newcommand{\N}{\mathcal{N}}
+		\)
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		<h1>Kulback-Leibler Divergence and Variational Inference</h1>
+		<main>
+			<h2>Kulback-Leibler Divergence</h2>
+			<p>
+				The KL-Divergence between two distributions \(P\) and \(Q\) is given by
+				\[\KL(P \parallel Q) = \Exp{X \sim P}{\log\left(\frac{P(X)}{Q(X)}\right)}.\]
+				It is the expected log likelihood ratio.
+				By the <a href="https://en.wikipedia.org/wiki/Neyman–Pearson_lemma">Neyman–Pearson lemma</a> this ratio is the most powerful way to distinguish between the two distributions.
+			</p>
+			<p>
+				The KL-Divergence can be split up into a cross-entropy and entropy term
+				\begin{align}
+					\KL(P \parallel Q) &= \Exp{X \sim P}{-\log Q(X) } - \Exp{X \sim P}{-\log P(X) } \\
+					&= H(P,Q) - H(P)
+				\end{align}
+			</p>
+			<p>
+				It holds that
+				\[\KL(P \parallel Q) \ge 0 \quad \text{and} \quad \KL(P \parallel Q) = 0 \iff P = Q. \]
+			</p>
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				TODO
+				<p align="right">\(\Box\)</p>
+			</div>
+			<p>
+				The KL-Divergence is only well defined if \(Q \ll P\), i.e. \(P(A) = 0 \implies Q(A) = 0.\)
+				Otherwise we can set it to \(\infty.\) Note that \(\KL(P \parallel Q)\) can be infinite even if \(Q \ll P.\)
+			</p>
+			<p>
+				The KL-Divergence is asymmetric, because \(P\) determines over which support the log likelihood ratio is averaged.
+				For example, if we want to approximate a bimodal Gaussian mixture model
+				\[P(x) = 0.4 \cdot \N(x \mid {-1}, 0.75^2) + 0.6 \cdot \N(x \mid 4, 0.5^2), \]
+				with an unimodel Gaussian
+				\[Q(x) = \N(x \mid \mu, \sigma^2),\]
+				then it matters whether we minimize \(\KL(P \parallel Q)\) or \(\KL(Q \parallel P).\)
+			</p>
+			<p>
+				The first case is called the inclusive KL, where \(Q\) will try to minimize the distance of the densities on the support of \(P\) (see left plot below),
+				while in the second case, the exclusive KL, \(Q\) will match the Normal distribution with the higher probability (see right plot below).
+
+				<div id="images">
+					<img src="./res/kl_vae/inclusive.svg" width="45%">
+					<img src="./res/kl_vae/exclusive.svg" width="45%">
+				</div>
+			</p>
+
+
+
+			<button class="collapsible">Proof.</button>
+			<div class="collapsiblecontent">
+				<p align="right">\(\Box\)</p>
+			</div>
+
+
+			<p style="font-style: italic">Proof.</p>
+			<p align="right">\(\Box\)</p>
+		</main>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
