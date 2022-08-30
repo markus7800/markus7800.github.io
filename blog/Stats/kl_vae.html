@@ -24,9 +24,11 @@
 			\newcommand{\bfa}{\mathbf{a}}
 			\newcommand{\d}{\operatorname{d}}
 			\newcommand{\Exp}[2]{\mathbb{E}_{#1}\left[ #2\right]}
+			\newcommand{\Prob}[1]{p\left(#1\right)}
 			\newcommand{\R}{\mathbb{R}}
 			\newcommand{\KL}{D_{\text{KL}}}
 			\newcommand{\N}{\mathcal{N}}
+			\newcommand{\D}{\mathcal{D}}
 		\)
 	</head>
 	<body>
@@ -81,16 +83,99 @@
 				</div>
 			</p>
 
+			<h2>Variational Inference</h2>
+			<p>
+				Lets suppose our data comes from a bimodal Gaussian mixture model
+				\[P(x \mid \bfmu) = 0.5 \cdot \N(x \mid \mu_1, 0.5) + 0.5 \cdot \N(x \mid \mu_2, 0.5), \]
+				and we have observed
+				\[\D = [ 1.41, -1.07, -0.85, -1.05, -0.21, 0.62, -0.59, -1.09, -0.24, 1.11].\]
+				We would like to infer the correct centers \(\bfmu.\)
+			</p>
+			<p>
+				In the usual Bayesian fashion, we want to find the posterior
+				\[\Prob{\bfmu \mid \D} = \frac{\Prob{\D \mid \bfmu} \Prob{\bfmu} }{\Prob{\D} }.\]
+			</p>
+			<p>
+				We choose an uniform prior \(\Prob{\bfmu} = \text{Unif}(\bfmu \mid [-2,2] \times [-3,3])\)
+				and use MCMC to sample from the posterior (see <a href="Stats/bayesianinversion.html">1</a> and <a href="Stats/trex.html">2</a>).
+				We visualise the samples with the 2D kernel density:
+				<div id="images">
+					<img src="./res/kl_vae/mcmc_posterior.png" width="65%">
+				</div>
+			</p>
+			<p>
+				To find the two modes we had to sample over a million times.
+				Another method to approximate the posterior is variational inference.
+			</p>
+			<p>
+				In <i>variational inference</i> we aim to approximate the posterior with a simpler distribution over the latent variables \(q_\theta(z),\)
+				and minimize the KL-divergence with respect to the parameters \(\theta\) 
+				\[\KL(q_\theta, \Prob{.\mid \D)}.\]
+				In our case \(z = \bfmu.\)
+			</p>
+			<p>
+				But how to measure this distance if we do not have access to the posterior \(\Prob{.\mid \D}?\)
+				Well, we are Bayesians, so we use the fact that \[\Prob{z \mid \D} = \frac{\Prob{\D \mid z}\Prob{z}}{\Prob{\D}} = \frac{\Prob{\D , z}}{\Prob{\D}}\]
+				and substitute in the definition of the KL-divergence
+				\begin{align}
+				\KL(q_\theta \parallel \Prob{.\mid \D)} &= \Exp{Z \sim q_\theta}{\log\left(\frac{q_\theta(Z)}{\Prob{Z \mid \D}}\right) } \\
+				&= \Exp{Z \sim q_\theta}{\log\left(\frac{q_\theta(Z) \Prob{\D}}{\Prob{\D , z}}\right) } \\
+				&= \Exp{Z \sim q_\theta}{\log\left(\frac{q_\theta(Z) }{\Prob{\D , z}}\right) } + \Exp{Z \sim q_\theta}{\log\Prob{\D} } \\
+				&= \KL(q_\theta \parallel \Prob{., \D}) + \log\Prob{\D} \\
+				&= -\text{ELBO}(q_\theta) + \log\Prob{\D}
+				\end{align}
+			</p>
+			<p>
+				Since \(\log\Prob{\D}\) is constant we can minimize \(\KL(q_\theta \parallel \Prob{.\mid \D)}\) by maximizing the so-called <i>evidence-lower-bound</i>, which is tractable.
+			</p>
+			<p>
+				Indeed, \(\text{ELBO}(q_\theta)\) is a lower bound on the evidence  \(\log\Prob{\D},\)
+				\begin{align}
+				\underbrace{\log\Prob{\D}}_{\le 0}  = \underbrace{\KL(q_\theta \parallel \Prob{.\mid \D)}}_{\ge 0} + \underbrace{\text{ELBO}(q_\theta)}_{\le 0} \ge \text{ELBO}(q_\theta).
+				\end{align}
+			</p>
 
+			<p>
+				For our model
+				\[P(x \mid \bfmu) = 0.5 \cdot \N(x \mid \mu_1, 0.5) + 0.5 \cdot \N(x \mid \mu_2, 0.5), \]
+				we can make an informed guess about how the posterior could be efficiently approximated.
+				First note that \(\mu_1\) and \(\mu_2\) can be interchanged which we reflect in \(q_\bfmu,\)
+				\[q_{(\mu_1, \mu_2)}(z) = q_{(\mu_2, \mu_1)}(z). \]
+				Also because of this fact there should be two equivalent modes.
+				They should become Guassian with increased number of observations.
+				Therefore, we select
+				\[q_{\bfmu}(z) = 0.5 \cdot \N(z \mid \mu_1, \sigma^2) + 0.5 \cdot \N(z \mid \mu_2, \sigma^2), \]
+				with a fixed standard deviation \(\sigma = 0.1.\)
+			</p>
+			<p>
+				Maximizing the \(\text{ELBO}\) gives us \(\bfmu = (0.98, -0.74)\) which is close to the true parameter \((1.0,-1.0).\)
+				Below you can see the density of \(q_{\bfmu}\) with the two mirrored modes.
+				<div id="images">
+					<img src="./res/kl_vae/vae_posterior.png" width="65%">
+				</div>
+			</p>
 
-			<button class="collapsible">Proof.</button>
-			<div class="collapsiblecontent">
-				<p align="right">\(\Box\)</p>
-			</div>
+			<h2>Relation to Maximum Likelihood Estimation</h2>
+			<p>
+				The minimizer of the KL-divergence is the MLE with infinite observations and true parameter \(\theta^*\) in the following sense.
+				\begin{align}
+				\theta_\text{MLE} &= \text{arg max}_\theta \enspace q_\theta(\D) = \text{arg max}_\theta \sum_{i=1}^N \log q_\theta(x_i) \\
+				&= \text{arg max}_\theta \sum_{i=1}^N \log q_\theta(x_i) - \log q_{\theta^*}(x_i) \\
+				&= \text{arg max}_\theta \frac{1}{N} \sum_{i=1}^N \log\left(\frac{q_\theta(x_i)}{q_{\theta^*}(x_i)}\right)\\
+				&\to \text{arg max}_\theta \enspace \Exp{X \sim q_{\theta^*}}{\log\left(\frac{q_\theta(X)}{q_{\theta^*}(X)}\right)} \\
+				&= \text{arg min}_\theta \enspace \KL(q_\theta \parallel q_{\theta^*})
+				\end{align}
+			</p>
+			<p>
+				where \(\D = (x_1, \dots x_N) \sim p_{\theta^*}\) iid.
+			</p>
 
-
-			<p style="font-style: italic">Proof.</p>
-			<p align="right">\(\Box\)</p>
+			<p>
+				Furthermore, note that with uniform priors the MAP coincides with the MLE,
+				\begin{align}
+				\text{arg max}_z \enspace \Prob{z \mid \D} = \text{arg max}_z \frac{\Prob{\D \mid z}\Prob{z}}{\Prob{\D}} = \text{arg max}_z \enspace \Prob{\D \mid z}.
+				\end{align}
+			</p>
 		</main>
 		<p>
 			<a href="../blog.html">Blog</a>
