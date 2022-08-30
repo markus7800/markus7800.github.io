@@ -52,19 +52,32 @@
 					&= H(P,Q) - H(P)
 				\end{align}
 			</p>
+			
+			<p>
+				The KL-Divergence is only well defined if \(Q \ll P\), i.e. \(P(A) = 0 \implies Q(A) = 0.\)
+				Otherwise we can set it to \(\infty.\) Note that \(\KL(P \parallel Q)\) can be infinite even if \(Q \ll P.\)
+			</p>
 			<p>
 				It holds that
 				\[\KL(P \parallel Q) \ge 0 \quad \text{and} \quad \KL(P \parallel Q) = 0 \iff P = Q. \]
 			</p>
 			<button class="collapsible">Proof.</button>
 			<div class="collapsiblecontent">
-				TODO
+				<p>
+					Recall Jensen's inequality for concave \(\psi\)
+					\[\Exp{}{\psi(X)} \ge \psi(\Exp{}{X}).\]
+					For strictly concave \(\psi\) and not constant \(X\)
+					\[\Exp{}{\psi(X)} > \psi(\Exp{}{X}).\]
+				</p>
+				<p>
+					The logarithm is strictly concave and thus for \(Q \ll P,\)
+					\[ \Exp{X \sim P}{\log\left(\frac{P(X)}{Q(X)}\right)} \ge \log\ \Exp{X \sim P}{\frac{P(X)}{Q(X)}} = \log\Exp{X \sim Q}{\frac{1}{Q(X)}} \ge 0.\]
+				</p>
+				<p>
+					If \(\frac{P(X)}{Q(X)}\) is not constant, i.e. \(P \neq Q\), then the strict inequality holds.
+				</p>
 				<p align="right">\(\Box\)</p>
 			</div>
-			<p>
-				The KL-Divergence is only well defined if \(Q \ll P\), i.e. \(P(A) = 0 \implies Q(A) = 0.\)
-				Otherwise we can set it to \(\infty.\) Note that \(\KL(P \parallel Q)\) can be infinite even if \(Q \ll P.\)
-			</p>
 			<p>
 				The KL-Divergence is asymmetric, because \(P\) determines over which support the log likelihood ratio is averaged.
 				For example, if we want to approximate a bimodal Gaussian mixture model
@@ -175,6 +188,10 @@
 				\begin{align}
 				\text{arg max}_z \enspace \Prob{z \mid \D} = \text{arg max}_z \frac{\Prob{\D \mid z}\Prob{z}}{\Prob{\D}} = \text{arg max}_z \enspace \Prob{\D \mid z}.
 				\end{align}
+			</p>
+
+			<p>
+				For optimization source code see my <a href="https://github.com/markus7800/MathAndAlgos/blob/master/Statistics/KL_VAE/kl_vae.jl">github</a>.
 			</p>
 		</main>
 		<p>
