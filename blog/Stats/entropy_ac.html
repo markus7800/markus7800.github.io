@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../blog.css">
+		<link rel="icon" type="image/png" href="../res/m.png">
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+		<title>Entropy and Arithmetic Coding</title>
+        \(
+			\newcommand{\Exp}[2]{\mathbb{E}_{#1}\left[ #2\right]}
+			\newcommand{\Prob}[1]{p\left(#1\right)}
+		\)
+	</head>
+	<body>
+		<div>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		<h1>Entropy and Arithmetic Coding</h1>
+		<main>
+            <h2>Entropy</h2>
+            <p>
+                For a random variable \(X\) entropy is defined as 
+                \[\mathcal{H}(X) = \Exp{}{\log_2\left(\frac{1}{\Prob{X}}\right)} = - \Exp{}{\log_2{\Prob{X}}}\]
+                and is the average level of "information", "surprise", or "uncertainty" inherent to the variable's possible outcomes.
+                If an outcome \(X=x\) is likely then the surprisal \(\log_2\left(\frac{1}{\Prob{X=x}}\right)\) is close to 0.
+                But if the outcome is unlikely the suprisal will be very large.
+            </p>
+            <p>
+                But entropy is best explained with an example.
+                Consider a categorical variable \(X\) with support \(\{a,b,c,d,e,f,g,h\}\) with respective probabilities
+                \(\frac{1}{2}, \frac{1}{4}, \frac{1}{8}, \frac{1}{16}, \frac{1}{64}, \frac{1}{64}, \frac{1}{64}, \frac{1}{64}.\)
+                The the entropy can be interpreted as the average number of yes or no question one has to ask to identify the value of \(X.\)
+            </p>
+			<p>
+                Consider following questions (in spirit similar to binary search), where \(p\) is the probability of asking this question and getting the answer yes.
+                <table>
+                    <tr>
+                        <th>n</th>
+                        <th>Question</th>
+                        <th>p</th>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Is the value \(a\)?</td>
+                        <td>\(0.5 = \frac{1}{2}\)</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Is the value \(b\)?</td>
+                        <td>\(0.5^2 = \frac{1}{4}\)</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Is the value \(c\)?</td>
+                        <td>\(0.5^3 = \frac{1}{8}\)</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>Is the value \(d\)?</td>
+                        <td>\(0.5^4 = \frac{1}{16}\)</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>Is the value \(e\) or \(f\)?</td>
+                        <td>\(0.5^5 = \frac{1}{32}\)</td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>Is the value \(e\)?</td>
+                        <td>\(0.5^6 = \frac{1}{64}\)</td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>Is the value \(g\)?</td>
+                        <td>\(0.5^6 = \frac{1}{64}\)</td>
+                      </tr>
+                </table>
+            </p>
+            <p>
+                The average number of questions needed to ask is
+                \[\frac{1}{2} \cdot 1 + \frac{1}{4} \cdot 2 + \frac{1}{8} \cdot 3 + \frac{1}{16} \cdot 4 + 4 \cdot \left(\frac{1}{64} \cdot 6\right) = 2,\]
+                which is precisely the formula for the entropy of \(X\).
+            </p>
+            <p>
+                This questions can be used to encode the support of \(X\) as binary strings:
+                \[a,b,c,d,e,f,g,h \mapsto 0, 10, 110, 1110, 111100, 111101, 111110, 111111\]
+            </p>
+            <p>
+                The expected code length is again the entropy.
+            </p>
+            <p>
+                For discrete \(X\) the entropy is bounded by the size of the support
+                \[0 \le \mathcal{H}(X) \le \log_2 n\]
+                with equality for the uniform distribution.
+                This makes sense as we cannot exploit any more or less likely elements for our questions and encoding.
+                In this case we have resort to binary search and encoding with \(\log_2 n\) bits.
+            </p>
+		</main>
+		<p>
+			<a href="../blog.html">Blog</a>
+		</p>
+		</div>
+		<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
+	</body>
+	
+	<script src="../collapsible.js"></script>
+</html>
