@@ -90,6 +90,7 @@
                 \[a,b,c,d,e,f,g,h \mapsto 0, 10, 110, 1110, 111100, 111101, 111110, 111111\]
             </p>
             <p>
+                We assigned more likely characters a shorter code.
                 The expected code length is again the entropy.
             </p>
             <p>
@@ -98,7 +99,124 @@
                 with equality for the uniform distribution.
                 This makes sense as we cannot exploit any more or less likely elements for our questions and encoding.
                 In this case we have resort to binary search and encoding with \(\log_2 n\) bits.
+                On the other hand, a random variable which takes a value with probability 1 has 0 entropy.
             </p>
+
+            <h2>Arithmetic Coding</h2>
+            <p>
+                In arithmetic coding we assume to have a finite alphabet of symbols \(\mathcal{A} = \{x_1, \dots, x_n\}.\)
+                We assign each symbol a probability \(p_i\) and can compute the probability of a string by assuming
+                its characters are iid. and multiplying the probabilities of its characters.
+            </p>
+            <p>
+                For example, let \(\mathcal{A} = \{\text{I},\text{K},\text{W}\}\) with \(p = (0.45, 0.275, 0.275).\)
+                By lexicographically ordering all strings of length three, we can visualise the cumulative distribution function.
+                <div id="images">
+                    <img src="./res/entropy_ac/cdf.svg" width="75%">
+                </div>
+            </p>
+            <p>
+                We can map each string to an interval between \([0,1],\) in the above example \(\text{KIW}.\)
+                In arithmetic coding encode a string with a number in this interval with shortest possible binary representation.
+                To achieve this we make a simple binary search as indicated below.
+                <div id="images">
+                    <img src="./res/entropy_ac/kiw_example2.svg" width="100%">
+                </div>
+            </p>
+            <p>
+                We could have selected \(0.1001\), but to also account for strings of different lengths, we only stop at precision
+                \(2^{-i}\) if the interval contains \([x, x+2^{-i}),\) as it is the case with \([0.100011,0.100011+0.000001).\)
+            </p>
+            <p>
+                To obtain the interval in \([0,1],\) we start with \(a=0, b=1\) and iteratively process the symbols and update
+                \[w \gets b-a, \quad a \gets a + w \cdot p_i, \quad b \gets a + w \cdot p_{i+1}.\]
+            </p>
+            <p>
+                This process can be easily reversed to decode a code \(x\), by selecting the symbols such that 
+                \[a + w \cdot p_i \le x < a + w \cdot p_{i+1}.\]
+            </p>
+            <p>
+                Now this updates work fine mathematically, but on a computer we quickly run out of precision to present the numbers.
+                That's why we rescale the numbers after each symbol.
+                If \(a\) and \(b\) both lie in the lower or upper half, we can add 0 or 1 to the output respectively and zoom in on the half.
+                If  \(a\) lies in the lower half and \(b\) in the upper half, we zoom in at the middle by adding \(0111\dots\) or \(1000\dots\)
+                to the output depending on the next symbol.
+                We stop once a quarter of our current scale is contained between \(a\) and \(b\).
+            </p>
+            <p>
+                This rescaling is best understood by visualisation:
+                <div id="images">
+                    <img src="./res/entropy_ac/kiw.svg" width="75%">
+                    <img src="./res/entropy_ac/kiwi.svg" width="75%">
+                    <img src="./res/entropy_ac/iiw.svg" width="75%">
+                </div>
+            </p>
+
+            <h3>Near optimality</h3>
+            <p>
+                By <a href="https://en.wikipedia.org/wiki/Shannon's_source_coding_theorem">Shannon's source coding theorem</a>
+                we need at least \(\mathcal{H}(X)\) bits to encode a random variable without loss of information.
+            </p>
+            <p>
+                Arithmetic encoding is near optimal in the sense that the average length of codes is close to the entropy.
+                Consider the alphabet \(\mathcal{A} = \{0,1,2,\dots, n\},\) where we designate \(0\) as a end-of-sequence symbol
+                to model finite length strings.
+                Let \(X, X_i\) be iid. random variables taking values in \(\mathcal{A}.\)
+                Formally, a string is defined as a the set of sequences that are the same up to the end-of-sequence
+                \[x_1 x_2 \cdots x_k 0 = \{\mathbf{y} \in \mathcal{A}^\mathbb{N}: y_i = x_i \text{ for } i \le k+1, \text{ and } y_i \neq 0 \text{ for } i \le k \}\]
+            </p>
+            <p>
+                We define
+                \[\Prob{x_1 x_2 \cdots x_k 0} = \Prob{X=x_1}\Prob{X=x_2}\cdots \Prob{X=0},\]
+                which is a probability mass function on the space of strings, as it corresponds to the generation probabilities of
+                a model which samples from the alphabet and stops when the end-of-sequence symbol is encountered.
+            </p>
+            <p>
+                Let \(\ell(s)\) be the length of the code of string \(s,\)
+                \[\ell(s) = \min_k \enspace \exists \beta_i \colon \enspace a_s \le \sum_{i=1}^k \frac{\beta_i}{2^i} < \sum_{i=1}^k \frac{\beta_i}{2^i} + \frac{1}{2^k} < b_s.\]
+            </p>
+            <p>
+                For any \(k\) with \(\frac{1}{2^k} \le \frac{b-a}{2}\) there exist such a binary number \(\beta_i\) and therefore
+                \ell(s) \le k
+                We have
+                \[
+                \frac{1}{2^{k-1}} \le b-a = \Prob{X=x_1}\Prob{X=x_2}\cdots \Prob{X=0} = \Prob{s}
+                \]
+                or equivalently
+                \[\log_2\left(\frac{1}{\Prob{s}}\right) \le k-1\]
+            </p>
+            <p>
+                If we pick
+                \[k = \lceil -\log_2 \Prob{s} \rceil + 1,\]
+                the above inequality holds and therefore, \(\ell(s) \le k = \lceil -\log_2 \Prob{s} \rceil + 1.\)
+            </p>
+            <p>
+                We conclude
+                \[\mathcal{H}(S) \le \Exp{}{\ell(S)} \le \Exp{}{\lceil-\log_2 \Prob{S} \rceil + 1} \le \mathcal{H}(S) + 2\]
+                for a random string \(S.\)
+                So the expected code length is within 2 bits of the optimal code length.
+            </p>
+            <p>
+                Note that the length of \(S\) is distributed according to \(\text{Geom}(\Prob{X=0}).\)
+            </p>
+
+
+            <h3>Improving Arithmetic Coding</h3>
+            <p>
+                We cannot really do better with iid. sequences as proved above.
+                But the coding can be extended to non-iid. sequences, which allows to save more bits.
+            </p>
+
+            <p><br></p>
+            <p>
+                Source code available <a href="https://github.com/markus7800/MathAndAlgos/blob/master/Statistics/ArithmeticCoding/arithmetic_coding.jl">here</a>.
+                This file contains 13929 characters.
+                By constructing an alphabet with the relative frequencies of characters,
+                we can encode the file in 65734 bits.
+                Assuming 8-bit characters, we compressed the file to about 60%.
+            </p>
+
+
 		</main>
 		<p>
 			<a href="../blog.html">Blog</a>
