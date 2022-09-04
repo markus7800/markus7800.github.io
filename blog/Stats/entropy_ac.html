@@ -177,7 +177,7 @@
             </p>
             <p>
                 For any \(k\) with \(\frac{1}{2^k} \le \frac{b-a}{2}\) there exist such a binary number \(\beta_i\) and therefore
-                \ell(s) \le k
+                \(\ell(s) \le k.\)
                 We have
                 \[
                 \frac{1}{2^{k-1}} \le b-a = \Prob{X=x_1}\Prob{X=x_2}\cdots \Prob{X=0} = \Prob{s}
@@ -188,11 +188,11 @@
             <p>
                 If we pick
                 \[k = \lceil -\log_2 \Prob{s} \rceil + 1,\]
-                the above inequality holds and therefore, \(\ell(s) \le k = \lceil -\log_2 \Prob{s} \rceil + 1.\)
+                the above inequality holds and therefore, \(\ell(s) \le k = \lceil -\log_2 \Prob{s} \rceil + 1 \le  -\log_2 \Prob{s}+2.\)
             </p>
             <p>
                 We conclude
-                \[\mathcal{H}(S) \le \Exp{}{\ell(S)} \le \Exp{}{\lceil-\log_2 \Prob{S} \rceil + 1} \le \mathcal{H}(S) + 2\]
+                \[\mathcal{H}(S) \le \Exp{}{\ell(S)} \le -\Exp{}{\log_2 \Prob{S}}+2 = \mathcal{H}(S) + 2\]
                 for a random string \(S.\)
                 So the expected code length is within 2 bits of the optimal code length.
             </p>
