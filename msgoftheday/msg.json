@@ -1,7 +1,9 @@
 {
     "messages": [
         {
-            "date": "04.08.25",
+            "day": 4,
+            "month": 8,
+            "year": 2025,
             "msg": "This is a test message."
         }
     ]
