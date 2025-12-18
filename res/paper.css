@@ -1,0 +1,56 @@
+p {
+	text-align: justify;
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+            hyphens: auto;
+}
+
+.paper-abstract {
+    display:none
+}
+.paper-bibtex {
+    display:none
+}
+.paper-container {
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.paper-desc {
+    width:70%;
+}
+
+.paper-image {
+    width: 30%;
+    overflow: hidden;
+    padding: 10px;
+    margin-top:10px;
+    display: block;
+}
+
+.paper-image img {
+    /* width: 240px; */
+    max-width: 100%;
+    overflow:hidden
+}
+
+pre, code {
+    background-color: transparent;
+}
+
+@media (max-width: 700px) {
+    .paper-container {
+        display: block;
+    }
+    .paper-desc {
+        width:100%;
+    }
+    .paper-image {
+        width:100%;
+    }
+    .paper-image img {
+        width: 210px;
+        overflow:hidden
+    }
+}

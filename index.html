@@ -15,12 +15,46 @@
       href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
       integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
       crossorigin="anonymous">
+	    <link rel="stylesheet" href="res/paper.css">
+
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 		<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
 		        integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
 		        crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script>window.jQuery ||
+			document.write('<script src="js/libs/jquery-1.11.3.min.js"><\/script>')</script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+			$("a.bibtex").click(function(event) {
+			
+			var label = $(this);
+			$(this).nextAll("div.paper-bibtex").first().slideToggle("fast",
+			function(){
+			if ($(this).is(":visible")) {
+			label.text('hide bibtex');    
+			} else {
+			label.text('bibtex');                
+			}
+			});
+			});
+
+			$("a.abstract").click(function(event) {
+			
+			var label = $(this);
+			$(this).nextAll("div.paper-abstract").first().slideToggle("fast",
+			function(){
+			if ($(this).is(":visible")) {
+			label.text('hide abstract');    
+			} else {
+			label.text('abstract');                
+			}
+			});
+			});
+			});
+		</script>
 
 
    	 	<!-- <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
@@ -46,34 +80,179 @@
 
 
 				<h1>I'm Markus.</h1>
-				<h2>About</h2>
 				<div style="margin:auto;">
 					<div id="profilepiccontainer">
 						<img src="profile_pic/markus2024.jpg" id="profilepic">
 					</div>
 					<div id="profiletext">
+						<h2>About</h2>
 						<p>
-							I am an Austrian Computer Science and Mathematics enthusiast.<br>
+							I am an Austrian Computer Science and Mathematics enthusiast.
 							I combine both of my passions by pursuing a PhD on Probabilistic Programming.
 						</p>
 					</div>
 				</div>
-				<p><br></p>
 
 				<h2>PhD Research</h2>
 				<p>
 					Probabilistic programming provides an intuitive means to specify probabilistic models as programs.
-					By enabling automatic Bayesian posterior inference, probabilistic programming systems allow the practitioners to focus on iterative modelling.<br>
+					By enabling automatic Bayesian posterior inference, probabilistic programming systems allow the practitioners to focus on iterative modelling.
 					In my work, I focus on static analysis, compilation, and acceleration of probabilistic programs.
-					See the <a href="https://probprog-ai-tuwien.github.io/index.html">project homepage</a>.
+					<!-- See the <a href="https://probprog-ai-tuwien.github.io/index.html">project homepage</a>. -->
 				</p>
+
+				<div class="paper-container">
+				<div class="paper-desc" style="width:100%;">
+					<h3>UPIX: Universal Programmable Inference in JAX</h3>
+					<i>Markus Böck, and Jürgen Cito. Work in progress.</i>
+					<p>
+					Universal probabilistic programming languages (PPL) like Pyro or Gen enable the user to specify models with stochastic support.
+						This means that control flow and array shapes are allowed to depend on the values sampled during execution.
+						This is fundamentally incompatible with JIT-compilation in JAX.
+						Thus, probabilistic programming systems built on top of JAX like NumPyro are restricted to models with static support, i.e. they disallow Python control flow.
+						UPIX realises the Divide-Conquer-Combine (DCC) approach as a framework which brings back JIT-compilation for universal PPLs.
+					</p>
+				</div>
+				<!-- <div class="paper-image">
+					<img src="res/papers/staticfactor.png"/>
+				</div> -->
+				</div>
+				
+				[<a href="papers/Markus_PPLxGPU.pdf">paper</a> | <a href="https://github.com/markus7800/UPIX">code</a>]
+				<div class="paper-abstract">
+				<p>
+					
+				</p>
+				</div>
+				<div class="paper-bibtex">
+					<code>
+					</code>
+				</div>
+
+
+				<div class="paper-container">
+				<div class="paper-desc">
+					<h3>Static Factorisation of Probabilistic Programs With User-Labelled Sample Statements and While Loops</h3>
+					<i>Markus Böck, and Jürgen Cito. To appear in OOPSLA 2026.</i>
+					<p>
+					Derives a novel factorisation of the program density from a static analysis that approximates the dependencies between variales.
+					Presents a compilation method based on the factorisation that speeds-up MCMC and SMC algorithms and reduces variance of a gradient estimator in variational inference.
+					</p>
+				</div>
+				<div class="paper-image">
+					<img src="res/papers/staticfactor.png"/>
+				</div>
+				</div>
+				
+				[<a href="https://arxiv.org/abs/2508.20922">paper</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
+				<div class="paper-abstract">
+				<p>
+					It is commonly known that any Bayesian network can be implemented as a probabilistic program, but the reverse direction is not so clear.
+					In this work, we address the open question to what extent a probabilistic program with user-labelled sample statements and while loops - features found in languages like Gen, Turing, and Pyro - can be represented graphically.
+					To this end, we extend existing operational semantics to support these language features.
+					By translating a program to its control-flow graph, we define a sound static analysis that approximates the dependency structure of the random variables in the program.
+					As a result, we obtain a static factorisation of the implicitly defined program density, which is equivalent to the known Bayesian network factorisation for programs without loops and constant labels, but constitutes a novel graphical representation for programs that define an unbounded number of random variables via loops or dynamic labels.
+					We further develop a sound program slicing technique to leverage this structure to statically enable three well-known optimisations for the considered program class: we reduce the variance of gradient estimates in variational inference and we speed up both single-site Metropolis Hastings and sequential Monte Carlo.
+					These optimisations are proven correct and empirically shown to match or outperform existing techniques.
+				</p>
+				</div>
+				<div class="paper-bibtex">
+					<code>
+					@misc{boeck2025staticfactorisation,<br>
+							title={Static Factorisation of Probabilistic Programs With User-Labelled Sample Statements and While Loops}, <br>
+							author={Markus Böck and Jürgen Cito},<br>
+							year={2025},<br>
+							eprint={2508.20922},<br>
+							archivePrefix={arXiv},<br>
+							primaryClass={cs.PL},<br>
+							url={https://arxiv.org/abs/2508.20922}, <br>
+					}
+					</code>
+				</div>
+
+				<div class="paper-container">
+				<div class="paper-desc">
+					<h3>Online and Interactive Bayesian Inference Debugging</h3>
+					<i>Nathanel Nussbaumer, Markus Böck, and Jürgen Cito. To appear in ICSE 2026.</i>
+					<p>
+					Derives a novel factorisation of the program density from a static analysis that approximates the dependencies between variales.
+					Presents a compilation method based on the factorisation that speeds-up MCMC and SMC algorithms and reduces variance of a gradient estimator in variational inference.
+					</p>
+				</div>
+				<div class="paper-image">
+					<img src="res/papers/inferlogholmes.png"/>
+				</div>
+				</div>
+				
+				[<a href="https://arxiv.org/abs/2510.26579">paper</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
+				<div class="paper-abstract">
+				<p>
+					Probabilistic programming is a rapidly developing programming paradigm which enables the formulation of Bayesian models as programs and the automation of posterior inference.
+					It facilitates the development of models and conducting Bayesian inference, which makes these techniques available to practitioners from multiple fields.
+					Nevertheless, probabilistic programming is notoriously difficult as identifying and repairing issues with inference requires a lot of time and deep knowledge.
+					Through this work, we introduce a novel approach to debugging Bayesian inference that reduces time and required knowledge significantly.
+					We discuss several requirements a Bayesian inference debugging framework has to fulfill, and propose a new tool that meets these key requirements directly within the development environment.
+					We evaluate our results in a study with 18 experienced participants and show that our approach to online and interactive debugging of Bayesian inference significantly reduces time and difficulty on inference debugging tasks.
+				</p>
+				</div>
+				<div class="paper-bibtex">
+					<code>
+					@misc{nussbaumer2025onlineinteractivebayesianinference,<br>
+						title={Online and Interactive Bayesian Inference Debugging}, <br>
+						author={Nathanael Nussbaumer and Markus Böck and Jürgen Cito},<br>
+						year={2025},<br>
+						eprint={2510.26579},<br>
+						archivePrefix={arXiv},<br>
+						primaryClass={cs.SE},<br>
+						url={https://arxiv.org/abs/2510.26579}, <br>
+					}
+					</code>
+				</div>
+
+				<div class="paper-container">
+				<div class="paper-desc">
+					<h3>Language-Agnostic Static Analysis of Probabilistic Programs</h3>
+					<i>Markus Böck, Michael Schröder, and Jürgen Cito. ASE 2024.</i>
+					<p>
+					Describes a framework which allows the formulation of program analyses which target problems specific to the probabilistic programming environment in a high-level API.
+					The analyses can be applied to any probabilistic programming language for which light-weight bindings are implemented.
+					</p>
+				</div>
+				<div class="paper-image">
+					<img src="res/papers/overview.png"/>
+				</div>
+				</div>
+				
+				[<a href="https://dl.acm.org/doi/10.1145/3691620.3695031">paper</a> | <a href="https://github.com/lasapp/lasapp">code</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
+				<div class="paper-abstract">
+				<p>
+					Probabilistic programming allows developers to focus on the modeling aspect in the Bayesian workflow by abstracting away the posterior inference machinery.
+					In practice, however, programming errors specific to the probabilistic environment are hard to fix without deep knowledge of the underlying systems.
+					Like in classical software engineering, static program analysis methods could be employed to catch many of these errors.
+					In this work, we present the first framework to formulate static analyses for probabilistic programs in a language-agnostic manner: LASAPP.
+					While prior work focused on specific languages, all analyses written with our framework can be readily applied to new languages by adding easy-to-implement API bindings.
+					Our prototype supports five popular probabilistic programming languages out-of-the-box.
+					We demonstrate the effectiveness and expressiveness of the LASAPP framework by presenting four provably-correct language-agnostic probabilistic program analyses that address problems discussed in the literature and evaluate them on over 200 real-world programs.
+				</p>
+				</div>
+				<div class="paper-bibtex">
+					<code>
+					@inproceedings{boeck2024language-agnostic,<br>
+						title={Language-Agnostic Static Analysis of Probabilistic Programs},<br>
+						author={B{\"o}ck, Markus and Schr{\"o}der, Michael and Cito, J{\"u}rgen},<br>
+						booktitle={Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering},<br>
+						pages={78--90},<br>
+						year={2024}<br>
+					}
+					</code>
+				</div>
 
 				<h2>Master's Thesis</h2>
 				<p>
 					The goal of my <a href="https://repositum.tuwien.at/handle/20.500.12708/68310" target="_blank">Master's thesis</a> was to build a Machine Learning model for the prediction of performance regressions in software projects.
 					Using the openly available data of Mozilla's Firefox project, a novel labeling approach was found to intercept potential faulty commits before the would go to production.
 					<div id="images">
-						<img class="lazy" data-src="res/master.png" width="75%" style="background-color:white;">
+						<img class="lazy" data-src="res/master.png" width="45%" style="background-color:white;">
 					</div>
 				</p>
 
@@ -86,8 +265,8 @@
 					measures in the action selection process.
 					Results published in <a href="https://epubs.siam.org/doi/10.1137/20M1364436">SIMODS</a>.
 					<div id="images">
-						<img class="lazy" data-src="res/rldiagram.svg" alt="reinforcement learning diagram" width="45%" style="background-color:white;">
-						<img class="lazy" data-src="res/catdist.svg" alt="categorical distribution example" width="45%">
+						<img class="lazy" data-src="res/rldiagram.svg" alt="reinforcement learning diagram" width="25%" style="background-color:white;">
+						<img class="lazy" data-src="res/catdist.svg" alt="categorical distribution example" width="25%">
 					</div>
 				</p>
 				<p><br></p>
@@ -101,7 +280,7 @@
 				<p><br></p> -->
 				
 
-				<h2>Projects</h2>
+				<h2>Hobby Projects</h2>
 				<div>
 					<!-- <h3>Reducing Digits to Two Dimensions</h3>
 					<p>
@@ -114,17 +293,6 @@
 					<p><a href="blog/ML/autoencoder.html">Read more</a></p>
 					<p><br></p> -->
 
-					<h3>UPIX: Universal Programmable Inference in JAX</h3>
-					<p>
-						Universal probabilistic programming languages (PPL) like Pyro or Gen enable the user to specify models with stochastic support.
-						This means that control flow and array shapes are allowed to depend on the values sampled during execution.
-						This is fundamentally incompatible with JIT-compilation in JAX.
-						Thus, probabilistic programming systems built on top of JAX like NumPyro are restricted to models with static support, i.e. they disallow Python control flow.
-						UPIX realises the Divide-Conquer-Combine (DCC) approach as a framework which brings back JIT-compilation for universal PPLs.
-
-					</p>
-					<p><a href=https://github.com/markus7800/UPIX>Read more</a></p>
-					<p><br></p>
 
 					<h3>Strongly Solving Connect4</h3>
 					<p>
@@ -287,12 +455,6 @@
 
 				</div>
 
-				<h2>Contact</h2>
-				<p>
-					You can find some of the above projects on my <a href="https://github.com/markus7800" target="_blank">GitHub</a>
-					and you can send me a message per <a href="mailto:markus.boeck7800@hotmail.com" target="_blank">e-mail</a>.
-				</p>
-				<p><br></p>
 			</div>
 			<div  style="height: 400px; width:100%; display: block; background-color:white;"></div>
 		</main>
