@@ -70,6 +70,7 @@ img {
 }
 #profilepiccontainer {
 	height: 200px;
+	width: 200px;
 	float:left
 }
 #profiletext {
@@ -78,7 +79,7 @@ img {
 	vertical-align: middle;
 }
 
-@media only screen and (max-device-width: 600px) {
+@media (max-device-width: 600px) {
     h1 {
 		font-size: 6rem;
 	}
@@ -102,6 +103,10 @@ img {
 		max-width: none;
 	}
 
+	p {
+		font-size: 3rem;
+	}
+
 	body {
 		font-size: 3rem;
 	}
@@ -114,6 +119,7 @@ img {
 	}
 	#profilepiccontainer {
 		width: 400px;
+		height: 400px;
 		float: none;
 	}
 	#profiletext {
