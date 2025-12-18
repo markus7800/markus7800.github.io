@@ -39,7 +39,7 @@ pre, code {
     background-color: transparent;
 }
 
-@media (max-width: 700px) {
+@media only screen and (max-device-width: 600px) {
     .paper-container {
         display: block;
     }
@@ -50,7 +50,7 @@ pre, code {
         width:100%;
     }
     .paper-image img {
-        width: 210px;
+        width: 600px;
         overflow:hidden
     }
 }
