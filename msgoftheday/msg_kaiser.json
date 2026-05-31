@@ -1,10 +1,16 @@
 {
     "messages": [
         {
-            "day": 22,
-            "month": 12,
-            "year": 2025,
-            "msg": "Merry XMAS! In welcher Zeile steht das?"
+            "day": 1,
+            "month": 6,
+            "year": 2026,
+            "msg": "Ich wuensch dir einie schoene Woche! xoxo"
+        }, 
+        {
+            "day": 3,
+            "month": 6,
+            "year": 2026,
+            "msg": "Viel Erflog bei deiner Praesi!"
         }
     ]
 }
