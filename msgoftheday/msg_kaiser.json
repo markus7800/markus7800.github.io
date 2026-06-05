@@ -1,16 +1,10 @@
 {
     "messages": [
         {
-            "day": 1,
+            "day": 5,
             "month": 6,
             "year": 2026,
-            "msg": "Ich wuensch dir eine schoene Woche! xoxo"
-        }, 
-        {
-            "day": 3,
-            "month": 6,
-            "year": 2026,
-            "msg": "Viel Erflog bei deiner Praesi!"
+            "msg": "Letzter Arbeitstag der Woche! Let's go!"
         }
     ]
 }
