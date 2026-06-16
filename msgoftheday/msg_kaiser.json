@@ -1,10 +1,16 @@
 {
     "messages": [
         {
-            "day": 10,
+            "day": 16,
             "month": 6,
             "year": 2026,
-            "msg": "Bon voyage! <3"
+            "msg": "Willkommen zurueck! Wien hat dich vermisst!"
+        },
+        {
+            "day": 17,
+            "month": 6,
+            "year": 2026,
+            "msg": "Willkommen zurueck! Wien hat dich vermisst!"
         }
     ]
 }
