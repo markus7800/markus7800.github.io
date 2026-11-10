@@ -102,30 +102,45 @@
 				</p>
 
 				<div class="paper-container">
-				<div class="paper-desc" style="width:100%;">
-					<h3>UPIX: Universal Programmable Inference in JAX</h3>
-					<i>Markus Böck, and Jürgen Cito. Work in progress.</i>
+				<div class="paper-desc">
+					<h3>Probabilistic Programming with Programmable Divide-Conquer-Combine Inference on Modern Hardware</h3>
+					<i>Markus Böck, and Jürgen Cito. OOPSLA 2026.</i>
 					<p>
-					Universal probabilistic programming languages (PPL) like Pyro or Gen enable the user to specify models with stochastic support.
-						This means that control flow and array shapes are allowed to depend on the values sampled during execution.
-						This is fundamentally incompatible with JIT-compilation in JAX.
-						Thus, probabilistic programming systems built on top of JAX like NumPyro are restricted to models with static support, i.e. they disallow Python control flow.
-						UPIX realises the Divide-Conquer-Combine (DCC) approach as a framework which brings back JIT-compilation for universal PPLs.
+					Universal probabilistic programming languages (PPL) like Pyro or Gen enable the user to specify models with stochastic support
+					via stochastic control flow or dynamic array shapes which are natively incompatible with JAX.
+					UPIX realises the Divide-Conquer-Combine (DCC) approach as a framework and brings back JIT-compilation for universal PPLs, accelerating inference up to 1000x on CPUs, GPUs and TPUs.
 					</p>
 				</div>
-				<!-- <div class="paper-image">
-					<img src="res/papers/staticfactor.png"/>
-				</div> -->
+				<div class="paper-image">
+					<img src="res/papers/upix.png"/>
+				</div>
 				</div>
 				
-				[<a href="papers/Markus_PPLxGPU.pdf">pre-print</a> | <a href="https://github.com/markus7800/UPIX">code</a>]
+				[<a href="https://doi.org/10.1145/3839533">paper</a> | <a href="https://github.com/markus7800/UPIX">code</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
 				<div class="paper-abstract">
 				<p>
-					
+					Universal probabilistic programming languages (PPLs) enable the specification of models with stochastic support structure.
+					Posterior inference is notoriously hard for this class of models and remains difficult to accelerate on modern hardware.
+					In response to these challenges, we introduce Upix - the first probabilistic programming system that realises the divide-conquer-combine (DCC) inference algorithm as a framework.
+					In Upix, a model expressed in a universal PPL is automatically split into multiple sub-models with static support structure, which are then compiled with JAX for execution on accelerator hardware.
+					The system allows extensive customisation of inference algorithms by incorporating established concepts from programmable inference literature.
+					To evaluate our system, we implemented two existing DCC algorithms in Upix and instantiated three novel algorithms.
+					We show that our implementation can result in better approximation quality compared to existing approaches by achieving up to 1070 times more computation within the same time budget.
+					On machines with up to 64 CPU cores and 8 GPU devices, we demonstrate that Upix enables the scaling of inference algorithms to workloads that are impractically slow for CPUs and prior methods.
 				</p>
 				</div>
 				<div class="paper-bibtex">
 					<code>
+						@article{boeck2026upix,
+						title={Probabilistic Programming with Programmable Divide-Conquer-Combine Inference on Modern Hardware},<br>
+						author={B{\"o}ck, Markus and Cito, J{\"u}rgen},<br>
+						journal={Proceedings of the ACM on Programming Languages},<br>
+						volume={10},<br>
+						number={OOPSLA2},<br>
+						pages={2407--2434},<br>
+						year={2026},<br>
+						publisher={ACM, New York, NY, USA}<br>
+						}
 					</code>
 				</div>
 
@@ -133,10 +148,10 @@
 				<div class="paper-container">
 				<div class="paper-desc">
 					<h3>Static Factorisation of Probabilistic Programs With User-Labelled Sample Statements and While Loops</h3>
-					<i>Markus Böck, and Jürgen Cito. To appear in OOPSLA 2026.</i>
+					<i>Markus Böck, and Jürgen Cito. OOPSLA 2026.</i>
 					<p>
 					Derives a novel factorisation of the program density from a static analysis that approximates the dependencies between variables.
-					Presents a compilation method based on the factorisation that speeds-up MCMC and SMC algorithms and reduces variance of a gradient estimator in variational inference.
+					Presents a compilation method based on the factorisation that speeds-up MCMC and SMC algorithms 10x and reduces variance of a gradient estimator in variational inference up to 60000x.
 					</p>
 				</div>
 				<div class="paper-image">
@@ -144,7 +159,7 @@
 				</div>
 				</div>
 				
-				[<a href="https://arxiv.org/abs/2508.20922">paper</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
+				[<a href="https://doi.org/10.1145/3798223">paper</a> | <a href="https://github.com/markus7800/PPLStaticFactor">code</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
 				<div class="paper-abstract">
 				<p>
 					It is commonly known that any Bayesian network can be implemented as a probabilistic program, but the reverse direction is not so clear.
@@ -173,10 +188,10 @@
 				<div class="paper-container">
 				<div class="paper-desc">
 					<h3>Online and Interactive Bayesian Inference Debugging</h3>
-					<i>Nathanel Nussbaumer, Markus Böck, and Jürgen Cito. To appear in ICSE 2026.</i>
+					<i>Nathanel Nussbaumer, Markus Böck, and Jürgen Cito. ICSE 2026.</i>
 					<p>
 					Introduces a new approach for debugging probabilistic programs, where diagnostic tools evaluate the quality of inference during execution.
-					We implemented a debugger as a VSCode extension and showed that our approach significantly reduces time and difficulty on inference debugging tasks in a user-study.
+					We implemented a debugger as a VSCode extension and showed that our approach significantly reduces time and difficulty on inference debugging tasks in a user-study with 18 participants ranging from novice to expert.
 					</p>
 				</div>
 				<div class="paper-image">
@@ -184,7 +199,7 @@
 				</div>
 				</div>
 				
-				[<a href="https://arxiv.org/abs/2510.26579">paper</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
+				[<a href="https://doi.org/10.1145/3744916.3773215">paper</a> | <a class="bibtex">bibtex</a> | <a class="abstract">abstract</a>]
 				<div class="paper-abstract">
 				<p>
 					Probabilistic programming is a rapidly developing programming paradigm which enables the formulation of Bayesian models as programs and the automation of posterior inference.
@@ -197,14 +212,12 @@
 				</div>
 				<div class="paper-bibtex">
 					<code>
-					@misc{nussbaumer2025onlineinteractivebayesianinference,<br>
-						title={Online and Interactive Bayesian Inference Debugging}, <br>
-						author={Nathanael Nussbaumer and Markus Böck and Jürgen Cito},<br>
-						year={2025},<br>
-						eprint={2510.26579},<br>
-						archivePrefix={arXiv},<br>
-						primaryClass={cs.SE},<br>
-						url={https://arxiv.org/abs/2510.26579}, <br>
+					@inproceedings{nussbaumer2026online,<br>
+					title={Online and interactive bayesian inference debugging},<br>
+					author={Nussbaumer, Nathanael and B{\"o}ck, Markus and Cito, J{\"u}rgen},<br>
+					booktitle={Proceedings of the 2026 IEEE/ACM 48th International Conference on Software Engineering},<br>
+					pages={3849--3860},<br>
+					year={2026}<br>
 					}
 					</code>
 				</div>
@@ -216,6 +229,7 @@
 					<p>
 					Describes a framework which allows the formulation of program analyses which target problems specific to the probabilistic programming environment in a high-level API.
 					The analyses can be applied to any probabilistic programming language for which light-weight bindings are implemented.
+					6 PPLs currently supported - 1 open source bug found.
 					</p>
 				</div>
 				<div class="paper-image">
